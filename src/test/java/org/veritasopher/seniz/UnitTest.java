@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.veritasopher.seniz.core.base.SenizLexer;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.mapper.TypeMapper;
-import org.veritasopher.seniz.core.visitor.StateVisitor;
+import org.veritasopher.seniz.core.visitor.StateDeclarationVisitor;
 import org.veritasopher.seniz.core.visitor.TransitionVisitor;
 import org.veritasopher.seniz.core.visitor.VariableVisitor;
 import org.veritasopher.seniz.core.model.SystemEnv;
@@ -33,8 +33,8 @@ public class UnitTest {
         VariableVisitor variableVisitor = new VariableVisitor(systemEnv);
         variableVisitor.visit(tree);
 
-        StateVisitor stateVisitor = new StateVisitor(systemEnv);
-        stateVisitor.visit(tree);
+        StateDeclarationVisitor stateDeclarationVisitor = new StateDeclarationVisitor(systemEnv);
+        stateDeclarationVisitor.visit(tree);
 
         TransitionVisitor transitionVisitor = new TransitionVisitor(systemEnv);
         transitionVisitor.visit(tree);
@@ -45,15 +45,15 @@ public class UnitTest {
     }
 
     @Test
-    public void testStateVisitor() {
+    public void testStateDeclarationVisitor() {
         ParseTree tree = getParserTreeFromFile("example/Simple1.sz");
         SystemEnv systemEnv = new SystemEnv();
 
         VariableVisitor variableVisitor = new VariableVisitor(systemEnv);
         variableVisitor.visit(tree);
 
-        StateVisitor stateVisitor = new StateVisitor(systemEnv);
-        stateVisitor.visit(tree);
+        StateDeclarationVisitor stateDeclarationVisitor = new StateDeclarationVisitor(systemEnv);
+        stateDeclarationVisitor.visit(tree);
 
         systemEnv.getStates().forEach((name, state) -> {
             System.out.println(state);

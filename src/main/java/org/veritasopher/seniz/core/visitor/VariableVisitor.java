@@ -20,7 +20,7 @@ public class VariableVisitor extends SenizParserBaseVisitor<SystemEnv> {
         String name = ctx.IDENTIFIER().getText();
         String type = ctx.primitiveType().getText();
         StateVariable stateVariable = new StateVariable(name, TypeMapper.map(type), null);
-        systemEnv.addVar(stateVariable);
+        systemEnv.addVariable(stateVariable);
         return systemEnv;
     }
 

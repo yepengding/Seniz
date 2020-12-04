@@ -42,7 +42,7 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<State> {
         @Override
         public StateVariable visitStateExpression(SenizParser.StateExpressionContext ctx) {
             String name = ctx.IDENTIFIER().getText();
-            StateVariable var = systemEnv.getVar(name);
+            StateVariable var = systemEnv.getVariable(name);
 
             // Check if variable is defined
             if (var == null) {

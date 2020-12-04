@@ -12,13 +12,13 @@ import org.veritasopher.seniz.core.model.domain.State;
  * @author Yepeng Ding
  * @date 12/3/2020
  */
-public class StateVisitor extends SenizParserBaseVisitor<SystemEnv> {
+public class StateDeclarationVisitor extends SenizParserBaseVisitor<SystemEnv> {
 
     private final SystemEnv systemEnv;
 
     private final StateDeclaratorVisitor stateDeclaratorVisitor;
 
-    public StateVisitor(SystemEnv systemEnv) {
+    public StateDeclarationVisitor(SystemEnv systemEnv) {
         this.systemEnv = systemEnv;
         this.stateDeclaratorVisitor = new StateDeclaratorVisitor(systemEnv);
     }
@@ -42,20 +42,6 @@ public class StateVisitor extends SenizParserBaseVisitor<SystemEnv> {
         }
 
         systemEnv.addState(name, state);
-        return systemEnv;
-    }
-
-    /**
-     * Visit states without explicit declarations
-     *
-     * @param ctx
-     * @return
-     */
-    @Override
-    public SystemEnv visitStateBody(SenizParser.StateBodyContext ctx) {
-        State state = ctx.stateDeclarator().accept(stateDeclaratorVisitor);
-
-        systemEnv.addState(state);
         return systemEnv;
     }
 

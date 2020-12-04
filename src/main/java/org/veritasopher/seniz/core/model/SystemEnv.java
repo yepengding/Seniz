@@ -7,9 +7,8 @@ import org.veritasopher.seniz.core.model.domain.State;
 import org.veritasopher.seniz.core.model.domain.StateVariable;
 import org.veritasopher.seniz.core.model.domain.Transition;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * System Environment
@@ -54,7 +53,7 @@ public class SystemEnv {
      *
      * @param stateVariable
      */
-    public void addVar(StateVariable stateVariable) {
+    public void addVariable(StateVariable stateVariable) {
         this.variables.put(stateVariable.getName(), stateVariable);
     }
 
@@ -65,8 +64,17 @@ public class SystemEnv {
      * @param name
      * @return
      */
-    public StateVariable getVar(String name) {
+    public StateVariable getVariable(String name) {
         return this.variables.get(name);
+    }
+
+    /**
+     * Get the set of state variables
+     *
+     * @return set of state variables
+     */
+    public Set<StateVariable> getVariableSet() {
+        return new HashSet<>(this.variables.values());
     }
 
     /**
