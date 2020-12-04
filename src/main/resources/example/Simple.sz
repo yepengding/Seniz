@@ -1,0 +1,35 @@
+system Simple over Vars {
+
+    s0 -> s1
+    s1 -> [a0] s2
+    s1 -> [a1] {v0: 077, v1: 2.2} -> [a2] s0
+    s2 -> [a3] {v0: 0} -> {v1: 1.1} -> {v2: true} -> {v3: "hello"}
+
+    s0 = {
+        v0: 0,
+        v1: 1.1,
+        v2: true,
+        v3: "hello"
+    }
+
+    // Don't care v3
+    s1 = {
+        v0: 0xA,
+        v1: 10.01,
+        v2: false
+    }
+
+    s2 = {
+        v0: -100,
+        v1: -0.1,
+        v3: "world"
+    }
+
+}
+
+variable Vars {
+    v0 :: int,
+    v1 :: float,
+    v2 :: bool,
+    v3 :: string
+}

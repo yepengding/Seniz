@@ -1,0 +1,28 @@
+system Transaction over TransactionVar {
+
+    { status: 0 } -> [PayGas] pending
+    pending -> [Proceed] success -> [Notify] notified
+    pending -> [Cancel] dropped
+
+    dropped -> [Notify] notified
+
+    pending = {
+        status: 1
+    }
+
+    success = {
+        status: 2
+    }
+
+    dropped = {
+        status: 3
+    }
+
+    notified = {
+        status: 4
+    }
+}
+
+variable TransactionVar {
+    status :: int
+}

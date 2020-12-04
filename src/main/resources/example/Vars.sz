@@ -1,0 +1,6 @@
+variable Vars {
+    a :: int,
+    b :: float,
+    c :: bool,
+    d :: string
+}
