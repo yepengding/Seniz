@@ -4,4 +4,6 @@ public interface Prefix {
 
     String ACTION = "@";
 
+    String STATE = "$";
+
 }

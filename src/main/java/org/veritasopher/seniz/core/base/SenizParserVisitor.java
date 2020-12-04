@@ -83,6 +83,12 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTransitionStatement(SenizParser.TransitionStatementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SenizParser#initIdentifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInitIdentifier(SenizParser.InitIdentifierContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SenizParser#actionDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

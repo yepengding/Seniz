@@ -1,6 +1,6 @@
 system Simple1 over Vars {
 
-    s0 -> [a0] {v0: 0} -> [a1] {v1: 1.1} -> [a2] {v2: true} -> [a3] {v3: "hello"}
+    init s0 -> [a0] {v0: 0} -> [a1] {v1: 1.1} -> [a2] {v2: true} -> [a3] {v3: "hello"}
 
     s0 = {
         v0: 0

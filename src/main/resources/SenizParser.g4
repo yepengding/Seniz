@@ -48,7 +48,11 @@ stateExpression
     ;
 
 transitionStatement
-    : stateIdentifier (TO actionDeclaration? stateIdentifier)+
+    : initIdentifier? stateIdentifier (TO actionDeclaration? stateIdentifier)+
+    ;
+
+initIdentifier
+    : INIT
     ;
 
 actionDeclaration

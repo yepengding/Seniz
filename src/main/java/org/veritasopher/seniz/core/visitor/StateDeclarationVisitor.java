@@ -7,7 +7,7 @@ import org.veritasopher.seniz.core.model.SystemEnv;
 import org.veritasopher.seniz.core.model.domain.State;
 
 /**
- * State Visitor
+ * State Declaration Visitor
  *
  * @author Yepeng Ding
  * @date 12/3/2020
@@ -38,7 +38,7 @@ public class StateDeclarationVisitor extends SenizParserBaseVisitor<SystemEnv> {
         // Check the uniqueness of state declaration
         String stateName = systemEnv.getStateName(state);
         if (stateName != null) {
-            throw new StateException(ctx.start.getLine(), "Cannot name the named state (" + stateName + ").");
+            throw new StateException(ctx.start.getLine(), "Cannot use occupied state name (" + stateName + ").");
         }
 
         systemEnv.addState(name, state);

@@ -4,6 +4,12 @@ import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.exception.TypeException;
 
+/**
+ * Literal Visitor
+ *
+ * @author Yepeng Ding
+ * @date 12/3/2020
+ */
 public class LiteralVisitor extends SenizParserBaseVisitor<Object> {
 
     @Override

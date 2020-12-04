@@ -2,16 +2,15 @@ package org.veritasopher.seniz.core.visitor;
 
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
-import org.veritasopher.seniz.core.model.domain.StateVariable;
-import org.veritasopher.seniz.exception.ActionException;
-import org.veritasopher.seniz.exception.StateException;
-import org.veritasopher.seniz.exception.TransitionException;
 import org.veritasopher.seniz.core.model.SystemEnv;
 import org.veritasopher.seniz.core.model.domain.Action;
 import org.veritasopher.seniz.core.model.domain.State;
+import org.veritasopher.seniz.core.model.domain.StateVariable;
 import org.veritasopher.seniz.core.model.domain.Transition;
+import org.veritasopher.seniz.exception.ActionException;
+import org.veritasopher.seniz.exception.StateException;
+import org.veritasopher.seniz.exception.TransitionException;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,13 +43,30 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
         int i = 0;
         Element element = ctx.getChild(i).accept(transitionStatementVisitor);
 
+        if (element == null) {
+            throw new TransitionException(ctx.start.getLine(), "Unsupported transition declaration.");
+        }
+
+        // Check init identifier
+        boolean isInit = false;
+        if (element.type == ElementType.INIT) {
+            isInit = true;
+            i++;
+            element = ctx.getChild(i).accept(transitionStatementVisitor);
+        }
+
         // Safety check (only state and action are legal)
-        if (element == null || element.type != ElementType.STATE) {
+        if (element.type != ElementType.STATE) {
             throw new TransitionException(ctx.start.getLine(), "Unsupported transition declaration.");
         }
 
         // Complete the first state with values of not contained state variables as 'null'
         inferState(element.state);
+
+        if (isInit) {
+            // Add to initial state set
+            systemEnv.addInitState(element.state);
+        }
 
         while (i < ctx.getChildCount() - 1) {
             Transition transition = new Transition();
@@ -71,7 +87,6 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
             switch (element.type) {
                 case STATE: {
                     // Implicit action can be omitted
-                    // TODO infer dst state
                     transition.setDstState(inferState(transition.getSrcState(), element.state));
                     break;
                 }
@@ -86,7 +101,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
                     if (element == null) {
                         throw new TransitionException(ctx.start.getLine(), "Unsupported transition declaration.");
                     }
-                    // TODO infer dst state
+
                     transition.setDstState(inferState(transition.getSrcState(), element.state));
                     break;
                 }
@@ -163,6 +178,17 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
             return new Element(ElementType.ACTION, new Action(ctx.IDENTIFIER().getText()));
         }
 
+        /**
+         * Init identifier
+         *
+         * @param ctx
+         * @return
+         */
+        @Override
+        public Element visitInitIdentifier(SenizParser.InitIdentifierContext ctx) {
+            return new Element(ElementType.INIT);
+        }
+
     }
 
     /**
@@ -209,7 +235,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
      * Main element types
      */
     private enum ElementType {
-        STATE, ACTION
+        STATE, ACTION, INIT
     }
 
     /**
@@ -222,6 +248,10 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
         private Action action;
 
         private final ElementType type;
+
+        Element(ElementType type) {
+            this.type = type;
+        }
 
         Element(ElementType type, State state) {
             this.state = state;

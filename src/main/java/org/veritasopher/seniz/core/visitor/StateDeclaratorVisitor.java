@@ -10,6 +10,12 @@ import org.veritasopher.seniz.core.model.domain.StateVariable;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * State Declarator Visitor
+ *
+ * @author Yepeng Ding
+ * @date 12/4/2020
+ */
 public class StateDeclaratorVisitor extends SenizParserBaseVisitor<State> {
 
     private final StateExpressionVisitor stateExpressionVisitor;

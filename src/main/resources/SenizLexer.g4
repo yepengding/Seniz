@@ -17,6 +17,10 @@ OVER
     : 'over'
     ;
 
+INIT
+    : 'init'
+    ;
+
 // Types
 BOOLEAN
     : 'bool'

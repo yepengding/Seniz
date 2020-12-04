@@ -30,6 +30,9 @@ public class SystemEnv {
     // State naming map <HashCode, Name>
     private BiMap<Integer, String> stateNames;
 
+    // Initial state set <HashCode>
+    private Set<Integer> initStates;
+
     // Transition map <HashCode, Transition>
     private Map<Integer, Transition> transitions;
 
@@ -38,6 +41,7 @@ public class SystemEnv {
         this.states = new HashMap<>();
         this.stateNames = HashBiMap.create();
         this.transitions = new HashMap<>();
+        this.initStates = new HashSet<>();
     }
 
     public SystemEnv(String identifier) {
@@ -46,6 +50,7 @@ public class SystemEnv {
         this.states = new HashMap<>();
         this.stateNames = HashBiMap.create();
         this.transitions = new HashMap<>();
+        this.initStates = new HashSet<>();
     }
 
     /**
@@ -61,11 +66,21 @@ public class SystemEnv {
     /**
      * Get a state variable by name
      *
-     * @param name
+     * @param name variable name
      * @return
      */
     public StateVariable getVariable(String name) {
         return this.variables.get(name);
+    }
+
+    /**
+     * Look up if variable exists.
+     *
+     * @param name variable name
+     * @return true if state exists. Otherwise false.
+     */
+    public boolean haveVariable(String name) {
+        return this.getVariables().containsKey(name);
     }
 
     /**
@@ -75,15 +90,6 @@ public class SystemEnv {
      */
     public Set<StateVariable> getVariableSet() {
         return new HashSet<>(this.variables.values());
-    }
-
-    /**
-     * Add a state
-     *
-     * @param state
-     */
-    public void addState(State state) {
-        this.states.put(state.hashCode(), state);
     }
 
     /**
@@ -127,7 +133,11 @@ public class SystemEnv {
         return this.stateNames.get(state.hashCode());
     }
 
-
+    /**
+     * Add a transition relation
+     *
+     * @param transition
+     */
     public void addTransition(Transition transition) {
         this.transitions.put(transition.hashCode(), transition);
     }
@@ -140,6 +150,15 @@ public class SystemEnv {
      */
     public boolean haveTransition(Transition transition) {
         return this.transitions.containsKey(transition.hashCode());
+    }
+
+    /**
+     * Add an initial state
+     *
+     * @param state initial state
+     */
+    public void addInitState(State state) {
+        this.initStates.add(state.hashCode());
     }
 
 }

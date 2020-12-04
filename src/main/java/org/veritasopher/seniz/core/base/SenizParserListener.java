@@ -128,6 +128,16 @@ public interface SenizParserListener extends ParseTreeListener {
 	 */
 	void exitTransitionStatement(SenizParser.TransitionStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SenizParser#initIdentifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterInitIdentifier(SenizParser.InitIdentifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#initIdentifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitInitIdentifier(SenizParser.InitIdentifierContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SenizParser#actionDeclaration}.
 	 * @param ctx the parse tree
 	 */
