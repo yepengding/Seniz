@@ -1,11 +1,11 @@
-package org.veritasopher.seniz.model;
+package org.veritasopher.seniz.core.model;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import lombok.Data;
-import org.veritasopher.seniz.model.domain.State;
-import org.veritasopher.seniz.model.domain.StateVariable;
-import org.veritasopher.seniz.model.domain.Transition;
+import org.veritasopher.seniz.core.model.domain.State;
+import org.veritasopher.seniz.core.model.domain.StateVariable;
+import org.veritasopher.seniz.core.model.domain.Transition;
 
 import java.util.HashMap;
 import java.util.Map;

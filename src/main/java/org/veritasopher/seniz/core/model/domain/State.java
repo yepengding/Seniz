@@ -1,4 +1,4 @@
-package org.veritasopher.seniz.model.domain;
+package org.veritasopher.seniz.core.model.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

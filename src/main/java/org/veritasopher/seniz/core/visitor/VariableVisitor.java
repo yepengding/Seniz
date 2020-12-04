@@ -3,8 +3,8 @@ package org.veritasopher.seniz.core.visitor;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.mapper.TypeMapper;
-import org.veritasopher.seniz.model.domain.StateVariable;
-import org.veritasopher.seniz.model.SystemEnv;
+import org.veritasopher.seniz.core.model.domain.StateVariable;
+import org.veritasopher.seniz.core.model.SystemEnv;
 
 public class VariableVisitor extends SenizParserBaseVisitor<SystemEnv> {
 

@@ -10,7 +10,7 @@ import org.veritasopher.seniz.core.mapper.TypeMapper;
 import org.veritasopher.seniz.core.visitor.StateVisitor;
 import org.veritasopher.seniz.core.visitor.TransitionVisitor;
 import org.veritasopher.seniz.core.visitor.VariableVisitor;
-import org.veritasopher.seniz.model.SystemEnv;
+import org.veritasopher.seniz.core.model.SystemEnv;
 
 import java.io.IOException;
 import java.io.InputStream;

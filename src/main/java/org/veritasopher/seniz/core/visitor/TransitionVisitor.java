@@ -5,10 +5,10 @@ import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.exception.ActionException;
 import org.veritasopher.seniz.exception.StateException;
 import org.veritasopher.seniz.exception.TransitionException;
-import org.veritasopher.seniz.model.SystemEnv;
-import org.veritasopher.seniz.model.domain.Action;
-import org.veritasopher.seniz.model.domain.State;
-import org.veritasopher.seniz.model.domain.Transition;
+import org.veritasopher.seniz.core.model.SystemEnv;
+import org.veritasopher.seniz.core.model.domain.Action;
+import org.veritasopher.seniz.core.model.domain.State;
+import org.veritasopher.seniz.core.model.domain.Transition;
 
 import java.util.Optional;
 

@@ -4,7 +4,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.veritasopher.seniz.core.base.SenizLexer;
 import org.veritasopher.seniz.core.base.SenizParser;
-import org.veritasopher.seniz.model.SystemEnv;
+import org.veritasopher.seniz.core.model.SystemEnv;
 
 import java.io.FileInputStream;
 import java.io.IOException;
