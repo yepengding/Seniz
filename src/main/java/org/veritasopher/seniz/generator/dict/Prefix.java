@@ -1,4 +1,4 @@
-package org.veritasopher.seniz.dict;
+package org.veritasopher.seniz.generator.dict;
 
 public interface Prefix {
 

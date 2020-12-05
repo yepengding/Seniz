@@ -2,6 +2,7 @@ package org.veritasopher.seniz;
 
 import org.apache.commons.cli.*;
 import org.veritasopher.seniz.config.Info;
+import org.veritasopher.seniz.exception.GlobalExceptionHandler;
 
 /**
  * Application

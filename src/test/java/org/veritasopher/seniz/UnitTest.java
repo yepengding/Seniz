@@ -3,16 +3,13 @@ package org.veritasopher.seniz;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.junit.Before;
 import org.junit.Test;
 import org.veritasopher.seniz.controller.CompileController;
 import org.veritasopher.seniz.core.base.SenizLexer;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.model.TransitionSystem;
-import org.veritasopher.seniz.core.model.VariableSet;
-import org.veritasopher.seniz.core.visitor.StateDeclarationVisitor;
-import org.veritasopher.seniz.core.visitor.TransitionVisitor;
-import org.veritasopher.seniz.core.visitor.VariableDeclaratorVisitor;
-import org.veritasopher.seniz.handler.TransitionSystemBuilder;
+import org.veritasopher.seniz.generator.DOTGenerator;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,9 +27,28 @@ import static org.junit.Assert.assertNotNull;
  */
 public class UnitTest {
 
+    private TransitionSystem testTS;
+
+    @Before
+    public void setUp() {
+        String path = resourcePath("example/TestTS.sz");
+        Set<String> sourceFilePaths = new HashSet<>();
+        sourceFilePaths.add(path);
+
+        CompileController compileController = new CompileController(sourceFilePaths);
+        compileController.compile();
+        testTS = compileController.getTransitionSystems().iterator().next();
+    }
+
+    @Test
+    public void testDOTGenerator() {
+        DOTGenerator dotGenerator = new DOTGenerator(testTS);
+        dotGenerator.generate();
+    }
+
     @Test
     public void testCompilationController() {
-        String path = resourcePath("example/Simple1.sz");
+        String path = resourcePath("example/Transaction.sz");
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 

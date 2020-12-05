@@ -12,18 +12,18 @@ import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.visitor.CompilationUnitVisitor;
 import org.veritasopher.seniz.exception.VariableException;
-import org.veritasopher.seniz.handler.TransitionSystemBuilder;
-import org.veritasopher.seniz.handler.VariableSetBuilder;
+import org.veritasopher.seniz.builder.TransitionSystemBuilder;
+import org.veritasopher.seniz.builder.VariableSetBuilder;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * Compilation Controller
+ * Compile all files to transition systems
  *
  * @author Yepeng Ding
  * @date 12/5/2020
@@ -81,7 +81,7 @@ public class CompileController {
             }
 
             // Build complete variable set
-            vars = variableSetBuilder.build(vars);
+            vars = variableSetBuilder.build(vars, tree);
 
             // Build transition system
             TransitionSystem ts = compilationUnit.getTransitionSystem();

@@ -1,6 +1,6 @@
 system Transaction over TransactionVar {
 
-    { status: 0 } -> [PayGas] pending
+    init { status: 0 } -> [PayGas] pending
     pending -> [Proceed] success -> [Notify] notified
     pending -> [Cancel] dropped
 

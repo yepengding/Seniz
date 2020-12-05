@@ -1,6 +1,5 @@
 package org.veritasopher.seniz.core.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.veritasopher.seniz.core.model.domain.Action;
@@ -116,8 +115,14 @@ public class TransitionSystem {
         this.actions.put(action.hashCode(), action);
     }
 
-    public Action getAction(int hashCode) {
-        return this.actions.get(hashCode);
+    /**
+     * Get action by hashcode
+     *
+     * @param hashCode
+     * @return either Action or null
+     */
+    public Optional<Action> getAction(Integer hashCode) {
+        return Optional.ofNullable(this.actions.get(hashCode));
     }
 
     /**

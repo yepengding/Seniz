@@ -19,7 +19,7 @@ public class Transition {
 
     private int srcState;
 
-    private int action;
+    private Integer action;
 
     private int dstState;
 
