@@ -4,7 +4,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.veritasopher.seniz.core.base.SenizLexer;
 import org.veritasopher.seniz.core.base.SenizParser;
-import org.veritasopher.seniz.core.model.SystemEnv;
+import org.veritasopher.seniz.core.model.TransitionSystem;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,13 +18,11 @@ import java.io.IOException;
 public class SystemController {
 
     private final String sourceFilePath;
-    private final String specName;
 
-    private SystemEnv systemEnv;
+    private TransitionSystem transitionSystem;
 
     public SystemController(String sourceFilePath, String specName) {
         this.sourceFilePath = sourceFilePath;
-        this.specName = specName;
     }
 
     public void run() {
@@ -34,7 +32,7 @@ public class SystemController {
             SenizParser parser = new SenizParser(new CommonTokenStream(lexer));
             parser.setBuildParseTree(true);
 
-            this.systemEnv = new SystemEnv();
+            this.transitionSystem = new TransitionSystem();
 
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());

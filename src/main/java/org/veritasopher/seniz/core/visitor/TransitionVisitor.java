@@ -2,7 +2,7 @@ package org.veritasopher.seniz.core.visitor;
 
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
-import org.veritasopher.seniz.core.model.SystemEnv;
+import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.domain.Action;
 import org.veritasopher.seniz.core.model.domain.State;
 import org.veritasopher.seniz.core.model.domain.StateVariable;
@@ -22,25 +22,25 @@ import java.util.stream.Collectors;
  * @author Yepeng Ding
  * @date 12/3/2020
  */
-public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
+public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> {
 
-    private final SystemEnv systemEnv;
+    private final TransitionSystem transitionSystem;
 
     private final TransitionStatementVisitor transitionStatementVisitor;
 
-    public TransitionVisitor(SystemEnv systemEnv) {
-        this.systemEnv = systemEnv;
-        this.transitionStatementVisitor = new TransitionStatementVisitor(systemEnv);
+    public TransitionVisitor(TransitionSystem transitionSystem) {
+        this.transitionSystem = transitionSystem;
+        this.transitionStatementVisitor = new TransitionStatementVisitor(transitionSystem);
     }
 
     /**
      * Construct the transition set by visiting transition statements
      *
      * @param ctx transition statement context
-     * @return system environment
+     * @return transition system
      */
     @Override
-    public SystemEnv visitTransitionStatement(SenizParser.TransitionStatementContext ctx) {
+    public TransitionSystem visitTransitionStatement(SenizParser.TransitionStatementContext ctx) {
         int i = 0;
         Element element = ctx.getChild(i).accept(transitionStatementVisitor);
 
@@ -66,7 +66,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
 
         if (isInit) {
             // Add to initial state set
-            systemEnv.addInitState(element.state);
+            transitionSystem.addInitState(element.state);
         }
 
         while (i < ctx.getChildCount() - 1) {
@@ -89,8 +89,8 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
                 // Explicit action
                 Action action = element.action;
 
-                // Add new action to system environment
-                systemEnv.addAction(action);
+                // Add new action
+                transitionSystem.addAction(action);
 
                 transition.setAction(action.hashCode());
 
@@ -104,15 +104,15 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
             }
 
             // Infer destination state
-            element.state = inferState(systemEnv.getState(transition.getSrcState()), element.state);
+            element.state = inferState(transitionSystem.getState(transition.getSrcState()), element.state);
             transition.setDstState(element.state.hashCode());
 
             // Transition duplicated
-            if (systemEnv.hasTransition(transition)) {
+            if (transitionSystem.hasTransition(transition)) {
                 throw new TransitionException(ctx.start.getLine(), "Transition is duplicated.");
             }
 
-            systemEnv.addTransition(transition);
+            transitionSystem.addTransition(transition);
 
         }
 
@@ -122,13 +122,13 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
 
     private static class TransitionStatementVisitor extends SenizParserBaseVisitor<Element> {
 
-        private final SystemEnv systemEnv;
+        private final TransitionSystem transitionSystem;
 
         private final StateDeclaratorVisitor stateDeclaratorVisitor;
 
-        TransitionStatementVisitor(SystemEnv systemEnv) {
-            this.systemEnv = systemEnv;
-            this.stateDeclaratorVisitor = new StateDeclaratorVisitor(systemEnv);
+        TransitionStatementVisitor(TransitionSystem transitionSystem) {
+            this.transitionSystem = transitionSystem;
+            this.stateDeclaratorVisitor = new StateDeclaratorVisitor(transitionSystem);
         }
 
         /**
@@ -145,7 +145,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
             if (ctx.IDENTIFIER() != null) {
                 // Named state
                 String name = ctx.IDENTIFIER().getText();
-                Optional<State> s = systemEnv.getStateName(name);
+                Optional<State> s = transitionSystem.getStateName(name);
 
                 // Check whether state associated with identifier exists
                 if (!s.isPresent()) {
@@ -208,15 +208,15 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
                 .map(StateVariable::getName)
                 .collect(Collectors.toSet());
 
-        systemEnv.getVariableSet()
+        transitionSystem.getVariableSet()
                 .stream()
                 .filter(v -> !varNames.contains(v.getName()))
                 .forEach(variables::add);
 
         inferredState = new State(variables);
 
-        // Add state to system environment
-        systemEnv.addState(inferredState);
+        // Add state
+        transitionSystem.addState(inferredState);
         return inferredState;
     }
 
@@ -244,8 +244,8 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
 
         inferredState = new State(variables);
 
-        // Add state to system environment
-        systemEnv.addState(inferredState);
+        // Add state
+        transitionSystem.addState(inferredState);
         return inferredState;
     }
 

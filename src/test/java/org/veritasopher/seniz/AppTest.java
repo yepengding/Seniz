@@ -1,13 +1,6 @@
 package org.veritasopher.seniz;
 
-import static org.junit.Assert.assertTrue;
-
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
-
-import java.io.InputStream;
 
 /**
  * Application Test
@@ -18,7 +11,9 @@ import java.io.InputStream;
 public class AppTest {
 
     @Test
-    public void test1() {
-
+    public void testHelp() {
+        String[] args = {"-h"};
+        App.main(args);
     }
+
 }

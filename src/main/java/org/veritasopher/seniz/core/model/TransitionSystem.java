@@ -9,13 +9,13 @@ import org.veritasopher.seniz.core.model.domain.Transition;
 import java.util.*;
 
 /**
- * System Environment
+ * Transition System
  *
  * @author Yepeng Ding
- * @date 12/2/2020
+ * @date 12/5/2020
  */
 @Data
-public class SystemEnv {
+public class TransitionSystem {
 
     private String identifier;
 
@@ -37,7 +37,7 @@ public class SystemEnv {
     // State naming map <Name, State>
     private Map<String, State> stateNames;
 
-    public SystemEnv() {
+    public TransitionSystem() {
         this.variables = new HashMap<>();
         this.states = new HashMap<>();
         this.actions = new HashMap<>();
@@ -46,7 +46,7 @@ public class SystemEnv {
         this.stateNames = new HashMap<>();
     }
 
-    public SystemEnv(String identifier) {
+    public TransitionSystem(String identifier) {
         this.identifier = identifier;
         this.variables = new HashMap<>();
         this.states = new HashMap<>();

@@ -4,7 +4,7 @@ import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.mapper.TypeMapper;
 import org.veritasopher.seniz.core.model.domain.StateVariable;
-import org.veritasopher.seniz.core.model.SystemEnv;
+import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.exception.VariableException;
 
 /**
@@ -13,27 +13,27 @@ import org.veritasopher.seniz.exception.VariableException;
  * @author Yepeng Ding
  * @date 12/3/2020
  */
-public class VariableVisitor extends SenizParserBaseVisitor<SystemEnv> {
+public class VariableVisitor extends SenizParserBaseVisitor<TransitionSystem> {
 
-    private final SystemEnv systemEnv;
+    private final TransitionSystem transitionSystem;
 
-    public VariableVisitor(SystemEnv systemEnv) {
-        this.systemEnv = systemEnv;
+    public VariableVisitor(TransitionSystem transitionSystem) {
+        this.transitionSystem = transitionSystem;
     }
 
     @Override
-    public SystemEnv visitVariableExpression(SenizParser.VariableExpressionContext ctx) {
+    public TransitionSystem visitVariableExpression(SenizParser.VariableExpressionContext ctx) {
         String name = ctx.IDENTIFIER().getText();
 
         // Check the name uniqueness
-        if (systemEnv.hasVariable(name)) {
+        if (transitionSystem.hasVariable(name)) {
             throw new VariableException(ctx.start.getLine(), "Cannot use occupied variable name (" + name + ").");
         }
 
         String type = ctx.primitiveType().getText();
         StateVariable stateVariable = new StateVariable(name, TypeMapper.map(type), null);
-        systemEnv.addVariable(stateVariable);
-        return systemEnv;
+        transitionSystem.addVariable(stateVariable);
+        return transitionSystem;
     }
 
 }

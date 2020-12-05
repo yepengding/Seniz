@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 import org.veritasopher.seniz.core.base.SenizLexer;
 import org.veritasopher.seniz.core.base.SenizParser;
-import org.veritasopher.seniz.core.model.SystemEnv;
+import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.visitor.StateDeclarationVisitor;
 import org.veritasopher.seniz.core.visitor.TransitionVisitor;
 import org.veritasopher.seniz.core.visitor.VariableVisitor;
@@ -27,18 +27,18 @@ public class UnitTest {
     @Test
     public void testTransitionVisitor() {
         ParseTree tree = getParserTreeFromFile("example/Simple1.sz");
-        SystemEnv systemEnv = new SystemEnv();
+        TransitionSystem transitionSystem = new TransitionSystem();
 
-        VariableVisitor variableVisitor = new VariableVisitor(systemEnv);
+        VariableVisitor variableVisitor = new VariableVisitor(transitionSystem);
         variableVisitor.visit(tree);
 
-        StateDeclarationVisitor stateDeclarationVisitor = new StateDeclarationVisitor(systemEnv);
+        StateDeclarationVisitor stateDeclarationVisitor = new StateDeclarationVisitor(transitionSystem);
         stateDeclarationVisitor.visit(tree);
 
-        TransitionVisitor transitionVisitor = new TransitionVisitor(systemEnv);
+        TransitionVisitor transitionVisitor = new TransitionVisitor(transitionSystem);
         transitionVisitor.visit(tree);
 
-        systemEnv.getTransitions().forEach((name, transition) -> {
+        transitionSystem.getTransitions().forEach((name, transition) -> {
             System.out.println(transition);
         });
     }
@@ -46,15 +46,15 @@ public class UnitTest {
     @Test
     public void testStateDeclarationVisitor() {
         ParseTree tree = getParserTreeFromFile("example/Simple1.sz");
-        SystemEnv systemEnv = new SystemEnv();
+        TransitionSystem transitionSystem = new TransitionSystem();
 
-        VariableVisitor variableVisitor = new VariableVisitor(systemEnv);
+        VariableVisitor variableVisitor = new VariableVisitor(transitionSystem);
         variableVisitor.visit(tree);
 
-        StateDeclarationVisitor stateDeclarationVisitor = new StateDeclarationVisitor(systemEnv);
+        StateDeclarationVisitor stateDeclarationVisitor = new StateDeclarationVisitor(transitionSystem);
         stateDeclarationVisitor.visit(tree);
 
-        systemEnv.getStates().forEach((name, state) -> {
+        transitionSystem.getStates().forEach((name, state) -> {
             System.out.println(state);
         });
     }
@@ -62,12 +62,12 @@ public class UnitTest {
     @Test
     public void testVariableVisitor() {
         ParseTree tree = getParserTreeFromFile("example/Vars.sz");
-        SystemEnv systemEnv = new SystemEnv();
+        TransitionSystem transitionSystem = new TransitionSystem();
 
-        VariableVisitor variableVisitor = new VariableVisitor(systemEnv);
+        VariableVisitor variableVisitor = new VariableVisitor(transitionSystem);
         variableVisitor.visit(tree);
 
-        systemEnv.getVariables().values().forEach(System.out::println);
+        transitionSystem.getVariables().values().forEach(System.out::println);
     }
 
 

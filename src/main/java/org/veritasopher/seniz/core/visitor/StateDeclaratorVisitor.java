@@ -3,7 +3,7 @@ package org.veritasopher.seniz.core.visitor;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.exception.VariableException;
-import org.veritasopher.seniz.core.model.SystemEnv;
+import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.domain.State;
 import org.veritasopher.seniz.core.model.domain.StateVariable;
 
@@ -20,8 +20,8 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<State> {
 
     private final StateExpressionVisitor stateExpressionVisitor;
 
-    public StateDeclaratorVisitor(SystemEnv systemEnv) {
-        this.stateExpressionVisitor = new StateExpressionVisitor(systemEnv);
+    public StateDeclaratorVisitor(TransitionSystem transitionSystem) {
+        this.stateExpressionVisitor = new StateExpressionVisitor(transitionSystem);
     }
 
     @Override
@@ -36,19 +36,19 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<State> {
 
     private static class StateExpressionVisitor extends SenizParserBaseVisitor<StateVariable> {
 
-        private final SystemEnv systemEnv;
+        private final TransitionSystem transitionSystem;
 
         private final LiteralVisitor literalVisitor;
 
-        StateExpressionVisitor(SystemEnv systemEnv) {
-            this.systemEnv = systemEnv;
+        StateExpressionVisitor(TransitionSystem transitionSystem) {
+            this.transitionSystem = transitionSystem;
             this.literalVisitor = new LiteralVisitor();
         }
 
         @Override
         public StateVariable visitStateExpression(SenizParser.StateExpressionContext ctx) {
             String name = ctx.IDENTIFIER().getText();
-            StateVariable var = systemEnv.getVariable(name);
+            StateVariable var = transitionSystem.getVariable(name);
 
             // Check if variable is defined
             if (var == null) {

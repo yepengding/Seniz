@@ -3,7 +3,7 @@ package org.veritasopher.seniz.core.visitor;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.exception.StateException;
-import org.veritasopher.seniz.core.model.SystemEnv;
+import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.domain.State;
 
 /**
@@ -12,15 +12,15 @@ import org.veritasopher.seniz.core.model.domain.State;
  * @author Yepeng Ding
  * @date 12/3/2020
  */
-public class StateDeclarationVisitor extends SenizParserBaseVisitor<SystemEnv> {
+public class StateDeclarationVisitor extends SenizParserBaseVisitor<TransitionSystem> {
 
-    private final SystemEnv systemEnv;
+    private final TransitionSystem transitionSystem;
 
     private final StateDeclaratorVisitor stateDeclaratorVisitor;
 
-    public StateDeclarationVisitor(SystemEnv systemEnv) {
-        this.systemEnv = systemEnv;
-        this.stateDeclaratorVisitor = new StateDeclaratorVisitor(systemEnv);
+    public StateDeclarationVisitor(TransitionSystem transitionSystem) {
+        this.transitionSystem = transitionSystem;
+        this.stateDeclaratorVisitor = new StateDeclaratorVisitor(transitionSystem);
     }
 
     /**
@@ -30,18 +30,18 @@ public class StateDeclarationVisitor extends SenizParserBaseVisitor<SystemEnv> {
      * @return
      */
     @Override
-    public SystemEnv visitStateDeclaration(SenizParser.StateDeclarationContext ctx) {
+    public TransitionSystem visitStateDeclaration(SenizParser.StateDeclarationContext ctx) {
         String name = ctx.IDENTIFIER().getText();
 
         State state = ctx.stateBody().stateDeclarator().accept(stateDeclaratorVisitor);
 
         // Check the uniqueness of state declaration
-        if (systemEnv.hasStateName(name)) {
+        if (transitionSystem.hasStateName(name)) {
             throw new StateException(ctx.start.getLine(), "Cannot use occupied state name (" + name + ").");
         }
 
-        systemEnv.addStateName(name, state);
-        return systemEnv;
+        transitionSystem.addStateName(name, state);
+        return transitionSystem;
     }
 
 }
