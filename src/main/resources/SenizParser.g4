@@ -76,7 +76,7 @@ variableHeader
     ;
 
 variableBody
-    : LBRACE variableDeclarator* RBRACE
+    : LBRACE variableDeclarator? RBRACE
     ;
 
 variableDeclarator

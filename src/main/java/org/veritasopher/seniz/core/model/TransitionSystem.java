@@ -1,6 +1,8 @@
 package org.veritasopher.seniz.core.model;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.veritasopher.seniz.core.model.domain.Action;
 import org.veritasopher.seniz.core.model.domain.State;
 import org.veritasopher.seniz.core.model.domain.StateVariable;
@@ -14,57 +16,38 @@ import java.util.*;
  * @author Yepeng Ding
  * @date 12/5/2020
  */
-@Data
+@Getter
 public class TransitionSystem {
 
-    private String identifier;
+    private final String identifier;
 
-    // Variable map <Name, State variable>
-    private Map<String, StateVariable> variables;
+    @Setter
+    private VariableSet variables;
 
     // State map <HashCode, State>
-    private Map<Integer, State> states;
+    private final Map<Integer, State> states;
 
     // Action map <HashCode, Action>
-    private Map<Integer, Action> actions;
+    private final Map<Integer, Action> actions;
 
     // Initial state set <HashCode>
-    private Set<Integer> initStates;
+    private final Set<Integer> initStates;
 
     // Transition map <HashCode, Transition>
-    private Map<Integer, Transition> transitions;
+    private final Map<Integer, Transition> transitions;
 
     // State naming map <Name, State>
-    private Map<String, State> stateNames;
-
-    public TransitionSystem() {
-        this.variables = new HashMap<>();
-        this.states = new HashMap<>();
-        this.actions = new HashMap<>();
-        this.transitions = new HashMap<>();
-        this.initStates = new HashSet<>();
-        this.stateNames = new HashMap<>();
-    }
+    private final Map<String, State> stateNames;
 
     public TransitionSystem(String identifier) {
         this.identifier = identifier;
-        this.variables = new HashMap<>();
+        this.variables = new VariableSet();
         this.states = new HashMap<>();
         this.actions = new HashMap<>();
         this.transitions = new HashMap<>();
         this.initStates = new HashSet<>();
         this.stateNames = new HashMap<>();
     }
-
-    /**
-     * Add a state variable
-     *
-     * @param stateVariable
-     */
-    public void addVariable(StateVariable stateVariable) {
-        this.variables.put(stateVariable.getName(), stateVariable);
-    }
-
 
     /**
      * Get a state variable by name
@@ -73,7 +56,7 @@ public class TransitionSystem {
      * @return
      */
     public StateVariable getVariable(String name) {
-        return this.variables.get(name);
+        return this.variables.getVariable(name);
     }
 
     /**
@@ -83,7 +66,7 @@ public class TransitionSystem {
      * @return true if state exists. Otherwise false.
      */
     public boolean hasVariable(String name) {
-        return this.getVariables().containsKey(name);
+        return this.variables.hasVariable(name);
     }
 
     /**
@@ -92,7 +75,7 @@ public class TransitionSystem {
      * @return set of state variables
      */
     public Set<StateVariable> getVariableSet() {
-        return new HashSet<>(this.variables.values());
+        return this.variables.getVariableSet();
     }
 
     /**
