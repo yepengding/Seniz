@@ -36,12 +36,11 @@ public class StateDeclarationVisitor extends SenizParserBaseVisitor<SystemEnv> {
         State state = ctx.stateBody().stateDeclarator().accept(stateDeclaratorVisitor);
 
         // Check the uniqueness of state declaration
-        String stateName = systemEnv.getStateName(state);
-        if (stateName != null) {
-            throw new StateException(ctx.start.getLine(), "Cannot use occupied state name (" + stateName + ").");
+        if (systemEnv.hasStateName(name)) {
+            throw new StateException(ctx.start.getLine(), "Cannot use occupied state name (" + name + ").");
         }
 
-        systemEnv.addState(name, state);
+        systemEnv.addStateName(name, state);
         return systemEnv;
     }
 

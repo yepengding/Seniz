@@ -26,7 +26,7 @@ public class VariableVisitor extends SenizParserBaseVisitor<SystemEnv> {
         String name = ctx.IDENTIFIER().getText();
 
         // Check the name uniqueness
-        if (systemEnv.haveVariable(name)) {
+        if (systemEnv.hasVariable(name)) {
             throw new VariableException(ctx.start.getLine(), "Cannot use occupied variable name (" + name + ").");
         }
 

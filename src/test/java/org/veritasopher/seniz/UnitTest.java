@@ -6,11 +6,10 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 import org.veritasopher.seniz.core.base.SenizLexer;
 import org.veritasopher.seniz.core.base.SenizParser;
-import org.veritasopher.seniz.core.mapper.TypeMapper;
+import org.veritasopher.seniz.core.model.SystemEnv;
 import org.veritasopher.seniz.core.visitor.StateDeclarationVisitor;
 import org.veritasopher.seniz.core.visitor.TransitionVisitor;
 import org.veritasopher.seniz.core.visitor.VariableVisitor;
-import org.veritasopher.seniz.core.model.SystemEnv;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,10 +67,7 @@ public class UnitTest {
         VariableVisitor variableVisitor = new VariableVisitor(systemEnv);
         variableVisitor.visit(tree);
 
-        systemEnv.getVariables().forEach((name, variable) -> {
-            System.out.println(name);
-            System.out.println(TypeMapper.map(variable.getType()));
-        });
+        systemEnv.getVariables().values().forEach(System.out::println);
     }
 
 

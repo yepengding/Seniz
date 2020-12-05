@@ -17,10 +17,10 @@ import lombok.ToString;
 @ToString
 public class Transition {
 
-    private State srcState;
+    private int srcState;
 
-    private Action action;
+    private int action;
 
-    private State dstState;
+    private int dstState;
 
 }

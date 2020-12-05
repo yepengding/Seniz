@@ -1,14 +1,12 @@
 package org.veritasopher.seniz.core.model;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import lombok.Data;
+import org.veritasopher.seniz.core.model.domain.Action;
 import org.veritasopher.seniz.core.model.domain.State;
 import org.veritasopher.seniz.core.model.domain.StateVariable;
 import org.veritasopher.seniz.core.model.domain.Transition;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * System Environment
@@ -27,8 +25,8 @@ public class SystemEnv {
     // State map <HashCode, State>
     private Map<Integer, State> states;
 
-    // State naming map <HashCode, Name>
-    private BiMap<Integer, String> stateNames;
+    // Action map <HashCode, Action>
+    private Map<Integer, Action> actions;
 
     // Initial state set <HashCode>
     private Set<Integer> initStates;
@@ -36,21 +34,26 @@ public class SystemEnv {
     // Transition map <HashCode, Transition>
     private Map<Integer, Transition> transitions;
 
+    // State naming map <Name, State>
+    private Map<String, State> stateNames;
+
     public SystemEnv() {
         this.variables = new HashMap<>();
         this.states = new HashMap<>();
-        this.stateNames = HashBiMap.create();
+        this.actions = new HashMap<>();
         this.transitions = new HashMap<>();
         this.initStates = new HashSet<>();
+        this.stateNames = new HashMap<>();
     }
 
     public SystemEnv(String identifier) {
         this.identifier = identifier;
         this.variables = new HashMap<>();
         this.states = new HashMap<>();
-        this.stateNames = HashBiMap.create();
+        this.actions = new HashMap<>();
         this.transitions = new HashMap<>();
         this.initStates = new HashSet<>();
+        this.stateNames = new HashMap<>();
     }
 
     /**
@@ -79,7 +82,7 @@ public class SystemEnv {
      * @param name variable name
      * @return true if state exists. Otherwise false.
      */
-    public boolean haveVariable(String name) {
+    public boolean hasVariable(String name) {
         return this.getVariables().containsKey(name);
     }
 
@@ -93,24 +96,22 @@ public class SystemEnv {
     }
 
     /**
-     * Add a state with name
+     * Add a state
      *
-     * @param name
      * @param state
      */
-    public void addState(String name, State state) {
+    public void addState(State state) {
         this.states.put(state.hashCode(), state);
-        this.stateNames.put(state.hashCode(), name);
     }
 
     /**
-     * Get a state by name
+     * Get a state by hash code
      *
-     * @param name
+     * @param hashCode
      * @return
      */
-    public Optional<State> getState(String name) {
-        return Optional.ofNullable(states.get(stateNames.inverse().get(name)));
+    public State getState(int hashCode) {
+        return this.states.get(hashCode);
     }
 
     /**
@@ -119,18 +120,21 @@ public class SystemEnv {
      * @param state
      * @return true if state exists. Otherwise false.
      */
-    public boolean haveState(State state) {
+    public boolean hasState(State state) {
         return this.states.containsKey(state.hashCode());
     }
 
     /**
-     * Get a state name
+     * Add an action
      *
-     * @param state
-     * @return state name if exists. Otherwise null;
+     * @param action
      */
-    public String getStateName(State state) {
-        return this.stateNames.get(state.hashCode());
+    public void addAction(Action action) {
+        this.actions.put(action.hashCode(), action);
+    }
+
+    public Action getAction(int hashCode) {
+        return this.actions.get(hashCode);
     }
 
     /**
@@ -148,7 +152,7 @@ public class SystemEnv {
      * @param transition
      * @return true if transition exists. Otherwise false.
      */
-    public boolean haveTransition(Transition transition) {
+    public boolean hasTransition(Transition transition) {
         return this.transitions.containsKey(transition.hashCode());
     }
 
@@ -159,6 +163,46 @@ public class SystemEnv {
      */
     public void addInitState(State state) {
         this.initStates.add(state.hashCode());
+    }
+
+    /**
+     * Look up if initial state exists.
+     *
+     * @param state
+     * @return true if initial state exists. Otherwise false.
+     */
+    public boolean hasInitState(State state) {
+        return this.getInitStates().contains(state.hashCode());
+    }
+
+    /**
+     * Add a state name
+     *
+     * @param name
+     * @param state
+     */
+    public void addStateName(String name, State state) {
+        this.stateNames.put(name, state);
+    }
+
+    /**
+     * Get a named state
+     *
+     * @param name state name
+     * @return Either a named state or null
+     */
+    public Optional<State> getStateName(String name) {
+        return Optional.ofNullable(this.stateNames.get(name));
+    }
+
+    /**
+     * Look up if state name exists.
+     *
+     * @param name state name
+     * @return true if state name exists. Otherwise false.
+     */
+    public boolean hasStateName(String name) {
+        return this.stateNames.containsKey(name);
     }
 
 }

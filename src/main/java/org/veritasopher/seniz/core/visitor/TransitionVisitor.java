@@ -11,6 +11,7 @@ import org.veritasopher.seniz.exception.ActionException;
 import org.veritasopher.seniz.exception.StateException;
 import org.veritasopher.seniz.exception.TransitionException;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -60,8 +61,8 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
             throw new TransitionException(ctx.start.getLine(), "Unsupported transition declaration.");
         }
 
-        // Complete the first state with values of not contained state variables as 'null'
-        inferState(element.state);
+        // Infer the first state
+        element.state = inferState(element.state);
 
         if (isInit) {
             // Add to initial state set
@@ -75,7 +76,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
                 throw new TransitionException(ctx.start.getLine(), "Unsupported transition declaration.");
             }
 
-            transition.setSrcState(element.state);
+            transition.setSrcState(element.state.hashCode());
 
             i += 2;
             element = ctx.getChild(i).accept(transitionStatementVisitor);
@@ -84,31 +85,30 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
                 throw new TransitionException(ctx.start.getLine(), "Unsupported transition declaration.");
             }
 
-            switch (element.type) {
-                case STATE: {
-                    // Implicit action can be omitted
-                    transition.setDstState(inferState(transition.getSrcState(), element.state));
-                    break;
-                }
-                case ACTION: {
-                    // Explicit action
-                    transition.setAction(element.action);
+            if (element.type == ElementType.ACTION) {
+                // Explicit action
+                Action action = element.action;
 
-                    // Get destination state
-                    i++;
-                    element = ctx.getChild(i).accept(transitionStatementVisitor);
+                // Add new action to system environment
+                systemEnv.addAction(action);
 
-                    if (element == null) {
-                        throw new TransitionException(ctx.start.getLine(), "Unsupported transition declaration.");
-                    }
+                transition.setAction(action.hashCode());
 
-                    transition.setDstState(inferState(transition.getSrcState(), element.state));
-                    break;
+                // Get destination state
+                i++;
+                element = ctx.getChild(i).accept(transitionStatementVisitor);
+
+                if (element == null || element.type != ElementType.STATE) {
+                    throw new TransitionException(ctx.start.getLine(), "Unsupported transition declaration.");
                 }
             }
 
+            // Infer destination state
+            element.state = inferState(systemEnv.getState(transition.getSrcState()), element.state);
+            transition.setDstState(element.state.hashCode());
+
             // Transition duplicated
-            if (systemEnv.haveTransition(transition)) {
+            if (systemEnv.hasTransition(transition)) {
                 throw new TransitionException(ctx.start.getLine(), "Transition is duplicated.");
             }
 
@@ -145,7 +145,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
             if (ctx.IDENTIFIER() != null) {
                 // Named state
                 String name = ctx.IDENTIFIER().getText();
-                Optional<State> s = systemEnv.getState(name);
+                Optional<State> s = systemEnv.getStateName(name);
 
                 // Check whether state associated with identifier exists
                 if (!s.isPresent()) {
@@ -193,11 +193,16 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
 
     /**
      * Infer the first state of a transition
+     * Complete the first state with values of not contained state variables as 'null'
      *
      * @param fst first state
      * @return inferred state
      */
     private State inferState(State fst) {
+        State inferredState;
+
+        Set<StateVariable> variables = new HashSet<>(fst.getVariables());
+
         Set<String> varNames = fst.getVariables()
                 .stream()
                 .map(StateVariable::getName)
@@ -206,9 +211,13 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
         systemEnv.getVariableSet()
                 .stream()
                 .filter(v -> !varNames.contains(v.getName()))
-                .forEach(fst.getVariables()::add);
+                .forEach(variables::add);
 
-        return fst;
+        inferredState = new State(variables);
+
+        // Add state to system environment
+        systemEnv.addState(inferredState);
+        return inferredState;
     }
 
     /**
@@ -219,6 +228,10 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
      * @return inferred state
      */
     private State inferState(State src, State dst) {
+        State inferredState;
+
+        Set<StateVariable> variables = new HashSet<>(dst.getVariables());
+
         Set<String> varNames = dst.getVariables()
                 .stream()
                 .map(StateVariable::getName)
@@ -227,8 +240,13 @@ public class TransitionVisitor extends SenizParserBaseVisitor<SystemEnv> {
         src.getVariables()
                 .stream()
                 .filter(v -> !varNames.contains(v.getName()))
-                .forEach(dst.getVariables()::add);
-        return dst;
+                .forEach(variables::add);
+
+        inferredState = new State(variables);
+
+        // Add state to system environment
+        systemEnv.addState(inferredState);
+        return inferredState;
     }
 
     /**
