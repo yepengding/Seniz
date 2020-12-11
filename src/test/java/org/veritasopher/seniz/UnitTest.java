@@ -48,7 +48,6 @@ public class UnitTest {
         String path = resourcePath("example/TestTS.sz");
         File file = new File(path);
         String sourceFileContent = Files.toString(file, Charsets.UTF_8);
-
         CompileController compileController = new CompileController();
         compileController.compile(sourceFileContent);
         TransitionSystem ts = compileController.getHighestTS();
