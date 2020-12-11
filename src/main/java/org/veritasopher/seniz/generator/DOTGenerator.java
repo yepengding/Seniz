@@ -28,7 +28,18 @@ public class DOTGenerator {
     /**
      * Generate DOT program and print to console
      */
-    public void generate() {
+    public void generateToConsole() {
+        System.out.println(build());
+    }
+
+    /**
+     * Generate DOT program and return as string
+     */
+    public String generateAsString() {
+        return build();
+    }
+
+    private String build() {
         StringBuilder program = new StringBuilder();
 
         // Generate header
@@ -45,12 +56,7 @@ public class DOTGenerator {
 
         // Generate footer
         program.append('}');
-
-        System.out.println(program.toString());
-    }
-
-    public void generate(String outputPath) {
-
+        return program.toString();
     }
 
     /**

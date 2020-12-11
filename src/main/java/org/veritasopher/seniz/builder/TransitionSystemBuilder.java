@@ -6,7 +6,9 @@ import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.visitor.StateDeclarationVisitor;
 import org.veritasopher.seniz.core.visitor.TransitionVisitor;
+import org.veritasopher.seniz.exception.BaseException;
 import org.veritasopher.seniz.exception.StateException;
+import org.veritasopher.seniz.exception.TransitionException;
 
 /**
  * Transition System Builder
@@ -20,8 +22,8 @@ public class TransitionSystemBuilder {
      * Build transition system
      *
      * @param transitionSystem identified transition system
-     * @param variableSet variable set
-     * @param tree parse tree
+     * @param variableSet      variable set
+     * @param tree             parse tree
      * @return built transition system
      */
     public TransitionSystem build(TransitionSystem transitionSystem, VariableSet variableSet, ParseTree tree) {
@@ -33,16 +35,27 @@ public class TransitionSystemBuilder {
         transitionSystem.setVariables(variableSet);
 
         // Collect named states
-        StateDeclarationVisitor stateDeclarationVisitor = new StateDeclarationVisitor(transitionSystem);
-        stateDeclarationVisitor.visit(tree);
+        try {
+            StateDeclarationVisitor stateDeclarationVisitor = new StateDeclarationVisitor(transitionSystem);
+            stateDeclarationVisitor.visit(tree);
+        } catch (StateException e) {
+            return null;
+        }
 
         // Collect all transitions, inferred states, initial states and actions
-        TransitionVisitor transitionVisitor = new TransitionVisitor(transitionSystem);
-        transitionVisitor.visit(tree);
+        try {
+            TransitionVisitor transitionVisitor = new TransitionVisitor(transitionSystem);
+            transitionVisitor.visit(tree);
+        } catch (TransitionException e) {
+            return null;
+        }
 
         // Check legacy
-        legacyCheck(transitionSystem);
-
+        try {
+            legacyCheck(transitionSystem);
+        } catch (StateException e) {
+            return null;
+        }
         return transitionSystem;
     }
 

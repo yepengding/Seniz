@@ -1,6 +1,7 @@
 package org.veritasopher.seniz.controller;
 
 import lombok.Getter;
+import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -30,8 +31,6 @@ import java.util.stream.Collectors;
  */
 public class CompileController {
 
-    private final Set<String> sourceFilePaths;
-
     private final TransitionSystemBuilder transitionSystemBuilder;
 
     private final VariableSetBuilder variableSetBuilder;
@@ -39,14 +38,16 @@ public class CompileController {
     @Getter
     private final Set<TransitionSystem> transitionSystems;
 
-    public CompileController(Set<String> sourceFilePaths) {
-        this.sourceFilePaths = sourceFilePaths;
+    @Getter
+    private TransitionSystem highestTS;
+
+    public CompileController() {
         this.transitionSystemBuilder = new TransitionSystemBuilder();
         this.variableSetBuilder = new VariableSetBuilder();
         this.transitionSystems = new HashSet<>();
     }
 
-    public void compile() {
+    public void compile(Set<String> sourceFilePaths) {
         Set<CharStream> sourceCharStreams = sourceFilePaths.stream()
                 .map(path -> {
                     try {
@@ -61,36 +62,45 @@ public class CompileController {
         // TODO Currently support single file without dependencies
         for (CharStream source :
                 sourceCharStreams) {
-            SenizLexer lexer = new SenizLexer(source);
-            SenizParser parser = new SenizParser(new CommonTokenStream(lexer));
-            parser.setBuildParseTree(true);
-            ParseTree tree = parser.compilationUnit();
-
-            CompilationUnit compilationUnit = new CompilationUnit();
-            CompilationUnitVisitor compilationUnitVisitor = new CompilationUnitVisitor(compilationUnit);
-            compilationUnitVisitor.visit(tree);
-
-            // Check defined variable set
-            String varSetName = compilationUnit.getSystemParameter();
-            VariableSet vars = compilationUnit.getVariableSet();
-
-            if (varSetName != null) {
-                if (vars == null || !varSetName.equals(vars.getIdentifier())) {
-                    throw new VariableException("Variable set (" + varSetName + ") is not defined");
-                }
-            }
-
-            // Build complete variable set
-            vars = variableSetBuilder.build(vars, tree);
-
-            // Build transition system
-            TransitionSystem ts = compilationUnit.getTransitionSystem();
-            if (ts != null) {
-                transitionSystems.add(transitionSystemBuilder.build(ts, vars, tree));
-            }
-
+            compileSource(source);
         }
 
+    }
+
+    public void compile(String sourceFileContent) {
+        CharStream source = CharStreams.fromString(sourceFileContent);
+        compileSource(source);
+        highestTS = this.transitionSystems.iterator().next();
+    }
+
+    private void compileSource(CharStream source) {
+        SenizLexer lexer = new SenizLexer(source);
+        SenizParser parser = new SenizParser(new CommonTokenStream(lexer));
+        parser.setBuildParseTree(true);
+        ParseTree tree = parser.compilationUnit();
+
+        CompilationUnit compilationUnit = new CompilationUnit();
+        CompilationUnitVisitor compilationUnitVisitor = new CompilationUnitVisitor(compilationUnit);
+        compilationUnitVisitor.visit(tree);
+
+        // Check defined variable set
+        String varSetName = compilationUnit.getSystemParameter();
+        VariableSet vars = compilationUnit.getVariableSet();
+
+        if (varSetName != null) {
+            if (vars == null || !varSetName.equals(vars.getIdentifier())) {
+                throw new VariableException("Variable set (" + varSetName + ") is not defined");
+            }
+        }
+
+        // Build complete variable set
+        vars = variableSetBuilder.build(vars, tree);
+
+        // Build transition system
+        TransitionSystem ts = compilationUnit.getTransitionSystem();
+        if (ts != null) {
+            transitionSystems.add(transitionSystemBuilder.build(ts, vars, tree));
+        }
     }
 
 }

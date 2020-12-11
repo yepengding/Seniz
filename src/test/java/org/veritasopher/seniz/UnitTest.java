@@ -1,5 +1,7 @@
 package org.veritasopher.seniz;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -11,6 +13,7 @@ import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.generator.DOTGenerator;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
@@ -35,15 +38,29 @@ public class UnitTest {
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 
-        CompileController compileController = new CompileController(sourceFilePaths);
-        compileController.compile();
+        CompileController compileController = new CompileController();
+        compileController.compile(sourceFilePaths);
         testTS = compileController.getTransitionSystems().iterator().next();
+    }
+
+    @Test
+    public void testGenerateDOTString() throws IOException {
+        String path = resourcePath("example/TestTS.sz");
+        File file = new File(path);
+        String sourceFileContent = Files.toString(file, Charsets.UTF_8);
+
+        CompileController compileController = new CompileController();
+        compileController.compile(sourceFileContent);
+        TransitionSystem ts = compileController.getHighestTS();
+        DOTGenerator dotGenerator = new DOTGenerator(ts);
+        String dotProgram = dotGenerator.generateAsString();
+        System.out.println(dotProgram);
     }
 
     @Test
     public void testDOTGenerator() {
         DOTGenerator dotGenerator = new DOTGenerator(testTS);
-        dotGenerator.generate();
+        dotGenerator.generateToConsole();
     }
 
     @Test
@@ -52,8 +69,8 @@ public class UnitTest {
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 
-        CompileController compileController = new CompileController(sourceFilePaths);
-        compileController.compile();
+        CompileController compileController = new CompileController();
+        compileController.compile(sourceFilePaths);
 
         compileController.getTransitionSystems().forEach(ts -> {
             System.out.println(ts.getTransitions());
