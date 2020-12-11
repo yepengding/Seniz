@@ -1,6 +1,7 @@
 package org.veritasopher.seniz.exception;
 
 public class InternalException extends BaseException {
+
     public InternalException(String message) {
         super(message);
     }
@@ -11,5 +12,9 @@ public class InternalException extends BaseException {
 
     public InternalException(int line, String message) {
         super(line, message);
+    }
+
+    public InternalException(int line, int col, String message) {
+        super(line, col, message);
     }
 }

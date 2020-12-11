@@ -31,7 +31,7 @@ public class LiteralVisitor extends SenizParserBaseVisitor<Object> {
         } else if (literal.equals("false")) {
             value = false;
         } else {
-            throw new TypeException(ctx.start.getLine(), "Unsupported Boolean type.");
+            throw new TypeException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported Boolean type.");
         }
         return value;
     }
@@ -71,7 +71,7 @@ public class LiteralVisitor extends SenizParserBaseVisitor<Object> {
             } else if (ctx.HEX_LITERAL() != null) {
                 value = Integer.decode(literal);
             } else {
-                throw new TypeException(ctx.start.getLine(), "Unsupported Integer type.");
+                throw new TypeException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported Integer type.");
             }
 
             return value;
@@ -89,7 +89,7 @@ public class LiteralVisitor extends SenizParserBaseVisitor<Object> {
             } else if (ctx.HEX_FLOAT_LITERAL() != null) {
                 value = Float.intBitsToFloat(Integer.decode(literal));
             } else {
-                throw new TypeException(ctx.start.getLine(), "Unsupported Float type.");
+                throw new TypeException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported Float type.");
             }
 
             return value;

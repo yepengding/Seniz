@@ -35,27 +35,18 @@ public class TransitionSystemBuilder {
         transitionSystem.setVariables(variableSet);
 
         // Collect named states
-        try {
-            StateDeclarationVisitor stateDeclarationVisitor = new StateDeclarationVisitor(transitionSystem);
-            stateDeclarationVisitor.visit(tree);
-        } catch (StateException e) {
-            return null;
-        }
+        StateDeclarationVisitor stateDeclarationVisitor = new StateDeclarationVisitor(transitionSystem);
+        stateDeclarationVisitor.visit(tree);
+
 
         // Collect all transitions, inferred states, initial states and actions
-        try {
-            TransitionVisitor transitionVisitor = new TransitionVisitor(transitionSystem);
-            transitionVisitor.visit(tree);
-        } catch (TransitionException e) {
-            return null;
-        }
+        TransitionVisitor transitionVisitor = new TransitionVisitor(transitionSystem);
+        transitionVisitor.visit(tree);
+
 
         // Check legacy
-        try {
-            legacyCheck(transitionSystem);
-        } catch (StateException e) {
-            return null;
-        }
+        legacyCheck(transitionSystem);
+
         return transitionSystem;
     }
 

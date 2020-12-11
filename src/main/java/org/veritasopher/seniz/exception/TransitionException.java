@@ -1,6 +1,7 @@
 package org.veritasopher.seniz.exception;
 
 public class TransitionException extends BaseException {
+
     public TransitionException(String message) {
         super(message);
     }
@@ -11,5 +12,9 @@ public class TransitionException extends BaseException {
 
     public TransitionException(int line, String message) {
         super(line, message);
+    }
+
+    public TransitionException(int line, int col, String message) {
+        super(line, col, message);
     }
 }

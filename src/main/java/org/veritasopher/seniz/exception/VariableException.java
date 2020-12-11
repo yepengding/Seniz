@@ -19,4 +19,8 @@ public class VariableException extends BaseException {
     public VariableException(int line, String message) {
         super(line, message);
     }
+
+    public VariableException(int line, int col, String message) {
+        super(line, col, message);
+    }
 }

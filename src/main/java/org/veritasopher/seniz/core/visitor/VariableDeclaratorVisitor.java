@@ -39,7 +39,7 @@ public class VariableDeclaratorVisitor extends SenizParserBaseVisitor<VariableSe
 
             // Check the name uniqueness
             if (variableSet.hasVariable(name)) {
-                throw new VariableException(ctx.start.getLine(), "Cannot use occupied variable name (" + name + ").");
+                throw new VariableException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied variable name (" + name + ").");
             }
 
             String type = ctx.primitiveType().getText();

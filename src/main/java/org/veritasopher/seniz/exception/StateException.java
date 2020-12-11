@@ -13,4 +13,8 @@ public class StateException extends BaseException {
     public StateException(int line, String message) {
         super(line, message);
     }
+
+    public StateException(int line, int col, String message) {
+        super(line, col, message);
+    }
 }

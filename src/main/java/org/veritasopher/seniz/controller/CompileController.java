@@ -1,20 +1,20 @@
 package org.veritasopher.seniz.controller;
 
 import lombok.Getter;
-import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.veritasopher.seniz.builder.TransitionSystemBuilder;
+import org.veritasopher.seniz.builder.VariableSetBuilder;
 import org.veritasopher.seniz.core.base.SenizLexer;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.model.CompilationUnit;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.visitor.CompilationUnitVisitor;
+import org.veritasopher.seniz.exception.ThrowingErrorListener;
 import org.veritasopher.seniz.exception.VariableException;
-import org.veritasopher.seniz.builder.TransitionSystemBuilder;
-import org.veritasopher.seniz.builder.VariableSetBuilder;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -75,7 +75,11 @@ public class CompileController {
 
     private void compileSource(CharStream source) {
         SenizLexer lexer = new SenizLexer(source);
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
         SenizParser parser = new SenizParser(new CommonTokenStream(lexer));
+        parser.removeErrorListeners();
+        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
         parser.setBuildParseTree(true);
         ParseTree tree = parser.compilationUnit();
 

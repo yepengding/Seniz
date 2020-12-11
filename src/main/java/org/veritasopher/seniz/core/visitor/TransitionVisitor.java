@@ -45,7 +45,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
         Element element = ctx.getChild(i).accept(transitionStatementVisitor);
 
         if (element == null) {
-            throw new TransitionException(ctx.start.getLine(), "Unsupported transition declaration.");
+            throw new TransitionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported transition declaration.");
         }
 
         // Check init identifier
@@ -58,7 +58,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
 
         // Safety check (only state and action are legal)
         if (element.type != ElementType.STATE) {
-            throw new TransitionException(ctx.start.getLine(), "Unsupported transition declaration.");
+            throw new TransitionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported transition declaration.");
         }
 
         // Infer the first state
@@ -73,7 +73,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
             Transition transition = new Transition();
             // Safety check
             if (element.type != ElementType.STATE) {
-                throw new TransitionException(ctx.start.getLine(), "Unsupported transition declaration.");
+                throw new TransitionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported transition declaration.");
             }
 
             transition.setSrcState(element.state.hashCode());
@@ -82,7 +82,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
             element = ctx.getChild(i).accept(transitionStatementVisitor);
 
             if (element == null) {
-                throw new TransitionException(ctx.start.getLine(), "Unsupported transition declaration.");
+                throw new TransitionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported transition declaration.");
             }
 
             if (element.type == ElementType.ACTION) {
@@ -99,7 +99,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
                 element = ctx.getChild(i).accept(transitionStatementVisitor);
 
                 if (element == null || element.type != ElementType.STATE) {
-                    throw new TransitionException(ctx.start.getLine(), "Unsupported transition declaration.");
+                    throw new TransitionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported transition declaration.");
                 }
             }
 
@@ -109,7 +109,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
 
             // Transition duplicated
             if (transitionSystem.hasTransition(transition)) {
-                throw new TransitionException(ctx.start.getLine(), "Transition is duplicated.");
+                throw new TransitionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Transition is duplicated.");
             }
 
             transitionSystem.addTransition(transition);
@@ -149,7 +149,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
 
                 // Check whether state associated with identifier exists
                 if (!s.isPresent()) {
-                    throw new StateException(ctx.start.getLine(), "State named (" + name + ") does not exist.");
+                    throw new StateException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "State named (" + name + ") does not exist.");
                 }
                 state = s.get();
 
@@ -157,7 +157,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
                 // Unnamed state
                 state = ctx.stateBody().stateDeclarator().accept(stateDeclaratorVisitor);
             } else {
-                throw new StateException(ctx.start.getLine(), "Unsupported state type.");
+                throw new StateException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported state type.");
             }
 
             return new Element(ElementType.STATE, state);
@@ -172,7 +172,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
         @Override
         public Element visitActionDeclaration(SenizParser.ActionDeclarationContext ctx) {
             if (ctx.IDENTIFIER() == null) {
-                throw new ActionException(ctx.start.getLine(), "Unsupported action type.");
+                throw new ActionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported action type.");
             }
 
             return new Element(ElementType.ACTION, new Action(ctx.IDENTIFIER().getText()));

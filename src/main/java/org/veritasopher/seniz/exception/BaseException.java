@@ -18,4 +18,8 @@ public class BaseException extends RuntimeException {
     public BaseException(int line, String message) {
         super("line " + line + ": " + message);
     }
+
+    public BaseException(int line, int col, String message) {
+        super("line " + line + ":" + col + " " + message);
+    }
 }

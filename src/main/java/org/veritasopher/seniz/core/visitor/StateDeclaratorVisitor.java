@@ -52,7 +52,7 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<State> {
 
             // Check if variable is defined
             if (var == null) {
-                throw new VariableException(ctx.start.getLine(), "Undefined variable.");
+                throw new VariableException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined variable.");
             }
 
             // Get value of the variable
