@@ -16,11 +16,11 @@ import org.veritasopher.seniz.exception.VariableException;
 public class VariableDeclaratorVisitor extends SenizParserBaseVisitor<VariableSet> {
 
     @Override
-    public VariableSet visitVariableDeclarator(SenizParser.VariableDeclaratorContext ctx) {
+    public VariableSet visitStateVarSetDeclarator(SenizParser.StateVarSetDeclaratorContext ctx) {
         VariableSet variableSet = new VariableSet();
 
         VariableExpressionVisitor variableExpressionVisitor = new VariableExpressionVisitor(variableSet);
-        ctx.variableExpression().forEach(expr -> variableSet.addVariable(expr.accept(variableExpressionVisitor)));
+        ctx.stateVarExpression().forEach(expr -> variableSet.addVariable(expr.accept(variableExpressionVisitor)));
 
         return variableSet;
     }
@@ -34,8 +34,8 @@ public class VariableDeclaratorVisitor extends SenizParserBaseVisitor<VariableSe
         }
 
         @Override
-        public StateVariable visitVariableExpression(SenizParser.VariableExpressionContext ctx) {
-            String name = ctx.IDENTIFIER().getText();
+        public StateVariable visitStateVarExpression(SenizParser.StateVarExpressionContext ctx) {
+            String name = ctx.stateVarIdentifier().IDENTIFIER().getText();
 
             // Check the name uniqueness
             if (variableSet.hasVariable(name)) {

@@ -1,4 +1,4 @@
-// Generated from C:/Project/ResearchProject/FDD/Seniz/project/Seniz/src/main/resources\SenizParser.g4 by ANTLR 4.9
+// Generated from D:/Project/ResearchProject/FDD/Seniz/project/Seniz/src/main/resources\SenizParser.g4 by ANTLR 4.9
 package org.veritasopher.seniz.core.base;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -100,13 +100,25 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStateDeclaration(SenizParser.StateDeclarationContext ctx) { }
+	@Override public void enterSystemIdentifier(SenizParser.SystemIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStateDeclaration(SenizParser.StateDeclarationContext ctx) { }
+	@Override public void exitSystemIdentifier(SenizParser.SystemIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStateNaming(SenizParser.StateNamingContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStateNaming(SenizParser.StateNamingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -196,61 +208,97 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableDeclaration(SenizParser.VariableDeclarationContext ctx) { }
+	@Override public void enterStateNameIdentifier(SenizParser.StateNameIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableDeclaration(SenizParser.VariableDeclarationContext ctx) { }
+	@Override public void exitStateNameIdentifier(SenizParser.StateNameIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableHeader(SenizParser.VariableHeaderContext ctx) { }
+	@Override public void enterStateVarSetDeclaration(SenizParser.StateVarSetDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableHeader(SenizParser.VariableHeaderContext ctx) { }
+	@Override public void exitStateVarSetDeclaration(SenizParser.StateVarSetDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableBody(SenizParser.VariableBodyContext ctx) { }
+	@Override public void enterStateVarSetHeader(SenizParser.StateVarSetHeaderContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableBody(SenizParser.VariableBodyContext ctx) { }
+	@Override public void exitStateVarSetHeader(SenizParser.StateVarSetHeaderContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableDeclarator(SenizParser.VariableDeclaratorContext ctx) { }
+	@Override public void enterStateVarSetBody(SenizParser.StateVarSetBodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableDeclarator(SenizParser.VariableDeclaratorContext ctx) { }
+	@Override public void exitStateVarSetBody(SenizParser.StateVarSetBodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableExpression(SenizParser.VariableExpressionContext ctx) { }
+	@Override public void enterStateVarSetDeclarator(SenizParser.StateVarSetDeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableExpression(SenizParser.VariableExpressionContext ctx) { }
+	@Override public void exitStateVarSetDeclarator(SenizParser.StateVarSetDeclaratorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStateVarExpression(SenizParser.StateVarExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStateVarExpression(SenizParser.StateVarExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStateVarSetIdentifer(SenizParser.StateVarSetIdentiferContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStateVarSetIdentifer(SenizParser.StateVarSetIdentiferContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStateVarIdentifier(SenizParser.StateVarIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStateVarIdentifier(SenizParser.StateVarIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

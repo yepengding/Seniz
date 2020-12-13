@@ -7,7 +7,6 @@ import org.veritasopher.seniz.core.model.domain.Transition;
 import org.veritasopher.seniz.generator.dict.Prefix;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 

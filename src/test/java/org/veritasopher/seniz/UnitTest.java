@@ -49,11 +49,12 @@ public class UnitTest {
         File file = new File(path);
         String sourceFileContent = Files.toString(file, Charsets.UTF_8);
         CompileController compileController = new CompileController();
-        compileController.compile(sourceFileContent);
-        TransitionSystem ts = compileController.getHighestTS();
-        DOTGenerator dotGenerator = new DOTGenerator(ts);
-        String dotProgram = dotGenerator.generateAsString();
-        System.out.println(dotProgram);
+        TransitionSystem ts = compileController.compile(sourceFileContent);
+        if (ts != null) {
+            DOTGenerator dotGenerator = new DOTGenerator(ts);
+            String dotProgram = dotGenerator.generateAsString();
+            System.out.println(dotProgram);
+        }
     }
 
     @Test

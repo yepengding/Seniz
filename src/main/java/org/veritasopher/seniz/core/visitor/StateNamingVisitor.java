@@ -12,13 +12,13 @@ import org.veritasopher.seniz.core.model.domain.State;
  * @author Yepeng Ding
  * @date 12/3/2020
  */
-public class StateDeclarationVisitor extends SenizParserBaseVisitor<TransitionSystem> {
+public class StateNamingVisitor extends SenizParserBaseVisitor<TransitionSystem> {
 
     private final TransitionSystem transitionSystem;
 
     private final StateDeclaratorVisitor stateDeclaratorVisitor;
 
-    public StateDeclarationVisitor(TransitionSystem transitionSystem) {
+    public StateNamingVisitor(TransitionSystem transitionSystem) {
         this.transitionSystem = transitionSystem;
         this.stateDeclaratorVisitor = new StateDeclaratorVisitor(transitionSystem);
     }
@@ -30,8 +30,8 @@ public class StateDeclarationVisitor extends SenizParserBaseVisitor<TransitionSy
      * @return
      */
     @Override
-    public TransitionSystem visitStateDeclaration(SenizParser.StateDeclarationContext ctx) {
-        String name = ctx.IDENTIFIER().getText();
+    public TransitionSystem visitStateNaming(SenizParser.StateNamingContext ctx) {
+        String name = ctx.stateNameIdentifier().IDENTIFIER().getText();
 
         State state = ctx.stateBody().stateDeclarator().accept(stateDeclaratorVisitor);
 

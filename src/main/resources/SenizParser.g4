@@ -3,7 +3,7 @@ parser grammar SenizParser;
 options { tokenVocab=SenizLexer; }
 
 compilationUnit
-    : importDeclaration* systemDeclaration? variableDeclaration? EOF
+    : importDeclaration* systemDeclaration? stateVarSetDeclaration? EOF
     ;
 
 importDeclaration
@@ -15,11 +15,11 @@ systemDeclaration
     ;
 
 systemHeader
-    : SYSTEM IDENTIFIER systemParameter?
+    : SYSTEM systemIdentifier systemParameter?
     ;
 
 systemParameter
-    : OVER IDENTIFIER
+    : OVER stateVarSetIdentifer
     ;
 
 systemBody
@@ -27,16 +27,20 @@ systemBody
     ;
 
 systemBodyDeclaration
-    : stateDeclaration
+    : stateNaming
     | transitionStatement
     ;
 
-stateDeclaration
-    : IDENTIFIER bop=EQ stateBody
+systemIdentifier
+    : IDENTIFIER
+    ;
+
+stateNaming
+    : stateNameIdentifier bop=EQ stateBody
     ;
 
 stateBody
-    : LBRACE stateDeclarator? RBRACE
+    : LBRACE stateDeclarator RBRACE
     ;
 
 stateDeclarator
@@ -44,7 +48,7 @@ stateDeclarator
     ;
 
 stateExpression
-    : IDENTIFIER bop=VALUEOF literal
+    : stateVarIdentifier bop=VALUEOF literal
     ;
 
 transitionStatement
@@ -60,31 +64,43 @@ actionDeclaration
     ;
 
 stateIdentifier
-    : IDENTIFIER
+    : stateNameIdentifier
     | stateBody
+    ;
+
+stateNameIdentifier
+    : IDENTIFIER
     ;
 
 
 // State Variable
 
-variableDeclaration
-    : variableHeader variableBody
+stateVarSetDeclaration
+    : stateVarSetHeader stateVarSetBody
     ;
 
-variableHeader
-    : VARIABLE IDENTIFIER
+stateVarSetHeader
+    : VARIABLE stateVarSetIdentifer
     ;
 
-variableBody
-    : LBRACE variableDeclarator? RBRACE
+stateVarSetBody
+    : LBRACE stateVarSetDeclarator RBRACE
     ;
 
-variableDeclarator
-    : variableExpression (COMMA variableExpression)*
+stateVarSetDeclarator
+    : stateVarExpression (COMMA stateVarExpression)*
     ;
 
-variableExpression
-    : IDENTIFIER bop=TYPEOF primitiveType
+stateVarExpression
+    : stateVarIdentifier bop=TYPEOF primitiveType
+    ;
+
+stateVarSetIdentifer
+    : IDENTIFIER
+    ;
+
+stateVarIdentifier
+    : IDENTIFIER
     ;
 
 // Types

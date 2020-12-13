@@ -29,21 +29,21 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
 
     @Override
     public CompilationUnit visitSystemDeclaration(SenizParser.SystemDeclarationContext ctx) {
-        TransitionSystem ts = new TransitionSystem(ctx.systemHeader().IDENTIFIER().getText());
+        TransitionSystem ts = new TransitionSystem(ctx.systemHeader().systemIdentifier(). IDENTIFIER().getText());
         compilationUnit.setTransitionSystem(ts);
         return compilationUnit;
     }
 
     @Override
     public CompilationUnit visitSystemParameter(SenizParser.SystemParameterContext ctx) {
-        compilationUnit.setSystemParameter(ctx.IDENTIFIER().getText());
+        compilationUnit.setSystemParameter(ctx.stateVarSetIdentifer(). IDENTIFIER().getText());
         return compilationUnit;
     }
 
     @Override
-    public CompilationUnit visitVariableDeclaration(SenizParser.VariableDeclarationContext ctx) {
+    public CompilationUnit visitStateVarSetDeclaration(SenizParser.StateVarSetDeclarationContext ctx) {
         VariableSet variableSet;
-        SenizParser.VariableDeclaratorContext declaratorContext = ctx.variableBody().variableDeclarator();
+        SenizParser.StateVarSetDeclaratorContext declaratorContext = ctx.stateVarSetBody().stateVarSetDeclarator();
         if (declaratorContext != null) {
             VariableDeclaratorVisitor variableDeclaratorVisitor = new VariableDeclaratorVisitor();
             variableSet = declaratorContext.accept(variableDeclaratorVisitor);
@@ -51,7 +51,7 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
             variableSet = new VariableSet();
         }
 
-        variableSet.setIdentifier(ctx.variableHeader().IDENTIFIER().getText());
+        variableSet.setIdentifier(ctx.stateVarSetHeader().stateVarSetIdentifer().IDENTIFIER().getText());
 
         compilationUnit.setVariableSet(variableSet);
 

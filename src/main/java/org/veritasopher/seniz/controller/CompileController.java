@@ -38,9 +38,6 @@ public class CompileController {
     @Getter
     private final Set<TransitionSystem> transitionSystems;
 
-    @Getter
-    private TransitionSystem highestTS;
-
     public CompileController() {
         this.transitionSystemBuilder = new TransitionSystemBuilder();
         this.variableSetBuilder = new VariableSetBuilder();
@@ -67,13 +64,12 @@ public class CompileController {
 
     }
 
-    public void compile(String sourceFileContent) {
+    public TransitionSystem compile(String sourceFileContent) {
         CharStream source = CharStreams.fromString(sourceFileContent);
-        compileSource(source);
-        highestTS = this.transitionSystems.iterator().next();
+        return compileSource(source);
     }
 
-    private void compileSource(CharStream source) {
+    private TransitionSystem compileSource(CharStream source) {
         SenizLexer lexer = new SenizLexer(source);
         lexer.removeErrorListeners();
         lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
@@ -105,6 +101,8 @@ public class CompileController {
         if (ts != null) {
             transitionSystems.add(transitionSystemBuilder.build(ts, vars, tree));
         }
+
+        return ts;
     }
 
 }

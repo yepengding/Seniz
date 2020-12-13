@@ -142,13 +142,13 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
 
             State state;
 
-            if (ctx.IDENTIFIER() != null) {
+            if (ctx.stateNameIdentifier() != null) {
                 // Named state
-                String name = ctx.IDENTIFIER().getText();
+                String name = ctx.stateNameIdentifier().IDENTIFIER().getText();
                 Optional<State> s = transitionSystem.getStateName(name);
 
                 // Check whether state associated with identifier exists
-                if (!s.isPresent()) {
+                if (s.isEmpty()) {
                     throw new StateException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "State named (" + name + ") does not exist.");
                 }
                 state = s.get();

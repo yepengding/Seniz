@@ -4,11 +4,9 @@ package org.veritasopher.seniz.builder;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.VariableSet;
-import org.veritasopher.seniz.core.visitor.StateDeclarationVisitor;
+import org.veritasopher.seniz.core.visitor.StateNamingVisitor;
 import org.veritasopher.seniz.core.visitor.TransitionVisitor;
-import org.veritasopher.seniz.exception.BaseException;
 import org.veritasopher.seniz.exception.StateException;
-import org.veritasopher.seniz.exception.TransitionException;
 
 /**
  * Transition System Builder
@@ -35,8 +33,8 @@ public class TransitionSystemBuilder {
         transitionSystem.setVariables(variableSet);
 
         // Collect named states
-        StateDeclarationVisitor stateDeclarationVisitor = new StateDeclarationVisitor(transitionSystem);
-        stateDeclarationVisitor.visit(tree);
+        StateNamingVisitor stateNamingVisitor = new StateNamingVisitor(transitionSystem);
+        stateNamingVisitor.visit(tree);
 
 
         // Collect all transitions, inferred states, initial states and actions
