@@ -1,4 +1,4 @@
-variable Vars {
+varset Vars {
     a :: int,
     b :: float,
     c :: bool,

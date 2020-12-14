@@ -1,7 +1,7 @@
 package org.veritasopher.seniz.builder;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.veritasopher.seniz.core.model.VariableSet;
+import org.veritasopher.seniz.core.model.StateVariableSet;
 
 /**
  * Variable Set Builder
@@ -14,12 +14,12 @@ public class VariableSetBuilder {
     /**
      * Build variable set
      *
-     * @param variableSet defined variable set
+     * @param stateVariableSet defined variable set
      * @param tree parse tree
      * @return built variable set
      */
-    public VariableSet build(VariableSet variableSet, ParseTree tree) {
+    public StateVariableSet build(StateVariableSet stateVariableSet, ParseTree tree) {
         // TODO may allow defining variable in system body
-        return variableSet;
+        return stateVariableSet;
     }
 }

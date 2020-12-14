@@ -12,7 +12,7 @@ system TestTS over Vars {
 
 }
 
-variable Vars {
+varset Vars {
     v0 :: int,
     v1 :: float,
     v2 :: bool,

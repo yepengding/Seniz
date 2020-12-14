@@ -15,14 +15,14 @@ import java.util.Set;
  * @date 12/5/2020
  */
 @Data
-public class VariableSet {
+public class StateVariableSet {
 
     private String identifier;
 
     // Variable map <Name, State variable>
     private final Map<String, StateVariable> variables;
 
-    public VariableSet() {
+    public StateVariableSet() {
         this.variables = new HashMap<>();
     }
 

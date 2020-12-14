@@ -4,7 +4,7 @@ import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.CompilationUnit;
 import org.veritasopher.seniz.core.model.TransitionSystem;
-import org.veritasopher.seniz.core.model.VariableSet;
+import org.veritasopher.seniz.core.model.StateVariableSet;
 
 /**
  * Compilation Unit Visitor
@@ -42,18 +42,18 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
 
     @Override
     public CompilationUnit visitStateVarSetDeclaration(SenizParser.StateVarSetDeclarationContext ctx) {
-        VariableSet variableSet;
+        StateVariableSet stateVariableSet;
         SenizParser.StateVarSetDeclaratorContext declaratorContext = ctx.stateVarSetBody().stateVarSetDeclarator();
         if (declaratorContext != null) {
-            VariableDeclaratorVisitor variableDeclaratorVisitor = new VariableDeclaratorVisitor();
-            variableSet = declaratorContext.accept(variableDeclaratorVisitor);
+            StateVariableDeclaratorVisitor stateVariableDeclaratorVisitor = new StateVariableDeclaratorVisitor();
+            stateVariableSet = declaratorContext.accept(stateVariableDeclaratorVisitor);
         } else {
-            variableSet = new VariableSet();
+            stateVariableSet = new StateVariableSet();
         }
 
-        variableSet.setIdentifier(ctx.stateVarSetHeader().stateVarSetIdentifer().IDENTIFIER().getText());
+        stateVariableSet.setIdentifier(ctx.stateVarSetHeader().stateVarSetIdentifer().IDENTIFIER().getText());
 
-        compilationUnit.setVariableSet(variableSet);
+        compilationUnit.setStateVariableSet(stateVariableSet);
 
         return compilationUnit;
     }

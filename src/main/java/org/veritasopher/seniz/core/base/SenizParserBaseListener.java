@@ -172,6 +172,18 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterActionDeclaration(SenizParser.ActionDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitActionDeclaration(SenizParser.ActionDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterInitIdentifier(SenizParser.InitIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -184,13 +196,85 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterActionDeclaration(SenizParser.ActionDeclarationContext ctx) { }
+	@Override public void enterPropositionStatement(SenizParser.PropositionStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitActionDeclaration(SenizParser.ActionDeclarationContext ctx) { }
+	@Override public void exitPropositionStatement(SenizParser.PropositionStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPropositionBody(SenizParser.PropositionBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPropositionBody(SenizParser.PropositionBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPropConditionalOrExpression(SenizParser.PropConditionalOrExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPropConditionalOrExpression(SenizParser.PropConditionalOrExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPropConditionalAndExpression(SenizParser.PropConditionalAndExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPropConditionalAndExpression(SenizParser.PropConditionalAndExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPropPrimaryExpression(SenizParser.PropPrimaryExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPropPrimaryExpression(SenizParser.PropPrimaryExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPropNotExpression(SenizParser.PropNotExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPropNotExpression(SenizParser.PropNotExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPropositionPrimary(SenizParser.PropositionPrimaryContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPropositionPrimary(SenizParser.PropositionPrimaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -215,6 +299,18 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStateNameIdentifier(SenizParser.StateNameIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPropositionIdentifer(SenizParser.PropositionIdentiferContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPropositionIdentifer(SenizParser.PropositionIdentiferContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

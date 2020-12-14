@@ -11,10 +11,10 @@ import org.veritasopher.seniz.core.base.SenizLexer;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.model.CompilationUnit;
 import org.veritasopher.seniz.core.model.TransitionSystem;
-import org.veritasopher.seniz.core.model.VariableSet;
+import org.veritasopher.seniz.core.model.StateVariableSet;
 import org.veritasopher.seniz.core.visitor.CompilationUnitVisitor;
 import org.veritasopher.seniz.exception.ThrowingErrorListener;
-import org.veritasopher.seniz.exception.VariableException;
+import org.veritasopher.seniz.exception.StateVariableException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -85,11 +85,11 @@ public class CompileController {
 
         // Check defined variable set
         String varSetName = compilationUnit.getSystemParameter();
-        VariableSet vars = compilationUnit.getVariableSet();
+        StateVariableSet vars = compilationUnit.getStateVariableSet();
 
         if (varSetName != null) {
             if (vars == null || !varSetName.equals(vars.getIdentifier())) {
-                throw new VariableException("Variable set (" + varSetName + ") is not defined");
+                throw new StateVariableException("Variable set (" + varSetName + ") is not defined");
             }
         }
 

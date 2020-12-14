@@ -21,7 +21,7 @@ public class TransitionSystem {
     private final String identifier;
 
     @Setter
-    private VariableSet variables;
+    private StateVariableSet variables;
 
     // State map <HashCode, State>
     private final Map<Integer, State> states;
@@ -40,7 +40,7 @@ public class TransitionSystem {
 
     public TransitionSystem(String identifier) {
         this.identifier = identifier;
-        this.variables = new VariableSet();
+        this.variables = new StateVariableSet();
         this.states = new HashMap<>();
         this.actions = new HashMap<>();
         this.transitions = new HashMap<>();

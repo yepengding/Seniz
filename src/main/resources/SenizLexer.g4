@@ -9,8 +9,8 @@ SYSTEM
     : 'system'
     ;
 
-VARIABLE
-    : 'variable'
+VARSET
+    : 'varset'
     ;
 
 OVER
@@ -49,21 +49,30 @@ TYPEOF
     : '::'
     ;
 
-EQ
-    : '='
-    ;
-
 TO
     : '->'
     ;
 
-POS
-    : '+'
-    ;
-
-NEG
-    : '-'
-    ;
+GT:                 '>';
+LT:                 '<';
+BANG:               '!';
+TILDE:              '~';
+QUESTION:           '?';
+EQ:                 '=';
+LE:                 '<=';
+GE:                 '>=';
+NOTEQUAL:           '/=';
+AND:                '&';
+OR:                 '|';
+NOT:                'not';
+INC:                '++';
+DEC:                '--';
+ADD:                '+';
+SUB:                '-';
+MUL:                '*';
+DIV:                '/';
+CARET:              '^';
+MOD:                '%';
 
 // Literals
 

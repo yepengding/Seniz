@@ -29,11 +29,14 @@ systemBody
 systemBodyDeclaration
     : stateNaming
     | transitionStatement
+    | propositionStatement
     ;
 
 systemIdentifier
     : IDENTIFIER
     ;
+
+// State
 
 stateNaming
     : stateNameIdentifier bop=EQ stateBody
@@ -51,24 +54,52 @@ stateExpression
     : stateVarIdentifier bop=VALUEOF literal
     ;
 
-transitionStatement
-    : initIdentifier? stateIdentifier (TO actionDeclaration? stateIdentifier)+
-    ;
-
-initIdentifier
-    : INIT
-    ;
-
-actionDeclaration
-    : LBRACK IDENTIFIER RBRACK
-    ;
-
 stateIdentifier
     : stateNameIdentifier
     | stateBody
     ;
 
 stateNameIdentifier
+    : IDENTIFIER
+    ;
+
+// Transition
+
+transitionStatement
+    : initIdentifier? stateIdentifier (TO actionDeclaration? stateIdentifier)+
+    ;
+
+actionDeclaration
+    : LBRACK IDENTIFIER RBRACK
+    ;
+
+initIdentifier
+    : INIT
+    ;
+
+// Proposition
+
+propositionStatement
+    : propositionIdentifer bop=EQ propositionBody
+    ;
+
+propositionBody
+    : LBRACE propositionExpression RBRACE
+    ;
+
+propositionExpression
+    : propositionPrimary #propPrimaryExpression
+    | prefix=(NOT|BANG) propositionExpression #propNotExpression
+    | propositionExpression bop=AND propositionExpression #propConditionalAndExpression
+    | propositionExpression bop=OR propositionExpression #propConditionalOrExpression
+    ;
+
+propositionPrimary
+    : LPAREN propositionExpression RPAREN
+    | stateNameIdentifier
+    ;
+
+propositionIdentifer
     : IDENTIFIER
     ;
 
@@ -80,7 +111,7 @@ stateVarSetDeclaration
     ;
 
 stateVarSetHeader
-    : VARIABLE stateVarSetIdentifer
+    : VARSET stateVarSetIdentifer
     ;
 
 stateVarSetBody
@@ -122,8 +153,8 @@ literal
     ;
 
 numberLiteral
-    : prefix=(POS|NEG)? integerLiteral
-    | prefix=(POS|NEG)? floatLiteral
+    : prefix=(ADD|SUB)? integerLiteral
+    | prefix=(ADD|SUB)? floatLiteral
     ;
 
 stringLiteral

@@ -23,6 +23,6 @@ system Transaction over TransactionVar {
     }
 }
 
-variable TransactionVar {
+varset TransactionVar {
     status :: int
 }

@@ -13,6 +13,6 @@ public class CompilationUnit {
 
     private String systemParameter;
 
-    private VariableSet variableSet;
+    private StateVariableSet stateVariableSet;
 
 }
