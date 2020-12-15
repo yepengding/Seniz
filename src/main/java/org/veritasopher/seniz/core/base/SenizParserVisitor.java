@@ -83,11 +83,29 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStateExpression(SenizParser.StateExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SenizParser#stateIdentifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStateIdentifier(SenizParser.StateIdentifierContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#stateNameIdentifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStateNameIdentifier(SenizParser.StateNameIdentifierContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SenizParser#transitionStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitTransitionStatement(SenizParser.TransitionStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#initIdentifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInitIdentifier(SenizParser.InitIdentifierContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#actionDeclaration}.
 	 * @param ctx the parse tree
@@ -95,11 +113,23 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitActionDeclaration(SenizParser.ActionDeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#initIdentifier}.
+	 * Visit a parse tree produced by {@link SenizParser#formalParameterList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitInitIdentifier(SenizParser.InitIdentifierContext ctx);
+	T visitFormalParameterList(SenizParser.FormalParameterListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#formalParameter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFormalParameter(SenizParser.FormalParameterContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#variableIdentifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVariableIdentifier(SenizParser.VariableIdentifierContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#propositionStatement}.
 	 * @param ctx the parse tree
@@ -146,18 +176,6 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPropositionPrimary(SenizParser.PropositionPrimaryContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SenizParser#stateIdentifier}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStateIdentifier(SenizParser.StateIdentifierContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SenizParser#stateNameIdentifier}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStateNameIdentifier(SenizParser.StateNameIdentifierContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#propositionIdentifer}.
 	 * @param ctx the parse tree

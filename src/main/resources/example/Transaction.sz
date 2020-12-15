@@ -1,10 +1,10 @@
 system Transaction over TransactionVar {
 
-    init { status: 0 } -> [PayGas] pending
-    pending -> [Proceed] success -> [Notify] notified
-    pending -> [Cancel] dropped
+    init { status: 0 } -> PayGas() pending
+    pending -> Proceed() success -> Notify() notified
+    pending -> Cancel() dropped
 
-    dropped -> [Notify] notified
+    dropped -> Notify() notified
 
     pending = {
         status: 1

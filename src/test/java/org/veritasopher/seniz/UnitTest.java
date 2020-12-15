@@ -34,7 +34,7 @@ public class UnitTest {
 
     @Before
     public void setUp() {
-        String path = resourcePath("example/Transaction.sz");
+        String path = resourcePath("example/Simple.sz");
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 

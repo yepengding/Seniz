@@ -69,13 +69,30 @@ transitionStatement
     : initIdentifier? stateIdentifier (TO actionDeclaration? stateIdentifier)+
     ;
 
-actionDeclaration
-    : LBRACK IDENTIFIER RBRACK
-    ;
-
 initIdentifier
     : INIT
     ;
+
+// Action
+
+actionDeclaration
+    : IDENTIFIER LPAREN formalParameterList? RPAREN
+    ;
+
+// Formal Parameter
+
+formalParameterList
+    : formalParameter (COMMA formalParameter)*
+    ;
+
+formalParameter
+    : variableIdentifier bop=TYPEOF primitiveType
+    ;
+
+variableIdentifier
+    : IDENTIFIER
+    ;
+
 
 // Proposition
 
