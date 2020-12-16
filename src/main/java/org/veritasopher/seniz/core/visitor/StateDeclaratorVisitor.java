@@ -46,7 +46,7 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<State> {
         @Override
         public StateVariable visitStateExpression(SenizParser.StateExpressionContext ctx) {
             String name = ctx.stateVarIdentifier().IDENTIFIER().getText();
-            StateVariable var = transitionSystem.getVariable(name);
+            StateVariable var = transitionSystem.getStateVariable(name);
 
             // Check if variable is defined
             if (var == null) {
@@ -57,8 +57,6 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<State> {
             Evaluation evaluation = new Evaluation();
             ExpressionVisitor expressionVisitor = new ExpressionVisitor(evaluation);
             ctx.expression().accept(expressionVisitor);
-
-            System.out.println(evaluation.getRPN());
 
             return var.withEvaluation(evaluation);
         }

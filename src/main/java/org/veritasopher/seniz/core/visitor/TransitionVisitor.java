@@ -114,7 +114,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
                 .map(StateVariable::getName)
                 .collect(Collectors.toSet());
 
-        transitionSystem.getVariableSet()
+        transitionSystem.getStateVariableSet()
                 .stream()
                 .filter(v -> !varNames.contains(v.getName()))
                 .forEach(variables::add);

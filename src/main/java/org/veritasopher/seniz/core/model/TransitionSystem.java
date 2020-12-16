@@ -2,10 +2,7 @@ package org.veritasopher.seniz.core.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.veritasopher.seniz.core.model.common.Action;
-import org.veritasopher.seniz.core.model.common.State;
-import org.veritasopher.seniz.core.model.common.StateVariable;
-import org.veritasopher.seniz.core.model.common.Transition;
+import org.veritasopher.seniz.core.model.common.*;
 
 import java.util.*;
 
@@ -18,10 +15,15 @@ import java.util.*;
 @Getter
 public class TransitionSystem {
 
+    // System identifier
     private final String identifier;
 
+    // State variable set
     @Setter
-    private StateVariableSet variables;
+    private StateVariableSet stateVariables;
+
+    // System variable set
+    private final SystemVariableSet systemVariables;
 
     // State map <HashCode, State>
     private final Map<Integer, State> states;
@@ -40,7 +42,8 @@ public class TransitionSystem {
 
     public TransitionSystem(String identifier) {
         this.identifier = identifier;
-        this.variables = new StateVariableSet();
+        this.stateVariables = new StateVariableSet();
+        this.systemVariables = new SystemVariableSet();
         this.states = new HashMap<>();
         this.actions = new HashMap<>();
         this.transitions = new HashMap<>();
@@ -51,21 +54,21 @@ public class TransitionSystem {
     /**
      * Get a state variable by name
      *
-     * @param name variable name
+     * @param name state variable name
      * @return
      */
-    public StateVariable getVariable(String name) {
-        return this.variables.getVariable(name);
+    public StateVariable getStateVariable(String name) {
+        return this.stateVariables.getVariable(name);
     }
 
     /**
-     * Look up if variable exists.
+     * Look up if state variable exists.
      *
-     * @param name variable name
-     * @return true if state exists. Otherwise false.
+     * @param name state variable name
+     * @return true if state variable exists. Otherwise false.
      */
-    public boolean hasVariable(String name) {
-        return this.variables.hasVariable(name);
+    public boolean hasStateVariable(String name) {
+        return this.stateVariables.hasVariable(name);
     }
 
     /**
@@ -73,8 +76,27 @@ public class TransitionSystem {
      *
      * @return set of state variables
      */
-    public Set<StateVariable> getVariableSet() {
-        return this.variables.getVariableSet();
+    public Set<StateVariable> getStateVariableSet() {
+        return this.stateVariables.getVariableSet();
+    }
+
+    /**
+     * Add a state variable
+     *
+     * @param systemVariable system variable
+     */
+    public void addSystemVariable(SystemVariable systemVariable) {
+        this.systemVariables.addVariable(systemVariable);
+    }
+
+    /**
+     * Look up if system variable exists.
+     *
+     * @param systemVariable
+     * @return true if system variable exists. Otherwise false.
+     */
+    public boolean hasSystemVariable(SystemVariable systemVariable) {
+        return this.systemVariables.hasVariable(systemVariable.getName());
     }
 
     /**

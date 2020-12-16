@@ -30,7 +30,7 @@ public class TransitionSystemBuilder {
         if (stateVariableSet == null) {
             stateVariableSet = new StateVariableSet();
         }
-        transitionSystem.setVariables(stateVariableSet);
+        transitionSystem.setStateVariables(stateVariableSet);
 
         // Collect named states
         StateNamingVisitor stateNamingVisitor = new StateNamingVisitor(transitionSystem);
