@@ -68,13 +68,11 @@ expression
     : LPAREN inner=expression RPAREN #parenthesesExpression
     | primary #primaryExpression
     | prefix=(ADD|SUB) expression #unaryExpression
-    | prefix=(NOT|BANG) expression #notExpression
+    | prefix=BANG expression #notExpression
     | expression bop=(MUL|DIV|MOD) expression #multiplicativeExpression
     | expression bop=(ADD|SUB) expression #additiveExpression
-    | expression bop=(LE | GE | GT | LT) expression #equalityExpression
-    | expression bop=(EQ | NEQ) expression #relationalExpression
-    | expression bop=AND expression #conditionalAndExpression
-    | expression bop=OR expression #conditionalOrExpression
+    | expression bop=(EQ|NEQ|LE|GE|GT|LT) expression #relationalExpression
+    | expression bop=(AND|OR) expression #conditionalExpression
     ;
 
 primary

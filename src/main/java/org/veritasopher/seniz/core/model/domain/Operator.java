@@ -30,6 +30,7 @@ public enum Operator {
             case SenizLexer.DIV:
                 return DIV;
             case SenizLexer.NOT:
+            case SenizLexer.BANG:
                 return NOT;
             case SenizLexer.EQ:
                 return EQ;

@@ -172,18 +172,6 @@ public interface SenizParserListener extends ParseTreeListener {
 	 */
 	void exitParenthesesExpression(SenizParser.ParenthesesExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code conditionalOrExpression}
-	 * labeled alternative in {@link SenizParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterConditionalOrExpression(SenizParser.ConditionalOrExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code conditionalOrExpression}
-	 * labeled alternative in {@link SenizParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitConditionalOrExpression(SenizParser.ConditionalOrExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code additiveExpression}
 	 * labeled alternative in {@link SenizParser#expression}.
 	 * @param ctx the parse tree
@@ -208,17 +196,17 @@ public interface SenizParserListener extends ParseTreeListener {
 	 */
 	void exitRelationalExpression(SenizParser.RelationalExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code equalityExpression}
+	 * Enter a parse tree produced by the {@code conditionalExpression}
 	 * labeled alternative in {@link SenizParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterEqualityExpression(SenizParser.EqualityExpressionContext ctx);
+	void enterConditionalExpression(SenizParser.ConditionalExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code equalityExpression}
+	 * Exit a parse tree produced by the {@code conditionalExpression}
 	 * labeled alternative in {@link SenizParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitEqualityExpression(SenizParser.EqualityExpressionContext ctx);
+	void exitConditionalExpression(SenizParser.ConditionalExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code notExpression}
 	 * labeled alternative in {@link SenizParser#expression}.
@@ -243,18 +231,6 @@ public interface SenizParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMultiplicativeExpression(SenizParser.MultiplicativeExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code conditionalAndExpression}
-	 * labeled alternative in {@link SenizParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterConditionalAndExpression(SenizParser.ConditionalAndExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code conditionalAndExpression}
-	 * labeled alternative in {@link SenizParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitConditionalAndExpression(SenizParser.ConditionalAndExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code unaryExpression}
 	 * labeled alternative in {@link SenizParser#expression}.

@@ -35,6 +35,27 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
     }
 
     @Override
+    public Evaluation visitUnaryExpression(SenizParser.UnaryExpressionContext ctx) {
+        Operator operator = Operator.getOperator(ctx.prefix.getType());
+        if (operator == null) {
+            throw new ExpressionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported unary operator.");
+        }
+        evaluation.addTerm(new Term(operator));
+        evaluation.addTerm(new Term(new Value(Type.INTEGER, 0)));
+        return super.visitUnaryExpression(ctx);
+    }
+
+    @Override
+    public Evaluation visitNotExpression(SenizParser.NotExpressionContext ctx) {
+        Operator operator = Operator.getOperator(ctx.prefix.getType());
+        if (operator == null) {
+            throw new ExpressionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported not operator.");
+        }
+        evaluation.addTerm(new Term(operator));
+        return super.visitNotExpression(ctx);
+    }
+
+    @Override
     public Evaluation visitAdditiveExpression(SenizParser.AdditiveExpressionContext ctx) {
         Operator operator = Operator.getOperator(ctx.bop.getType());
         if (operator == null) {
@@ -54,6 +75,23 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
         return super.visitMultiplicativeExpression(ctx);
     }
 
+    @Override
+    public Evaluation visitRelationalExpression(SenizParser.RelationalExpressionContext ctx) {
+        Operator operator = Operator.getOperator(ctx.bop.getType());
+        if (operator == null) {
+            throw new ExpressionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported relational operator.");
+        }
+        evaluation.addTerm(new Term(operator));
+        return super.visitRelationalExpression(ctx);
+    }
 
-
+    @Override
+    public Evaluation visitConditionalExpression(SenizParser.ConditionalExpressionContext ctx) {
+        Operator operator = Operator.getOperator(ctx.bop.getType());
+        if (operator == null) {
+            throw new ExpressionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported conditional operator.");
+        }
+        evaluation.addTerm(new Term(operator));
+        return super.visitConditionalExpression(ctx);
+    }
 }

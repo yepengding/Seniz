@@ -208,18 +208,6 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConditionalOrExpression(SenizParser.ConditionalOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConditionalOrExpression(SenizParser.ConditionalOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterAdditiveExpression(SenizParser.AdditiveExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -244,13 +232,13 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEqualityExpression(SenizParser.EqualityExpressionContext ctx) { }
+	@Override public void enterConditionalExpression(SenizParser.ConditionalExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEqualityExpression(SenizParser.EqualityExpressionContext ctx) { }
+	@Override public void exitConditionalExpression(SenizParser.ConditionalExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -275,18 +263,6 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMultiplicativeExpression(SenizParser.MultiplicativeExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterConditionalAndExpression(SenizParser.ConditionalAndExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConditionalAndExpression(SenizParser.ConditionalAndExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

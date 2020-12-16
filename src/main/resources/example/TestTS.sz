@@ -3,7 +3,7 @@ system TestTS(i::int, j::string) over Vars {
     init s0 -> a0(x::int, y::string) s1
 
     s0 = {
-        v0: x+2*(3-4)
+        v0: !(x>1 & y<2)
     }
 
     s1 = {

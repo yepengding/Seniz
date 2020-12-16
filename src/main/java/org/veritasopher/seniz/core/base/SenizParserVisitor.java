@@ -109,13 +109,6 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParenthesesExpression(SenizParser.ParenthesesExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code conditionalOrExpression}
-	 * labeled alternative in {@link SenizParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitConditionalOrExpression(SenizParser.ConditionalOrExpressionContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code additiveExpression}
 	 * labeled alternative in {@link SenizParser#expression}.
 	 * @param ctx the parse tree
@@ -130,12 +123,12 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRelationalExpression(SenizParser.RelationalExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code equalityExpression}
+	 * Visit a parse tree produced by the {@code conditionalExpression}
 	 * labeled alternative in {@link SenizParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitEqualityExpression(SenizParser.EqualityExpressionContext ctx);
+	T visitConditionalExpression(SenizParser.ConditionalExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code notExpression}
 	 * labeled alternative in {@link SenizParser#expression}.
@@ -150,13 +143,6 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMultiplicativeExpression(SenizParser.MultiplicativeExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code conditionalAndExpression}
-	 * labeled alternative in {@link SenizParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitConditionalAndExpression(SenizParser.ConditionalAndExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code unaryExpression}
 	 * labeled alternative in {@link SenizParser#expression}.
