@@ -1,0 +1,20 @@
+system Philosopher(id::int) over PhilosopherVars {
+
+    init thinking -> pickForks() eating -> returnForks() thinking
+
+    thinking = {
+        l: false,
+        r: false
+    }
+
+    eating = {
+        l: true,
+        r: true
+    }
+
+}
+
+varset PhilosopherVars {
+    l :: bool,
+    r :: bool
+}

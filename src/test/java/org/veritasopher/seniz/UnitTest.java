@@ -30,19 +30,16 @@ import static org.junit.Assert.assertNotNull;
  */
 public class UnitTest {
 
-    private TransitionSystem testTS;
-
-    @Before
-    public void setUp() {
-        String path = resourcePath("example/TestTS.sz");
+    @Test
+    public void testDPP() {
+//        String path = resourcePath("example/DiningPhilosopher/Fork.sz");
+//        String path = resourcePath("example/DiningPhilosopher/ForkRefine.sz");
+//        String path = resourcePath("example/DiningPhilosopher/Philosopher.sz");
+        String path = resourcePath("example/DiningPhilosopher/PhilosopherRefine.sz");
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 
-        CompileController compileController = new CompileController();
-        compileController.compile(sourceFilePaths);
-        if (compileController.getTransitionSystems().size() > 0) {
-            testTS = compileController.getTransitionSystems().iterator().next();
-        }
+        generateDOT(sourceFilePaths);
     }
 
     @Test
@@ -61,6 +58,22 @@ public class UnitTest {
 
     @Test
     public void testDOTGenerator() {
+        String path = resourcePath("example/TestTS.sz");
+        Set<String> sourceFilePaths = new HashSet<>();
+        sourceFilePaths.add(path);
+
+        generateDOT(sourceFilePaths);
+
+    }
+
+    private void generateDOT(Set<String> sourceFilePaths) {
+        CompileController compileController = new CompileController();
+        compileController.compile(sourceFilePaths);
+        TransitionSystem testTS = null;
+        if (compileController.getTransitionSystems().size() > 0) {
+            testTS = compileController.getTransitionSystems().iterator().next();
+        }
+
         if (testTS != null) {
             DOTGenerator dotGenerator = new DOTGenerator(testTS);
             dotGenerator.generateToConsole();

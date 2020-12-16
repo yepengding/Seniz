@@ -1,0 +1,21 @@
+system Fork(id::int, n::int) over ForkVars {
+
+    init available -> pickByLeft() occupiedByLeft -> returnFromLeft() available
+    available -> pickByRight() occupiedByRight -> returnFromRight() available
+
+    available = {
+        occupiedBy: -1
+    }
+
+    occupiedByLeft = {
+        occupiedBy: (id + 1) % n
+    }
+
+    occupiedByRight = {
+        occupiedBy: i
+    }
+}
+
+varset ForkVars {
+    occupiedBy :: int
+}

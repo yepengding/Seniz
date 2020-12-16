@@ -53,6 +53,11 @@ public class DOTGenerator {
             program.append(System.lineSeparator());
         });
 
+        // Highlight initial states
+        ts.getInitStates().forEach(hashCode -> {
+            program.append(getStateName(hashCode)).append("[color=blue]").append(System.lineSeparator());
+        });
+
         // Generate footer
         program.append('}');
         return program.toString();

@@ -45,7 +45,6 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
         if (formalParameterListContext != null) {
             formalParameterListContext.formalParameter().forEach(p -> systemVariableSet.addVariable(p.accept(formalParameterVisitor)));
         }
-        System.out.println(systemVariableSet.getVariableSet());
         return compilationUnit;
     }
 

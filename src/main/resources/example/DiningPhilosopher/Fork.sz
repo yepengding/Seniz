@@ -1,0 +1,18 @@
+system Fork(id::int) over ForkVars {
+
+    init available -> pickFork() occupied
+    occupied -> returnFork() available
+
+    available = {
+        o: false
+    }
+
+    occupied = {
+        o: true
+    }
+
+}
+
+varset ForkVars {
+    o :: bool
+}

@@ -1,0 +1,50 @@
+system Philosopher(id::int, n::int) {
+
+    init thinking -> pickLeft() waitingRight -> pickRight() eating
+    thinking -> pickRight() waitingLeft -> pickLeft() eating
+    eating -> returnLeft() returnedLeft -> returnRight() thinking
+    eating -> returnRight() returnedRight -> returnLeft() thinking
+
+    thinking = {
+        isThinking: true,
+        leftHand: -1,
+        rightHand: -1
+    }
+
+    waitingRight = {
+        isThinking: false,
+        leftHand: id,
+        rightHand: -1
+    }
+
+    waitingLeft = {
+        isThinking: false,
+        leftHand: -1,
+        rightHand: (id + 1) % n
+    }
+
+    eating = {
+        isThinking: false,
+        leftHand: id,
+        rightHand: (id + 1) % n
+    }
+
+    returnedRight = {
+        isThinking: false,
+        leftHand: id,
+        rightHand: -1
+    }
+
+    returnedLeft = {
+        isThinking: false,
+        leftHand: -1,
+        rightHand: (id + 1) % n
+    }
+
+}
+
+varset PhilosopherVars {
+    isThinking :: bool,
+    leftHand :: int,
+    rightHand :: int
+}
