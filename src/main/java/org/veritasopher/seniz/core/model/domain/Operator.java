@@ -11,7 +11,7 @@ import org.veritasopher.seniz.core.base.SenizLexer;
 public enum Operator {
 
     ADD("+"), SUB("-"), MUL("*"), DIV("/"), NOT("!"), EQ("=="), NEQ("!="),
-    GT(">"), LT("<"), GE(">="), LE("<="), AND("&&"), OR("||");
+    GT(">"), LT("<"), GE(">="), LE("<="), AND("&&"), OR("||"), MOD("%"), EXP("^");
 
     private final String value;
 
@@ -29,7 +29,10 @@ public enum Operator {
                 return MUL;
             case SenizLexer.DIV:
                 return DIV;
-            case SenizLexer.NOT:
+            case SenizLexer.MOD:
+                return MOD;
+            case SenizLexer.CARET:
+                return EXP;
             case SenizLexer.BANG:
                 return NOT;
             case SenizLexer.EQ:

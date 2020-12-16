@@ -69,7 +69,7 @@ expression
     | primary #primaryExpression
     | prefix=(ADD|SUB) expression #unaryExpression
     | prefix=BANG expression #notExpression
-    | expression bop=(MUL|DIV|MOD) expression #multiplicativeExpression
+    | expression bop=(MUL|DIV|MOD|CARET) expression #multiplicativeExpression
     | expression bop=(ADD|SUB) expression #additiveExpression
     | expression bop=(EQ|NEQ|LE|GE|GT|LT) expression #relationalExpression
     | expression bop=(AND|OR) expression #conditionalExpression
