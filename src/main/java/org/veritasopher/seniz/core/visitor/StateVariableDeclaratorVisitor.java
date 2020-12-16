@@ -2,9 +2,9 @@ package org.veritasopher.seniz.core.visitor;
 
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
-import org.veritasopher.seniz.core.mapper.TypeMapper;
 import org.veritasopher.seniz.core.model.StateVariableSet;
-import org.veritasopher.seniz.core.model.domain.StateVariable;
+import org.veritasopher.seniz.core.model.common.StateVariable;
+import org.veritasopher.seniz.core.model.domain.Type;
 import org.veritasopher.seniz.exception.StateVariableException;
 
 /**
@@ -42,8 +42,12 @@ public class StateVariableDeclaratorVisitor extends SenizParserBaseVisitor<State
                 throw new StateVariableException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied variable name (" + name + ").");
             }
 
-            String type = ctx.primitiveType().getText();
-            return new StateVariable(name, TypeMapper.map(type), null);
+            // Get type by type name
+            Type type = Type.getType(ctx.primitiveType().getText());
+            if (type == Type.NULL) {
+                throw new StateVariableException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported variable type.");
+            }
+            return new StateVariable(name, type, null);
         }
     }
 

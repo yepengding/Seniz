@@ -1,7 +1,7 @@
 package org.veritasopher.seniz.core.model;
 
 import lombok.Data;
-import org.veritasopher.seniz.core.model.domain.StateVariable;
+import org.veritasopher.seniz.core.model.common.StateVariable;
 
 import java.util.HashMap;
 import java.util.HashSet;

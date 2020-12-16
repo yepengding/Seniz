@@ -15,7 +15,7 @@ systemDeclaration
     ;
 
 systemHeader
-    : SYSTEM systemIdentifier systemParameter?
+    : SYSTEM systemIdentifier LPAREN formalParameterList? RPAREN systemParameter?
     ;
 
 systemParameter
@@ -51,7 +51,7 @@ stateDeclarator
     ;
 
 stateExpression
-    : stateVarIdentifier bop=VALUEOF literal
+    : stateVarIdentifier bop=VALUEOF expression
     ;
 
 stateIdentifier
@@ -62,6 +62,26 @@ stateIdentifier
 stateNameIdentifier
     : IDENTIFIER
     ;
+
+// Expression
+expression
+    : LPAREN inner=expression RPAREN #parenthesesExpression
+    | primary #primaryExpression
+    | prefix=(ADD|SUB) expression #unaryExpression
+    | prefix=(NOT|BANG) expression #notExpression
+    | expression bop=(MUL|DIV|MOD) expression #multiplicativeExpression
+    | expression bop=(ADD|SUB) expression #additiveExpression
+    | expression bop=(LE | GE | GT | LT) expression #equalityExpression
+    | expression bop=(EQ | NEQ) expression #relationalExpression
+    | expression bop=AND expression #conditionalAndExpression
+    | expression bop=OR expression #conditionalOrExpression
+    ;
+
+primary
+    : literal
+    | variableIdentifier
+    ;
+
 
 // Transition
 

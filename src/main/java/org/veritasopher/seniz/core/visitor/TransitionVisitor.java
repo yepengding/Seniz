@@ -3,10 +3,10 @@ package org.veritasopher.seniz.core.visitor;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.TransitionSystem;
-import org.veritasopher.seniz.core.model.domain.Action;
-import org.veritasopher.seniz.core.model.domain.State;
-import org.veritasopher.seniz.core.model.domain.StateVariable;
-import org.veritasopher.seniz.core.model.domain.Transition;
+import org.veritasopher.seniz.core.model.common.Action;
+import org.veritasopher.seniz.core.model.common.State;
+import org.veritasopher.seniz.core.model.common.StateVariable;
+import org.veritasopher.seniz.core.model.common.Transition;
 import org.veritasopher.seniz.exception.TransitionException;
 
 import java.util.HashSet;

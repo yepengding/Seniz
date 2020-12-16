@@ -1,9 +1,10 @@
-package org.veritasopher.seniz.core.model.domain;
+package org.veritasopher.seniz.core.model.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 import lombok.With;
+import org.veritasopher.seniz.core.model.domain.Type;
 
 /**
  * State Variable
@@ -18,8 +19,8 @@ import lombok.With;
 public class StateVariable {
     private String name;
 
-    private int type;
+    private Type type;
 
-    private Object value;
+    private Evaluation evaluation;
 
 }

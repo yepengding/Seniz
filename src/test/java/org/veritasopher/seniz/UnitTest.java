@@ -34,13 +34,15 @@ public class UnitTest {
 
     @Before
     public void setUp() {
-        String path = resourcePath("example/Simple.sz");
+        String path = resourcePath("example/TestTS.sz");
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 
         CompileController compileController = new CompileController();
         compileController.compile(sourceFilePaths);
-        testTS = compileController.getTransitionSystems().iterator().next();
+        if (compileController.getTransitionSystems().size() > 0) {
+            testTS = compileController.getTransitionSystems().iterator().next();
+        }
     }
 
     @Test
@@ -59,8 +61,10 @@ public class UnitTest {
 
     @Test
     public void testDOTGenerator() {
-        DOTGenerator dotGenerator = new DOTGenerator(testTS);
-        dotGenerator.generateToConsole();
+        if (testTS != null) {
+            DOTGenerator dotGenerator = new DOTGenerator(testTS);
+            dotGenerator.generateToConsole();
+        }
     }
 
     @Test

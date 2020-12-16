@@ -95,6 +95,82 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStateNameIdentifier(SenizParser.StateNameIdentifierContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code primaryExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrimaryExpression(SenizParser.PrimaryExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code parenthesesExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParenthesesExpression(SenizParser.ParenthesesExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code conditionalOrExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConditionalOrExpression(SenizParser.ConditionalOrExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code additiveExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAdditiveExpression(SenizParser.AdditiveExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code relationalExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRelationalExpression(SenizParser.RelationalExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code equalityExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEqualityExpression(SenizParser.EqualityExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code notExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNotExpression(SenizParser.NotExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code multiplicativeExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultiplicativeExpression(SenizParser.MultiplicativeExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code conditionalAndExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConditionalAndExpression(SenizParser.ConditionalAndExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code unaryExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryExpression(SenizParser.UnaryExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#primary}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrimary(SenizParser.PrimaryContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SenizParser#transitionStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

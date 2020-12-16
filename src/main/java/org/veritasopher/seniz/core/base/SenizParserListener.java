@@ -148,6 +148,136 @@ public interface SenizParserListener extends ParseTreeListener {
 	 */
 	void exitStateNameIdentifier(SenizParser.StateNameIdentifierContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code primaryExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrimaryExpression(SenizParser.PrimaryExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code primaryExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrimaryExpression(SenizParser.PrimaryExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code parenthesesExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterParenthesesExpression(SenizParser.ParenthesesExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code parenthesesExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitParenthesesExpression(SenizParser.ParenthesesExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code conditionalOrExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterConditionalOrExpression(SenizParser.ConditionalOrExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code conditionalOrExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitConditionalOrExpression(SenizParser.ConditionalOrExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code additiveExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAdditiveExpression(SenizParser.AdditiveExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code additiveExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAdditiveExpression(SenizParser.AdditiveExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code relationalExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRelationalExpression(SenizParser.RelationalExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code relationalExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRelationalExpression(SenizParser.RelationalExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code equalityExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterEqualityExpression(SenizParser.EqualityExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code equalityExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitEqualityExpression(SenizParser.EqualityExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code notExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotExpression(SenizParser.NotExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code notExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotExpression(SenizParser.NotExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code multiplicativeExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultiplicativeExpression(SenizParser.MultiplicativeExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code multiplicativeExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultiplicativeExpression(SenizParser.MultiplicativeExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code conditionalAndExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterConditionalAndExpression(SenizParser.ConditionalAndExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code conditionalAndExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitConditionalAndExpression(SenizParser.ConditionalAndExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code unaryExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnaryExpression(SenizParser.UnaryExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code unaryExpression}
+	 * labeled alternative in {@link SenizParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnaryExpression(SenizParser.UnaryExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#primary}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrimary(SenizParser.PrimaryContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#primary}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrimary(SenizParser.PrimaryContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SenizParser#transitionStatement}.
 	 * @param ctx the parse tree
 	 */

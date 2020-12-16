@@ -2,10 +2,10 @@ package org.veritasopher.seniz.core.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.veritasopher.seniz.core.model.domain.Action;
-import org.veritasopher.seniz.core.model.domain.State;
-import org.veritasopher.seniz.core.model.domain.StateVariable;
-import org.veritasopher.seniz.core.model.domain.Transition;
+import org.veritasopher.seniz.core.model.common.Action;
+import org.veritasopher.seniz.core.model.common.State;
+import org.veritasopher.seniz.core.model.common.StateVariable;
+import org.veritasopher.seniz.core.model.common.Transition;
 
 import java.util.*;
 

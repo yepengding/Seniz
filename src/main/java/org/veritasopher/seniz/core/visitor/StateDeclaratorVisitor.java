@@ -2,10 +2,11 @@ package org.veritasopher.seniz.core.visitor;
 
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
+import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.exception.StateVariableException;
 import org.veritasopher.seniz.core.model.TransitionSystem;
-import org.veritasopher.seniz.core.model.domain.State;
-import org.veritasopher.seniz.core.model.domain.StateVariable;
+import org.veritasopher.seniz.core.model.common.State;
+import org.veritasopher.seniz.core.model.common.StateVariable;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,11 +39,8 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<State> {
 
         private final TransitionSystem transitionSystem;
 
-        private final LiteralVisitor literalVisitor;
-
         StateExpressionVisitor(TransitionSystem transitionSystem) {
             this.transitionSystem = transitionSystem;
-            this.literalVisitor = new LiteralVisitor();
         }
 
         @Override
@@ -55,10 +53,14 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<State> {
                 throw new StateVariableException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined variable.");
             }
 
-            // Get value of the variable
-            Object value = ctx.literal().accept(literalVisitor);
+            // Get evaluation of the variable
+            Evaluation evaluation = new Evaluation();
+            ExpressionVisitor expressionVisitor = new ExpressionVisitor(evaluation);
+            ctx.expression().accept(expressionVisitor);
 
-            return var.withValue(value);
+            System.out.println(evaluation.getRPN());
+
+            return var.withEvaluation(evaluation);
         }
 
     }

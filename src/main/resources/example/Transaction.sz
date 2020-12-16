@@ -1,4 +1,4 @@
-system Transaction over TransactionVar {
+system Transaction() over TransactionVar {
 
     init { status: 0 } -> PayGas() pending
     pending -> Proceed() success -> Notify() notified

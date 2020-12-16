@@ -41,18 +41,9 @@ STRING
 
 // Operators
 
-VALUEOF
-    : ':'
-    ;
-
-TYPEOF
-    : '::'
-    ;
-
-TO
-    : '->'
-    ;
-
+VALUEOF:            ':';
+TYPEOF:             '::';
+TO:                 '->';
 GT:                 '>';
 LT:                 '<';
 BANG:               '!';
@@ -61,7 +52,7 @@ QUESTION:           '?';
 EQ:                 '=';
 LE:                 '<=';
 GE:                 '>=';
-NOTEQUAL:           '/=';
+NEQ:                '/=';
 AND:                '&';
 OR:                 '|';
 NOT:                'not';

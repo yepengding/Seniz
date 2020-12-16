@@ -1,9 +1,9 @@
 package org.veritasopher.seniz.generator;
 
 import org.veritasopher.seniz.core.model.TransitionSystem;
-import org.veritasopher.seniz.core.model.domain.Action;
-import org.veritasopher.seniz.core.model.domain.State;
-import org.veritasopher.seniz.core.model.domain.Transition;
+import org.veritasopher.seniz.core.model.common.Action;
+import org.veritasopher.seniz.core.model.common.State;
+import org.veritasopher.seniz.core.model.common.Transition;
 import org.veritasopher.seniz.generator.dict.Prefix;
 
 import java.util.HashSet;

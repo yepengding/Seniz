@@ -1,9 +1,9 @@
-system TestTS over Vars {
+system TestTS(i::int, j::string) over Vars {
 
-    init s0 -> a0(x::int, y::string) {v0: 0} -> {v1: 1.1} -> a2(z::float) {v2: true} -> a3() {v3: "hello"}
+    init s0 -> a0(x::int, y::string) s1
 
     s0 = {
-        v0: 0
+        v0: x+2*(3-4)
     }
 
     s1 = {

@@ -3,7 +3,7 @@ package org.veritasopher.seniz.core.visitor;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.TransitionSystem;
-import org.veritasopher.seniz.core.model.domain.State;
+import org.veritasopher.seniz.core.model.common.State;
 import org.veritasopher.seniz.exception.StateException;
 
 import java.util.Optional;

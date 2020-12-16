@@ -2,6 +2,8 @@ package org.veritasopher.seniz.core.visitor;
 
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
+import org.veritasopher.seniz.core.model.common.Value;
+import org.veritasopher.seniz.core.model.domain.Type;
 import org.veritasopher.seniz.exception.TypeException;
 
 /**
@@ -10,10 +12,10 @@ import org.veritasopher.seniz.exception.TypeException;
  * @author Yepeng Ding
  * @date 12/3/2020
  */
-public class LiteralVisitor extends SenizParserBaseVisitor<Object> {
+public class LiteralVisitor extends SenizParserBaseVisitor<Value> {
 
     @Override
-    public Object visitNumberLiteral(SenizParser.NumberLiteralContext ctx) {
+    public Value visitNumberLiteral(SenizParser.NumberLiteralContext ctx) {
         String prefix = "";
         if (ctx.prefix != null) {
             prefix = ctx.prefix.getText();
@@ -23,7 +25,7 @@ public class LiteralVisitor extends SenizParserBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitBooleanLiteral(SenizParser.BooleanLiteralContext ctx) {
+    public Value visitBooleanLiteral(SenizParser.BooleanLiteralContext ctx) {
         boolean value;
         String literal = ctx.getText();
         if (literal.equals("true")) {
@@ -33,20 +35,20 @@ public class LiteralVisitor extends SenizParserBaseVisitor<Object> {
         } else {
             throw new TypeException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported Boolean type.");
         }
-        return value;
+        return new Value(Type.BOOLEAN, value);
     }
 
     @Override
-    public Object visitStringLiteral(SenizParser.StringLiteralContext ctx) {
-        return ctx.getText();
+    public Value visitStringLiteral(SenizParser.StringLiteralContext ctx) {
+        return new Value(Type.STRING, ctx.getText());
     }
 
     @Override
-    public Object visitOtherLiteral(SenizParser.OtherLiteralContext ctx) {
+    public Value visitOtherLiteral(SenizParser.OtherLiteralContext ctx) {
         return null;
     }
 
-    private static class NumberLiteralVisitor extends SenizParserBaseVisitor<Object> {
+    private static class NumberLiteralVisitor extends SenizParserBaseVisitor<Value> {
 
         private final String prefix;
 
@@ -55,7 +57,7 @@ public class LiteralVisitor extends SenizParserBaseVisitor<Object> {
         }
 
         @Override
-        public Object visitIntegerLiteral(SenizParser.IntegerLiteralContext ctx) {
+        public Value visitIntegerLiteral(SenizParser.IntegerLiteralContext ctx) {
 
             String literal = prefix + ctx.getText();
 
@@ -74,11 +76,11 @@ public class LiteralVisitor extends SenizParserBaseVisitor<Object> {
                 throw new TypeException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported Integer type.");
             }
 
-            return value;
+            return new Value(Type.INTEGER, value);
         }
 
         @Override
-        public Object visitFloatLiteral(SenizParser.FloatLiteralContext ctx) {
+        public Value visitFloatLiteral(SenizParser.FloatLiteralContext ctx) {
             String literal = prefix + ctx.getText();
 
             // TODO maybe double
@@ -92,7 +94,7 @@ public class LiteralVisitor extends SenizParserBaseVisitor<Object> {
                 throw new TypeException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported Float type.");
             }
 
-            return value;
+            return new Value(Type.FLOAT, value);
         }
 
     }
