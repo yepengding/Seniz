@@ -15,7 +15,11 @@ systemDeclaration
     ;
 
 systemHeader
-    : SYSTEM systemIdentifier LPAREN formalParameterList? RPAREN systemParameter?
+    : systemModifier? SYSTEM systemIdentifier LPAREN formalParameterList? RPAREN systemParameter?
+    ;
+
+systemModifier
+    : MAIN
     ;
 
 systemParameter
@@ -24,12 +28,22 @@ systemParameter
 
 systemBody
     : LBRACE systemBodyDeclaration* RBRACE
+    | LBRACE controlSystemDeclaration RBRACE
     ;
 
 systemBodyDeclaration
     : stateNaming
     | transitionStatement
     | propositionStatement
+    ;
+
+controlSystemDeclaration
+    : controlStatement
+    | propositionStatement*
+    ;
+
+controlStatement
+    : systemIdentifier (PAR systemIdentifier)*
     ;
 
 systemIdentifier
@@ -124,7 +138,7 @@ propositionBody
 
 propositionExpression
     : propositionPrimary #propPrimaryExpression
-    | prefix=(NOT|BANG) propositionExpression #propNotExpression
+    | prefix=BANG propositionExpression #propNotExpression
     | propositionExpression bop=AND propositionExpression #propConditionalAndExpression
     | propositionExpression bop=OR propositionExpression #propConditionalOrExpression
     ;

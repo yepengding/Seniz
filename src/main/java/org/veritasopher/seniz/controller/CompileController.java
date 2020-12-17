@@ -12,6 +12,7 @@ import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.model.CompilationUnit;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.StateVariableSet;
+import org.veritasopher.seniz.core.tool.Parsing;
 import org.veritasopher.seniz.core.visitor.CompilationUnitVisitor;
 import org.veritasopher.seniz.exception.ThrowingErrorListener;
 import org.veritasopher.seniz.exception.StateVariableException;
@@ -70,14 +71,7 @@ public class CompileController {
     }
 
     private TransitionSystem compileSource(CharStream source) {
-        SenizLexer lexer = new SenizLexer(source);
-        lexer.removeErrorListeners();
-        lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
-        SenizParser parser = new SenizParser(new CommonTokenStream(lexer));
-        parser.removeErrorListeners();
-        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-        parser.setBuildParseTree(true);
-        ParseTree tree = parser.compilationUnit();
+        ParseTree tree = Parsing.getParseTreeFromSource(source);
 
         CompilationUnit compilationUnit = new CompilationUnit();
         CompilationUnitVisitor compilationUnitVisitor = new CompilationUnitVisitor(compilationUnit);

@@ -64,6 +64,18 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSystemModifier(SenizParser.SystemModifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSystemModifier(SenizParser.SystemModifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterSystemParameter(SenizParser.SystemParameterContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -95,6 +107,30 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSystemBodyDeclaration(SenizParser.SystemBodyDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterControlSystemDeclaration(SenizParser.ControlSystemDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitControlSystemDeclaration(SenizParser.ControlSystemDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterControlStatement(SenizParser.ControlStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitControlStatement(SenizParser.ControlStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

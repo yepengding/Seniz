@@ -35,6 +35,12 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSystemHeader(SenizParser.SystemHeaderContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SenizParser#systemModifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSystemModifier(SenizParser.SystemModifierContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SenizParser#systemParameter}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -52,6 +58,18 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitSystemBodyDeclaration(SenizParser.SystemBodyDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#controlSystemDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitControlSystemDeclaration(SenizParser.ControlSystemDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#controlStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitControlStatement(SenizParser.ControlStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#systemIdentifier}.
 	 * @param ctx the parse tree

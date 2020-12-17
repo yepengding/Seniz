@@ -4,7 +4,10 @@ import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.StateVariableSet;
 import org.veritasopher.seniz.core.model.SystemVariableSet;
+import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.StateVariable;
+import org.veritasopher.seniz.core.model.common.Term;
+import org.veritasopher.seniz.core.model.common.Value;
 import org.veritasopher.seniz.core.model.domain.Type;
 import org.veritasopher.seniz.exception.StateVariableException;
 
@@ -56,10 +59,37 @@ public class StateVariableDeclaratorVisitor extends SenizParserBaseVisitor<State
 
             // Get type by type name
             Type type = Type.getType(ctx.primitiveType().getText());
-            if (type == Type.NULL) {
+
+            // Get default evaluation for different types
+            Evaluation evaluation = getDefaultEvaluation(type);
+
+            if (evaluation.getRPN().size() == 0) {
+                // No default value for weird type
                 throw new StateVariableException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported variable type.");
             }
-            return new StateVariable(name, type, null);
+            return new StateVariable(name, type, evaluation);
+        }
+
+        private Evaluation getDefaultEvaluation(Type type) {
+            Evaluation evaluation = new Evaluation();
+            switch (type) {
+                case BOOLEAN: {
+                    evaluation.addTerm(new Term(new Value(Type.BOOLEAN, false)));
+                    break;
+                }
+                case INTEGER: {
+                    evaluation.addTerm(new Term(new Value(Type.INTEGER, 0)));
+                    break;
+                }
+                case FLOAT: {
+                    evaluation.addTerm(new Term(new Value(Type.FLOAT, 0.0)));
+                }
+                case STRING: {
+                    evaluation.addTerm(new Term(new Value(Type.STRING, "")));
+                }
+            }
+
+            return evaluation;
         }
     }
 

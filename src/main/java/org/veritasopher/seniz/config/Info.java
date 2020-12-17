@@ -6,4 +6,6 @@ public interface Info {
 
     String VERSION = "v0.0.1";
 
+    String SUFFIX = ".sz";
+
 }

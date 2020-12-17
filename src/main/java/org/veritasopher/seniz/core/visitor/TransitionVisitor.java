@@ -99,7 +99,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
 
     /**
      * Infer the first state of a transition
-     * Complete the first state with values of not contained state variables as 'null'
+     * Complete the first state with values of not explicitly identified state variables as default
      *
      * @param fst first state
      * @return inferred state

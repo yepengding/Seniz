@@ -5,6 +5,10 @@ IMPORT
     : 'import'
     ;
 
+MAIN
+    : 'main'
+    ;
+
 SYSTEM
     : 'system'
     ;
@@ -55,14 +59,13 @@ GE:                 '>=';
 NEQ:                '/=';
 AND:                '&';
 OR:                 '|';
-INC:                '++';
-DEC:                '--';
 ADD:                '+';
 SUB:                '-';
 MUL:                '*';
 DIV:                '/';
 CARET:              '^';
 MOD:                '%';
+PAR:                '||';
 
 // Literals
 

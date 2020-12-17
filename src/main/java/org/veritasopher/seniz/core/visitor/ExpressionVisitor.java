@@ -2,6 +2,8 @@ package org.veritasopher.seniz.core.visitor;
 
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
+import org.veritasopher.seniz.core.model.StateVariableSet;
+import org.veritasopher.seniz.core.model.SystemVariableSet;
 import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.Term;
 import org.veritasopher.seniz.core.model.common.Value;
@@ -15,9 +17,15 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
 
     private final Evaluation evaluation;
 
-    public ExpressionVisitor(Evaluation evaluation) {
+    private final SystemVariableSet systemVariableSet;
+
+    private final StateVariableSet stateVariableSet;
+
+    public ExpressionVisitor(Evaluation evaluation, SystemVariableSet systemVariableSet, StateVariableSet stateVariableSet) {
         this.literalVisitor = new LiteralVisitor();
         this.evaluation = evaluation;
+        this.systemVariableSet = systemVariableSet;
+        this.stateVariableSet = stateVariableSet;
     }
 
 
@@ -26,7 +34,12 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
         if (ctx.primary().literal() != null) {
             evaluation.addTerm(new Term(ctx.primary().literal().accept(literalVisitor)));
         } else if (ctx.primary().variableIdentifier() != null) {
-            evaluation.addTerm(new Term(new Value(Type.VARIABLE, ctx.primary().variableIdentifier().IDENTIFIER())));
+            String name = ctx.primary().variableIdentifier().IDENTIFIER().getText();
+            // Check whether variable is defined as system variable or state variable
+            if (!systemVariableSet.hasVariable(name) && !stateVariableSet.hasVariable(name)) {
+                throw new ExpressionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined variable.");
+            }
+            evaluation.addTerm(new Term(new Value(Type.VARIABLE, name)));
         } else {
             throw new ExpressionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Illegal primary expression.");
         }
