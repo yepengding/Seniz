@@ -26,16 +26,12 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
     }
 
     @Override
-    public CompilationUnit visitCompilationUnit(SenizParser.CompilationUnitContext ctx) {
-        // TODO Dependency info (import)
-
-        return super.visitCompilationUnit(ctx);
-    }
-
-    @Override
     public CompilationUnit visitSystemDeclaration(SenizParser.SystemDeclarationContext ctx) {
+        String identifier = ctx.systemHeader().systemIdentifier().IDENTIFIER().getText();
+        compilationUnit.setIdentifier(identifier);
+
         // Create new transition system
-        TransitionSystem ts = new TransitionSystem(ctx.systemHeader().systemIdentifier().IDENTIFIER().getText());
+        TransitionSystem ts = new TransitionSystem(identifier);
         compilationUnit.setTransitionSystem(ts);
 
         // Create new system variable set
@@ -45,38 +41,42 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
         if (formalParameterListContext != null) {
             formalParameterListContext.formalParameter().forEach(p -> systemVariableSet.addVariable(p.accept(formalParameterVisitor)));
         }
-        return compilationUnit;
+        return super.visitSystemDeclaration(ctx);
     }
 
     @Override
     public CompilationUnit visitSystemParameter(SenizParser.SystemParameterContext ctx) {
         compilationUnit.setSystemParameter(ctx.stateVarSetIdentifer().IDENTIFIER().getText());
-        return compilationUnit;
+        return super.visitSystemParameter(ctx);
     }
 
     @Override
     public CompilationUnit visitStateVarSetDeclaration(SenizParser.StateVarSetDeclarationContext ctx) {
-        StateVariableSet stateVariableSet;
-        SenizParser.StateVarSetDeclaratorContext declaratorContext = ctx.stateVarSetBody().stateVarSetDeclarator();
-        if (declaratorContext != null) {
-            // Pass system variable set for checking name uniqueness
-            SystemVariableSet systemVariableSet;
-            if (compilationUnit.getTransitionSystem() != null) {
-                systemVariableSet = compilationUnit.getTransitionSystem().getSystemVariables();
-            } else {
-                systemVariableSet = new SystemVariableSet();
-            }
-            StateVariableDeclaratorVisitor stateVariableDeclaratorVisitor = new StateVariableDeclaratorVisitor(systemVariableSet);
-            stateVariableSet = declaratorContext.accept(stateVariableDeclaratorVisitor);
-        } else {
-            stateVariableSet = new StateVariableSet();
+        String identifier = ctx.stateVarSetHeader().stateVarSetIdentifer().IDENTIFIER().getText();
+
+        // If state variable set only exists in the source file, then set identifier
+        if (compilationUnit.getIdentifier() == null) {
+            compilationUnit.setIdentifier(identifier);
         }
 
-        stateVariableSet.setIdentifier(ctx.stateVarSetHeader().stateVarSetIdentifer().IDENTIFIER().getText());
+        StateVariableSet stateVariableSet;
+
+        // Pass system variable set for checking name uniqueness
+        SystemVariableSet systemVariableSet;
+        if (compilationUnit.getTransitionSystem() != null) {
+            systemVariableSet = compilationUnit.getTransitionSystem().getSystemVariables();
+        } else {
+            systemVariableSet = new SystemVariableSet();
+        }
+
+        StateVariableDeclaratorVisitor stateVariableDeclaratorVisitor = new StateVariableDeclaratorVisitor(systemVariableSet);
+        stateVariableSet = ctx.stateVarSetBody().stateVarSetDeclarator().accept(stateVariableDeclaratorVisitor);
+
+        stateVariableSet.setIdentifier(identifier);
 
         compilationUnit.setStateVariableSet(stateVariableSet);
 
-        return compilationUnit;
+        return super.visitStateVarSetDeclaration(ctx);
     }
 
     private static class FormalParameterVisitor extends SenizParserBaseVisitor<SystemVariable> {

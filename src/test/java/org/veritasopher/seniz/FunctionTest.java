@@ -49,7 +49,7 @@ public class FunctionTest {
         assertEquals(6, sourceFilePaths.size());
 
         MasterController masterController = new MasterController();
-        masterController.precompile(sourceFilePaths);
+        masterController.compile(sourceFilePaths);
 
     }
 

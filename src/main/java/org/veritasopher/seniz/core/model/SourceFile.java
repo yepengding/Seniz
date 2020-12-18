@@ -27,7 +27,7 @@ public class SourceFile {
 
     private ParseTree parseTree;
 
-    private UnitDependency dependency;
+    private PrecompileUnit precompileUnit;
 
     public SourceFile(String path) throws IOException {
         this.path = path;

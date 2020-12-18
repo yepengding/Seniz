@@ -3,23 +3,20 @@ package org.veritasopher.seniz.controller;
 import lombok.Getter;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.veritasopher.seniz.builder.TransitionSystemBuilder;
 import org.veritasopher.seniz.builder.VariableSetBuilder;
-import org.veritasopher.seniz.core.base.SenizLexer;
-import org.veritasopher.seniz.core.base.SenizParser;
-import org.veritasopher.seniz.core.model.CompilationUnit;
-import org.veritasopher.seniz.core.model.TransitionSystem;
-import org.veritasopher.seniz.core.model.StateVariableSet;
+import org.veritasopher.seniz.core.model.*;
 import org.veritasopher.seniz.core.tool.Parsing;
 import org.veritasopher.seniz.core.visitor.CompilationUnitVisitor;
-import org.veritasopher.seniz.exception.ThrowingErrorListener;
+import org.veritasopher.seniz.exception.CompilationException;
+import org.veritasopher.seniz.exception.PrecompileException;
 import org.veritasopher.seniz.exception.StateVariableException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,7 +36,16 @@ public class CompileController {
     @Getter
     private final Set<TransitionSystem> transitionSystems;
 
+    private Map<String, SourceFile> sourceFileMap;
+
     public CompileController() {
+        this.transitionSystemBuilder = new TransitionSystemBuilder();
+        this.variableSetBuilder = new VariableSetBuilder();
+        this.transitionSystems = new HashSet<>();
+    }
+
+    public CompileController(Map<String, SourceFile> sourceFileMap) {
+        this.sourceFileMap = sourceFileMap;
         this.transitionSystemBuilder = new TransitionSystemBuilder();
         this.variableSetBuilder = new VariableSetBuilder();
         this.transitionSystems = new HashSet<>();
@@ -49,6 +55,20 @@ public class CompileController {
         CompilationUnit compilationUnit = new CompilationUnit();
         CompilationUnitVisitor compilationUnitVisitor = new CompilationUnitVisitor(compilationUnit);
         compilationUnitVisitor.visit(parseTree);
+
+        PrecompileUnit precompileUnit = sourceFileMap.get(compilationUnit.getIdentifier()).getPrecompileUnit();
+
+        // Check defined variable set
+        String varSetName = compilationUnit.getSystemParameter();
+        StateVariableSet stateVariableSet = compilationUnit.getStateVariableSet();
+        // State variable set is defined in the system parameter
+        if (varSetName != null) {
+            if (stateVariableSet == null && !precompileUnit.getPredIdSet().contains(varSetName)) {
+                throw new StateVariableException("Variable set (" + varSetName + ") is not defined");
+            } else if (stateVariableSet != null && varSetName.equals(stateVariableSet.getIdentifier()) && precompileUnit.getPredIdSet().contains(varSetName)) {
+                throw new CompilationException("Find both imported state variable set and internal state variable set");
+            }
+        }
 
         return compilationUnit;
     }
