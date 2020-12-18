@@ -53,8 +53,8 @@ public class DependencyGraph<T> {
     /**
      * Run topological sort
      */
-    public Stack<T> getTopologicalSortedStack() {
-        Stack<T> result = new Stack<>();
+    public List<T> getTopologicalSortedStack() {
+        Stack<T> stack = new Stack<>();
 
         // Mark all the vertices as not visited
         Map<T, Boolean> visited = new HashMap<>();
@@ -63,11 +63,15 @@ public class DependencyGraph<T> {
         for (T v :
                 vertices) {
             if (!visited.get(v)) {
-                topologicalSort(v, visited, result);
+                topologicalSort(v, visited, stack);
             }
         }
 
-        // Print contents of stack
+        // Stack to list
+        List<T> result = new ArrayList<>();
+        while (!stack.empty()) {
+            result.add(stack.pop());
+        }
         return result;
     }
 

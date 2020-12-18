@@ -4,8 +4,9 @@ import com.google.common.io.Files;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.veritasopher.seniz.core.model.CompilationUnit;
 import org.veritasopher.seniz.core.model.DependencyGraph;
-import org.veritasopher.seniz.core.model.StateVariableSet;
+import org.veritasopher.seniz.core.model.SourceFile;
 import org.veritasopher.seniz.core.model.UnitDependency;
 import org.veritasopher.seniz.core.tool.Parsing;
 import org.veritasopher.seniz.core.visitor.PrecompileVisitor;
@@ -13,6 +14,7 @@ import org.veritasopher.seniz.exception.PrecompileException;
 
 import java.io.FileInputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.veritasopher.seniz.util.ThrowingConsumer.throwingConsumerWrapper;
 
@@ -28,25 +30,21 @@ public class MasterController {
     // Map<Compile Unit Identifier, Parse Tree>
     private final Map<String, ParseTree> parseTrees;
 
-    // Map<Identifier, State Variable Set>
-    private Map<String, StateVariableSet> stateVariableSets;
-
     public MasterController() {
         this.parseTrees = new HashMap<>();
     }
 
     public void precompile(Set<String> sourceFilePaths) {
-        // Read source files as char streams
-        // Map<Compile Unit Identifier, Source File Char Stream>
-        Map<String, CharStream> sourceCharStreams = new HashMap<>();
-        sourceFilePaths.forEach(throwingConsumerWrapper(path -> sourceCharStreams.put(Files.getNameWithoutExtension(path), CharStreams.fromStream(new FileInputStream(path)))));
+        List<SourceFile> sourceFiles = new ArrayList<>();
+        sourceFilePaths.forEach(throwingConsumerWrapper(path -> sourceFiles.add(new SourceFile(path))));
 
-        // Get parse tree from char streams
-        sourceCharStreams.forEach((id, src) -> parseTrees.put(id, Parsing.getParseTreeFromSource(src)));
+        // Map<Identifier, Source File>
+        Map<String, SourceFile> sourceFileMap = new HashMap<>();
+        sourceFiles.forEach(src -> sourceFileMap.put(src.getIdentifier(), src));
 
         // Analyze all source files to unit dependencies
-        Set<UnitDependency> unitDependencies = new HashSet<>();
-        parseTrees.forEach((id, tree) -> unitDependencies.add(new PrecompileVisitor(id, parseTrees.keySet()).visit(tree)));
+        sourceFiles.forEach(src -> src.setDependency(new PrecompileVisitor(src.getIdentifier(), sourceFileMap.keySet()).visit(src.getParseTree())));
+        Set<UnitDependency> unitDependencies = sourceFiles.stream().map(SourceFile::getDependency).collect(Collectors.toSet());
 
         // Check legacy of the main system
         long mainCount = unitDependencies.stream().filter(UnitDependency::isMain).count();
@@ -57,10 +55,16 @@ public class MasterController {
         }
 
         // Sort units by topological sort algorithm
-        DependencyGraph<String> graph = new DependencyGraph<>(parseTrees.keySet());
+        DependencyGraph<String> graph = new DependencyGraph<>(sourceFileMap.keySet());
         unitDependencies.forEach(d -> d.getPredecessorId().forEach(pred -> graph.addEdge(pred, d.getIdentifier())));
-        Stack<String> sortedIdentifier = graph.getTopologicalSortedStack();
+        List<String> sortedIdentifier = graph.getTopologicalSortedStack();
         System.out.println(sortedIdentifier);
+
+        CompileController compileController = new CompileController();
+        for (String id :
+                sortedIdentifier) {
+            CompilationUnit compilationUnit = compileController.compile(sourceFileMap.get(id).getParseTree());
+        }
     }
 
 

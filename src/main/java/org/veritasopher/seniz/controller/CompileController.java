@@ -45,6 +45,14 @@ public class CompileController {
         this.transitionSystems = new HashSet<>();
     }
 
+    public CompilationUnit compile(ParseTree parseTree) {
+        CompilationUnit compilationUnit = new CompilationUnit();
+        CompilationUnitVisitor compilationUnitVisitor = new CompilationUnitVisitor(compilationUnit);
+        compilationUnitVisitor.visit(parseTree);
+
+        return compilationUnit;
+    }
+
     public void compile(Set<String> sourceFilePaths) {
         Set<CharStream> sourceCharStreams = sourceFilePaths.stream()
                 .map(path -> {
