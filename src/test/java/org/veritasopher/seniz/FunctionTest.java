@@ -81,7 +81,8 @@ public class FunctionTest {
 
     @Test
     public void testDOTGenerator() {
-        String path = resourcePath("example/TestTS.sz");
+//        String path = resourcePath("example/TestTS.sz");
+        String path = resourcePath("example/MultiTS/TS0.sz");
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 

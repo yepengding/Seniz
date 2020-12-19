@@ -15,7 +15,7 @@ systemDeclaration
     ;
 
 systemHeader
-    : systemModifier? SYSTEM systemIdentifier LPAREN formalParameterList? RPAREN systemParameter?
+    : systemModifier? SYSTEM systemIdentifier LPAREN formalParameterList? RPAREN systemParameter
     ;
 
 systemModifier
@@ -98,7 +98,7 @@ primary
 // Transition
 
 transitionStatement
-    : initIdentifier? stateIdentifier (TO actionDeclaration? stateIdentifier)+
+    : initIdentifier? stateIdentifier (TO actionDeclaration? stateIdentifier)*
     ;
 
 initIdentifier

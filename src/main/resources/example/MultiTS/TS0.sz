@@ -1,3 +1,9 @@
-system TS0() {
+system TS0() over Vars{
 
+    init {a: 0}
+
+}
+
+varset Vars {
+    a :: int
 }
