@@ -2,7 +2,7 @@ package org.veritasopher.seniz.core.model.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.veritasopher.seniz.core.model.domain.Type;
+import org.veritasopher.seniz.core.model.domain.PrimaryType;
 
 /**
  * Value
@@ -14,7 +14,7 @@ import org.veritasopher.seniz.core.model.domain.Type;
 @AllArgsConstructor
 public class Value {
 
-    private Type type;
+    private PrimaryType primaryType;
 
     private Object value;
 

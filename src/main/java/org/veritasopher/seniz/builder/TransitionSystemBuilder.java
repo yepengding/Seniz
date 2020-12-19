@@ -50,7 +50,7 @@ public class TransitionSystemBuilder {
 
     private void legacyCheck(TransitionSystem ts) {
         if (ts.getInitStates().size() == 0) {
-            throw new StateException("Lack initial states.");
+            throw new StateException(ts.getIdentifier(), "Lack initial states.");
         }
     }
 

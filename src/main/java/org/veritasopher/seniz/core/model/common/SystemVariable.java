@@ -2,7 +2,7 @@ package org.veritasopher.seniz.core.model.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.veritasopher.seniz.core.model.domain.Type;
+import org.veritasopher.seniz.core.model.domain.PrimaryType;
 
 /**
  * System Variable
@@ -17,7 +17,7 @@ public class SystemVariable {
 
     private String name;
 
-    private Type type;
+    private PrimaryType primaryType;
 
     private Evaluation evaluation;
 

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 import lombok.With;
-import org.veritasopher.seniz.core.model.domain.Type;
+import org.veritasopher.seniz.core.model.domain.PrimaryType;
 
 /**
  * State Variable
@@ -19,7 +19,7 @@ import org.veritasopher.seniz.core.model.domain.Type;
 public class StateVariable {
     private String name;
 
-    private Type type;
+    private PrimaryType primaryType;
 
     private Evaluation evaluation;
 

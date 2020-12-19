@@ -8,19 +8,19 @@ package org.veritasopher.seniz.exception;
  */
 public class StateVariableException extends BaseException {
 
-    public StateVariableException(String message) {
-        super(message);
+    public StateVariableException(String source, String message) {
+        super(source, message);
     }
 
-    public StateVariableException(String message, Throwable cause) {
-        super(message, cause);
+    public StateVariableException(String source, String message, Throwable cause) {
+        super(source, message, cause);
     }
 
-    public StateVariableException(int line, String message) {
-        super(line, message);
+    public StateVariableException(String source, int line, String message) {
+        super(source, line, message);
     }
 
-    public StateVariableException(int line, int col, String message) {
-        super(line, col, message);
+    public StateVariableException(String source, int line, int col, String message) {
+        super(source, line, col, message);
     }
 }

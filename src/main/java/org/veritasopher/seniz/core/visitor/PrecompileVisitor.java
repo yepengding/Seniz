@@ -3,6 +3,7 @@ package org.veritasopher.seniz.core.visitor;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.PrecompileUnit;
+import org.veritasopher.seniz.core.model.domain.UnitType;
 import org.veritasopher.seniz.exception.PrecompileException;
 
 import java.util.Set;
@@ -38,19 +39,27 @@ public class PrecompileVisitor extends SenizParserBaseVisitor<PrecompileUnit> {
                 name = context.qualifiedName().getText();
                 if (!idSet.contains(name)) {
                     // Module does not exist in source files
-                    throw new PrecompileException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Module (" + name + ") is missing.");
+                    throw new PrecompileException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Module (" + name + ") is missing.");
                 } else if (identifier.equals(name)) {
                     // Self importing
-                    throw new PrecompileException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot import self (" + name + ").");
+                    throw new PrecompileException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot import self (" + name + ").");
                 }
             }
             ctx.importDeclaration().forEach(pred -> precompileUnit.addPredecessorId(pred.qualifiedName().getText()));
         }
-        if (ctx.systemDeclaration() != null) {
-            precompileUnit.setSystem(true);
+        if (ctx.systemDeclaration() != null && ctx.stateVarSetDeclaration() != null) {
+            precompileUnit.setType(UnitType.TS_VAR);
+            this.visitSystemHeader(ctx.systemDeclaration().systemHeader());
+            this.visitStateVarSetHeader(ctx.stateVarSetDeclaration().stateVarSetHeader());
+        } else if (ctx.systemDeclaration() != null) {
+            if (ctx.systemDeclaration().systemBody().controlSystemDeclaration() != null) {
+                precompileUnit.setType(UnitType.CTRL);
+            } else {
+                precompileUnit.setType(UnitType.TS);
+            }
             this.visitSystemHeader(ctx.systemDeclaration().systemHeader());
         } else if (ctx.stateVarSetDeclaration() != null) {
-            precompileUnit.setSystem(false);
+            precompileUnit.setType(UnitType.VAR);
             this.visitStateVarSetHeader(ctx.stateVarSetDeclaration().stateVarSetHeader());
         }
 
@@ -59,11 +68,10 @@ public class PrecompileVisitor extends SenizParserBaseVisitor<PrecompileUnit> {
 
     @Override
     public PrecompileUnit visitSystemHeader(SenizParser.SystemHeaderContext ctx) {
-
         String id = ctx.systemIdentifier().IDENTIFIER().getText();
         // Identifier must be the same with the file name
         if (!identifier.equals(id)) {
-            throw new PrecompileException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "System identifier (" + id + ") is different from file name.");
+            throw new PrecompileException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "System identifier (" + id + ") is different from file name.");
         }
 
         // Set identifier
@@ -79,8 +87,8 @@ public class PrecompileVisitor extends SenizParserBaseVisitor<PrecompileUnit> {
     public PrecompileUnit visitStateVarSetHeader(SenizParser.StateVarSetHeaderContext ctx) {
         String id = ctx.stateVarSetIdentifer().IDENTIFIER().getText();
         // Identifier must be the same with the file name
-        if (!identifier.equals(id)) {
-            throw new PrecompileException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "State variable set identifier (" + id + ") is different from file name.");
+        if (precompileUnit.getType() == UnitType.VAR && !identifier.equals(id)) {
+            throw new PrecompileException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "State variable set identifier (" + id + ") is different from file name.");
         }
         precompileUnit.setIdentifier(id);
         return super.visitStateVarSetHeader(ctx);

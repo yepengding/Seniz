@@ -3,7 +3,7 @@ package org.veritasopher.seniz.core.visitor;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.common.Value;
-import org.veritasopher.seniz.core.model.domain.Type;
+import org.veritasopher.seniz.core.model.domain.PrimaryType;
 import org.veritasopher.seniz.exception.TypeException;
 
 /**
@@ -33,14 +33,14 @@ public class LiteralVisitor extends SenizParserBaseVisitor<Value> {
         } else if (literal.equals("false")) {
             value = false;
         } else {
-            throw new TypeException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported Boolean type.");
+            throw new TypeException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported Boolean primaryType.");
         }
-        return new Value(Type.BOOLEAN, value);
+        return new Value(PrimaryType.BOOLEAN, value);
     }
 
     @Override
     public Value visitStringLiteral(SenizParser.StringLiteralContext ctx) {
-        return new Value(Type.STRING, ctx.getText());
+        return new Value(PrimaryType.STRING, ctx.getText());
     }
 
     @Override
@@ -73,10 +73,10 @@ public class LiteralVisitor extends SenizParserBaseVisitor<Value> {
             } else if (ctx.HEX_LITERAL() != null) {
                 value = Integer.decode(literal);
             } else {
-                throw new TypeException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported Integer type.");
+                throw new TypeException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported Integer primaryType.");
             }
 
-            return new Value(Type.INTEGER, value);
+            return new Value(PrimaryType.INTEGER, value);
         }
 
         @Override
@@ -91,10 +91,10 @@ public class LiteralVisitor extends SenizParserBaseVisitor<Value> {
             } else if (ctx.HEX_FLOAT_LITERAL() != null) {
                 value = Float.intBitsToFloat(Integer.decode(literal));
             } else {
-                throw new TypeException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported Float type.");
+                throw new TypeException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported Float primaryType.");
             }
 
-            return new Value(Type.FLOAT, value);
+            return new Value(PrimaryType.FLOAT, value);
         }
 
     }

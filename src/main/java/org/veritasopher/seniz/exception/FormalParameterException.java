@@ -1,19 +1,20 @@
 package org.veritasopher.seniz.exception;
 
 public class FormalParameterException extends BaseException {
-    public FormalParameterException(String message) {
-        super(message);
+
+    public FormalParameterException(String source, String message) {
+        super(source, message);
     }
 
-    public FormalParameterException(String message, Throwable cause) {
-        super(message, cause);
+    public FormalParameterException(String source, String message, Throwable cause) {
+        super(source, message, cause);
     }
 
-    public FormalParameterException(int line, String message) {
-        super(line, message);
+    public FormalParameterException(String source, int line, String message) {
+        super(source, line, message);
     }
 
-    public FormalParameterException(int line, int col, String message) {
-        super(line, col, message);
+    public FormalParameterException(String source, int line, int col, String message) {
+        super(source, line, col, message);
     }
 }

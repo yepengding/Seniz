@@ -1,6 +1,6 @@
 varset Vars {
-    a :: int,
-    b :: float,
-    c :: bool,
-    d :: string
+    v0 :: int,
+    v1 :: float,
+    v2 :: bool,
+    v3 :: string
 }

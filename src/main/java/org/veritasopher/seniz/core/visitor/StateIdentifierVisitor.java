@@ -36,7 +36,7 @@ public class StateIdentifierVisitor extends SenizParserBaseVisitor<State> {
 
             // Check whether state associated with identifier exists
             if (s.isEmpty()) {
-                throw new StateException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "State named (" + name + ") does not exist.");
+                throw new StateException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "State named (" + name + ") does not exist.");
             }
             state = s.get();
 
@@ -44,7 +44,7 @@ public class StateIdentifierVisitor extends SenizParserBaseVisitor<State> {
             // Unnamed state
             state = ctx.stateBody().stateDeclarator().accept(stateDeclaratorVisitor);
         } else {
-            throw new StateException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported state type.");
+            throw new StateException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported state type.");
         }
 
         return state;

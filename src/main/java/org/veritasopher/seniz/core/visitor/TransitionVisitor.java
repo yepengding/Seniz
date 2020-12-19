@@ -86,7 +86,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
 
             // Transition duplicated
             if (transitionSystem.hasTransition(transition)) {
-                throw new TransitionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Transition is duplicated.");
+                throw new TransitionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Transition is duplicated.");
             }
 
             transitionSystem.addTransition(transition);

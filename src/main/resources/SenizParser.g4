@@ -15,7 +15,7 @@ systemDeclaration
     ;
 
 systemHeader
-    : systemModifier? SYSTEM systemIdentifier LPAREN formalParameterList? RPAREN systemParameter
+    : systemModifier? SYSTEM systemIdentifier LPAREN formalParameterList? RPAREN systemParameter?
     ;
 
 systemModifier
@@ -27,8 +27,8 @@ systemParameter
     ;
 
 systemBody
-    : LBRACE systemBodyDeclaration* RBRACE
-    | LBRACE controlSystemDeclaration RBRACE
+    : LBRACE controlSystemDeclaration RBRACE
+    | LBRACE systemBodyDeclaration* RBRACE
     ;
 
 systemBodyDeclaration

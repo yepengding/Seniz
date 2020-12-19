@@ -19,6 +19,9 @@ public class VariableSetBuilder {
      * @return built variable set
      */
     public StateVariableSet build(StateVariableSet stateVariableSet, ParseTree tree) {
+        if (stateVariableSet == null) {
+            stateVariableSet = new StateVariableSet();
+        }
         // TODO may allow defining variable in system body
         return stateVariableSet;
     }

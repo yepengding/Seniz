@@ -9,6 +9,10 @@ MAIN
     : 'main'
     ;
 
+CONTROL
+    : 'control'
+    ;
+
 SYSTEM
     : 'system'
     ;

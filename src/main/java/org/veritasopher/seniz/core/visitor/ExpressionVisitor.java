@@ -8,7 +8,7 @@ import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.Term;
 import org.veritasopher.seniz.core.model.common.Value;
 import org.veritasopher.seniz.core.model.domain.Operator;
-import org.veritasopher.seniz.core.model.domain.Type;
+import org.veritasopher.seniz.core.model.domain.PrimaryType;
 import org.veritasopher.seniz.exception.ExpressionException;
 
 public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
@@ -37,11 +37,11 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
             String name = ctx.primary().variableIdentifier().IDENTIFIER().getText();
             // Check whether variable is defined as system variable or state variable
             if (!systemVariableSet.hasVariable(name) && !stateVariableSet.hasVariable(name)) {
-                throw new ExpressionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined variable.");
+                throw new ExpressionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined variable.");
             }
-            evaluation.addTerm(new Term(new Value(Type.VARIABLE, name)));
+            evaluation.addTerm(new Term(new Value(PrimaryType.VARIABLE, name)));
         } else {
-            throw new ExpressionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Illegal primary expression.");
+            throw new ExpressionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Illegal primary expression.");
         }
 
         return super.visitPrimaryExpression(ctx);
@@ -51,10 +51,10 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
     public Evaluation visitUnaryExpression(SenizParser.UnaryExpressionContext ctx) {
         Operator operator = Operator.getOperator(ctx.prefix.getType());
         if (operator == null) {
-            throw new ExpressionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported unary operator.");
+            throw new ExpressionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported unary operator.");
         }
         evaluation.addTerm(new Term(operator));
-        evaluation.addTerm(new Term(new Value(Type.INTEGER, 0)));
+        evaluation.addTerm(new Term(new Value(PrimaryType.INTEGER, 0)));
         return super.visitUnaryExpression(ctx);
     }
 
@@ -62,7 +62,7 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
     public Evaluation visitNotExpression(SenizParser.NotExpressionContext ctx) {
         Operator operator = Operator.getOperator(ctx.prefix.getType());
         if (operator == null) {
-            throw new ExpressionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported not operator.");
+            throw new ExpressionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported not operator.");
         }
         evaluation.addTerm(new Term(operator));
         return super.visitNotExpression(ctx);
@@ -72,7 +72,7 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
     public Evaluation visitAdditiveExpression(SenizParser.AdditiveExpressionContext ctx) {
         Operator operator = Operator.getOperator(ctx.bop.getType());
         if (operator == null) {
-            throw new ExpressionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported additive operator.");
+            throw new ExpressionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported additive operator.");
         }
         evaluation.addTerm(new Term(operator));
         return super.visitAdditiveExpression(ctx);
@@ -82,7 +82,7 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
     public Evaluation visitMultiplicativeExpression(SenizParser.MultiplicativeExpressionContext ctx) {
         Operator operator = Operator.getOperator(ctx.bop.getType());
         if (operator == null) {
-            throw new ExpressionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported multiplicative operator.");
+            throw new ExpressionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported multiplicative operator.");
         }
         evaluation.addTerm(new Term(operator));
         return super.visitMultiplicativeExpression(ctx);
@@ -92,7 +92,7 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
     public Evaluation visitRelationalExpression(SenizParser.RelationalExpressionContext ctx) {
         Operator operator = Operator.getOperator(ctx.bop.getType());
         if (operator == null) {
-            throw new ExpressionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported relational operator.");
+            throw new ExpressionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported relational operator.");
         }
         evaluation.addTerm(new Term(operator));
         return super.visitRelationalExpression(ctx);
@@ -102,7 +102,7 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
     public Evaluation visitConditionalExpression(SenizParser.ConditionalExpressionContext ctx) {
         Operator operator = Operator.getOperator(ctx.bop.getType());
         if (operator == null) {
-            throw new ExpressionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported conditional operator.");
+            throw new ExpressionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported conditional operator.");
         }
         evaluation.addTerm(new Term(operator));
         return super.visitConditionalExpression(ctx);

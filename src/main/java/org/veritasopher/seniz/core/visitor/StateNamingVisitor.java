@@ -37,7 +37,7 @@ public class StateNamingVisitor extends SenizParserBaseVisitor<TransitionSystem>
 
         // Check the uniqueness of state declaration
         if (transitionSystem.hasStateName(name)) {
-            throw new StateException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied state name (" + name + ").");
+            throw new StateException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied state name (" + name + ").");
         }
 
         transitionSystem.addStateName(name, state);

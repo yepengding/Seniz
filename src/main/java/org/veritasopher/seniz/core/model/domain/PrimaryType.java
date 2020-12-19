@@ -1,6 +1,6 @@
 package org.veritasopher.seniz.core.model.domain;
 
-public enum Type {
+public enum PrimaryType {
     NULL, BOOLEAN, INTEGER, FLOAT, STRING, VARIABLE;
 
     /**
@@ -9,7 +9,7 @@ public enum Type {
      * @param typeName type name defined in lexer
      * @return corresponding Type
      */
-    public static Type getType(String typeName) {
+    public static PrimaryType getType(String typeName) {
         switch (typeName) {
             case "bool": return BOOLEAN;
             case "int": return INTEGER;

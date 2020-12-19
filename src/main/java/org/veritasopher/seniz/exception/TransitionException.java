@@ -2,19 +2,19 @@ package org.veritasopher.seniz.exception;
 
 public class TransitionException extends BaseException {
 
-    public TransitionException(String message) {
-        super(message);
+    public TransitionException(String source, String message) {
+        super(source, message);
     }
 
-    public TransitionException(String message, Throwable cause) {
-        super(message, cause);
+    public TransitionException(String source, String message, Throwable cause) {
+        super(source, message, cause);
     }
 
-    public TransitionException(int line, String message) {
-        super(line, message);
+    public TransitionException(String source, int line, String message) {
+        super(source, line, message);
     }
 
-    public TransitionException(int line, int col, String message) {
-        super(line, col, message);
+    public TransitionException(String source, int line, int col, String message) {
+        super(source, line, col, message);
     }
 }

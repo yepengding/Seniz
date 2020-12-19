@@ -8,7 +8,7 @@ import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.StateVariable;
 import org.veritasopher.seniz.core.model.common.Term;
 import org.veritasopher.seniz.core.model.common.Value;
-import org.veritasopher.seniz.core.model.domain.Type;
+import org.veritasopher.seniz.core.model.domain.PrimaryType;
 import org.veritasopher.seniz.exception.StateVariableException;
 
 /**
@@ -52,40 +52,40 @@ public class StateVariableDeclaratorVisitor extends SenizParserBaseVisitor<State
 
             // Check the name uniqueness
             if (stateVariableSet.hasVariable(name)) {
-                throw new StateVariableException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied state variable name (" + name + ").");
+                throw new StateVariableException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied state variable name (" + name + ").");
             } else if (systemVariableSet.hasVariable(name)) {
-                throw new StateVariableException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied system variable name (" + name + ").");
+                throw new StateVariableException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied system variable name (" + name + ").");
             }
 
             // Get type by type name
-            Type type = Type.getType(ctx.primitiveType().getText());
+            PrimaryType primaryType = PrimaryType.getType(ctx.primitiveType().getText());
 
             // Get default evaluation for different types
-            Evaluation evaluation = getDefaultEvaluation(type);
+            Evaluation evaluation = getDefaultEvaluation(primaryType);
 
             if (evaluation.getRPN().size() == 0) {
                 // No default value for weird type
-                throw new StateVariableException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported variable type.");
+                throw new StateVariableException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported variable type.");
             }
-            return new StateVariable(name, type, evaluation);
+            return new StateVariable(name, primaryType, evaluation);
         }
 
-        private Evaluation getDefaultEvaluation(Type type) {
+        private Evaluation getDefaultEvaluation(PrimaryType primaryType) {
             Evaluation evaluation = new Evaluation();
-            switch (type) {
+            switch (primaryType) {
                 case BOOLEAN: {
-                    evaluation.addTerm(new Term(new Value(Type.BOOLEAN, false)));
+                    evaluation.addTerm(new Term(new Value(PrimaryType.BOOLEAN, false)));
                     break;
                 }
                 case INTEGER: {
-                    evaluation.addTerm(new Term(new Value(Type.INTEGER, 0)));
+                    evaluation.addTerm(new Term(new Value(PrimaryType.INTEGER, 0)));
                     break;
                 }
                 case FLOAT: {
-                    evaluation.addTerm(new Term(new Value(Type.FLOAT, 0.0)));
+                    evaluation.addTerm(new Term(new Value(PrimaryType.FLOAT, 0.0)));
                 }
                 case STRING: {
-                    evaluation.addTerm(new Term(new Value(Type.STRING, "")));
+                    evaluation.addTerm(new Term(new Value(PrimaryType.STRING, "")));
                 }
             }
 

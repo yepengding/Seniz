@@ -16,7 +16,7 @@ public class ActionDeclarationVisitor extends SenizParserBaseVisitor<Action> {
     @Override
     public Action visitActionDeclaration(SenizParser.ActionDeclarationContext ctx) {
         if (ctx.IDENTIFIER() == null) {
-            throw new ActionException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported action type.");
+            throw new ActionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported action type.");
         }
 //        if (ctx.formalParameterList() != null) {
 //            ctx.formalParameterList().formalParameter().forEach(param -> {

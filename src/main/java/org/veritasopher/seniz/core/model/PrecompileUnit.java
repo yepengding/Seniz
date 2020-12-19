@@ -1,6 +1,7 @@
 package org.veritasopher.seniz.core.model;
 
 import lombok.Data;
+import org.veritasopher.seniz.core.model.domain.UnitType;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,9 +17,9 @@ public class PrecompileUnit {
 
     private String identifier;
 
-    private boolean isMain;
+    private UnitType type;
 
-    private boolean isSystem;
+    private boolean isMain;
 
     private Set<String> predIdSet;
 

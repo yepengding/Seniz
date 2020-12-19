@@ -25,19 +25,25 @@ public class MasterController {
         this.sourceFileMap = new HashMap<>();
     }
 
-    public void compile(Set<String> sourceFilePaths) {
+    public TransitionSystem compile(Set<String> sourceFilePaths) {
         Set<PrecompileUnit> precompileUnits = precompile(sourceFilePaths);
 
         // Sort units by topological sort algorithm
         DependencyGraph<String> graph = new DependencyGraph<>(sourceFileMap.keySet());
         precompileUnits.forEach(d -> d.getPredIdSet().forEach(pred -> graph.addEdge(pred, d.getIdentifier())));
         List<String> sortedIdentifier = graph.getTopologicalSortedStack();
-
         CompileController compileController = new CompileController(sourceFileMap);
+
+        TransitionSystem mainTS = null;
         for (String id :
                 sortedIdentifier) {
             CompilationUnit compilationUnit = compileController.compile(sourceFileMap.get(id).getParseTree());
+            if (sourceFileMap.get(id).getPrecompileUnit().isMain()) {
+                mainTS = compilationUnit.getTransitionSystem();
+                break;
+            }
         }
+        return mainTS;
     }
 
     private Set<PrecompileUnit> precompile(Set<String> sourceFilePaths) {
@@ -53,9 +59,9 @@ public class MasterController {
         // Check legacy of the main system
         long mainCount = precompileUnits.stream().filter(PrecompileUnit::isMain).count();
         if (mainCount == 0) {
-            throw new PrecompileException("Missing main system.");
+            throw new PrecompileException("", "Missing main system.");
         } else if (mainCount > 1) {
-            throw new PrecompileException("Multiple main systems exist.");
+            throw new PrecompileException("", "Multiple main systems exist.");
         }
 
         return precompileUnits;

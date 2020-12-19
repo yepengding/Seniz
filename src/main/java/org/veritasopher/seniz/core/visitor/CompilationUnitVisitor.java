@@ -7,7 +7,7 @@ import org.veritasopher.seniz.core.model.StateVariableSet;
 import org.veritasopher.seniz.core.model.SystemVariableSet;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.common.SystemVariable;
-import org.veritasopher.seniz.core.model.domain.Type;
+import org.veritasopher.seniz.core.model.domain.PrimaryType;
 import org.veritasopher.seniz.exception.FormalParameterException;
 import org.veritasopher.seniz.exception.StateVariableException;
 
@@ -93,16 +93,16 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
             String name = ctx.variableIdentifier().IDENTIFIER().getText();
             // Check the name uniqueness
             if (systemVariableSet.hasVariable(name)) {
-                throw new FormalParameterException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied system variable name (" + name + ").");
+                throw new FormalParameterException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied system variable name (" + name + ").");
             }
 
             // Get type by type name
-            Type type = Type.getType(ctx.primitiveType().getText());
-            if (type == Type.NULL) {
-                throw new StateVariableException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported variable type.");
+            PrimaryType primaryType = PrimaryType.getType(ctx.primitiveType().getText());
+            if (primaryType == PrimaryType.NULL) {
+                throw new StateVariableException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported variable type.");
             }
 
-            return new SystemVariable(name, type, null);
+            return new SystemVariable(name, primaryType, null);
         }
 
     }

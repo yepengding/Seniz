@@ -1,17 +1,13 @@
 package org.veritasopher.seniz;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 import org.veritasopher.seniz.config.Info;
-import org.veritasopher.seniz.controller.CompileController;
 import org.veritasopher.seniz.controller.MasterController;
 import org.veritasopher.seniz.core.base.SenizLexer;
 import org.veritasopher.seniz.core.base.SenizParser;
-import org.veritasopher.seniz.core.model.DependencyGraph;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.generator.DOTGenerator;
 
@@ -24,7 +20,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -39,7 +34,7 @@ import static org.junit.Assert.assertNotNull;
 public class FunctionTest {
 
     @Test
-    public void testMasterController() {
+    public void testMultiFileCompile() {
         String path = resourcePath("example/MultiTS");
         File folder = new File(path);
         FilenameFilter filter = (f, name) -> name.endsWith(Info.SUFFIX);
@@ -62,61 +57,49 @@ public class FunctionTest {
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 
-        generateDOT(sourceFilePaths);
     }
 
-    @Test
-    public void testGenerateDOTString() throws IOException {
-        String path = resourcePath("example/TestTS.sz");
-        File file = new File(path);
-        String sourceFileContent = Files.toString(file, Charsets.UTF_8);
-        CompileController compileController = new CompileController();
-        TransitionSystem ts = compileController.compile(sourceFileContent);
-        if (ts != null) {
-            DOTGenerator dotGenerator = new DOTGenerator(ts);
-            String dotProgram = dotGenerator.generateAsString();
-            System.out.println(dotProgram);
-        }
-    }
+//    @Test
+//    public void testGenerateDOTString() throws IOException {
+//        String path = resourcePath("example/TestTS.sz");
+//        File file = new File(path);
+//        String sourceFileContent = Files.toString(file, Charsets.UTF_8);
+//        CompileController compileController = new CompileController();
+//        TransitionSystem ts = compileController.compile(sourceFileContent);
+//        if (ts != null) {
+//            DOTGenerator dotGenerator = new DOTGenerator(ts);
+//            String dotProgram = dotGenerator.generateAsString();
+//            System.out.println(dotProgram);
+//        }
+//    }
 
     @Test
     public void testDOTGenerator() {
-//        String path = resourcePath("example/TestTS.sz");
-        String path = resourcePath("example/MultiTS/TS0.sz");
+        String path = resourcePath("example/TestTS.sz");
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 
-        generateDOT(sourceFilePaths);
+        MasterController masterController = new MasterController();
+        TransitionSystem mainTS = masterController.compile(sourceFilePaths);
+        DOTGenerator dotGenerator = new DOTGenerator(mainTS);
+        dotGenerator.generateToConsole();
 
     }
 
-    private void generateDOT(Set<String> sourceFilePaths) {
-        CompileController compileController = new CompileController();
-        compileController.compile(sourceFilePaths);
-        TransitionSystem testTS = null;
-        if (compileController.getTransitionSystems().size() > 0) {
-            testTS = compileController.getTransitionSystems().iterator().next();
-        }
 
-        if (testTS != null) {
-            DOTGenerator dotGenerator = new DOTGenerator(testTS);
-            dotGenerator.generateToConsole();
-        }
-    }
-
-    @Test
-    public void testCompilationController() {
-        String path = resourcePath("example/Transaction.sz");
-        Set<String> sourceFilePaths = new HashSet<>();
-        sourceFilePaths.add(path);
-
-        CompileController compileController = new CompileController();
-        compileController.compile(sourceFilePaths);
-
-        compileController.getTransitionSystems().forEach(ts -> {
-            System.out.println(ts.getTransitions());
-        });
-    }
+//    @Test
+//    public void testCompilationController() {
+//        String path = resourcePath("example/Transaction.sz");
+//        Set<String> sourceFilePaths = new HashSet<>();
+//        sourceFilePaths.add(path);
+//
+//        CompileController compileController = new CompileController();
+//        compileController.compile(sourceFilePaths);
+//
+//        compileController.getTransitionSystems().forEach(ts -> {
+//            System.out.println(ts.getTransitions());
+//        });
+//    }
 
     private String resourcePath(String filePath) {
         return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource(filePath)).getPath();

@@ -2,11 +2,11 @@ package org.veritasopher.seniz.core.visitor;
 
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
-import org.veritasopher.seniz.core.model.common.Evaluation;
-import org.veritasopher.seniz.exception.StateVariableException;
 import org.veritasopher.seniz.core.model.TransitionSystem;
+import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.State;
 import org.veritasopher.seniz.core.model.common.StateVariable;
+import org.veritasopher.seniz.exception.StateVariableException;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -50,7 +50,7 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<State> {
 
             // Check if variable is defined
             if (var == null) {
-                throw new StateVariableException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined variable.");
+                throw new StateVariableException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined variable (" + name + ").");
             }
 
             // Get evaluation of the variable
