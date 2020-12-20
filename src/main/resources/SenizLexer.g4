@@ -70,6 +70,7 @@ DIV:                '/';
 CARET:              '^';
 MOD:                '%';
 PAR:                '||';
+INTERLEAVE:         '|||';
 
 // Literals
 

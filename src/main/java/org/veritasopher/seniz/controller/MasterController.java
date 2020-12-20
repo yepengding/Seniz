@@ -1,7 +1,9 @@
 package org.veritasopher.seniz.controller;
 
 import org.veritasopher.seniz.core.model.*;
+import org.veritasopher.seniz.core.model.domain.UnitType;
 import org.veritasopher.seniz.core.visitor.PrecompileVisitor;
+import org.veritasopher.seniz.exception.CompilationException;
 import org.veritasopher.seniz.exception.PrecompileException;
 
 import java.util.*;
@@ -25,7 +27,7 @@ public class MasterController {
         this.sourceFileMap = new HashMap<>();
     }
 
-    public TransitionSystem compile(Set<String> sourceFilePaths) {
+    public List<TransitionSystem> compile(Set<String> sourceFilePaths) {
         Set<PrecompileUnit> precompileUnits = precompile(sourceFilePaths);
 
         // Sort units by topological sort algorithm
@@ -34,16 +36,32 @@ public class MasterController {
         List<String> sortedIdentifier = graph.getTopologicalSortedStack();
         CompileController compileController = new CompileController(sourceFileMap);
 
+        CompilationUnit compilationUnit;
+        PrecompileUnit precompileUnit;
         TransitionSystem mainTS = null;
         for (String id :
                 sortedIdentifier) {
-            CompilationUnit compilationUnit = compileController.compile(sourceFileMap.get(id).getParseTree());
-            if (sourceFileMap.get(id).getPrecompileUnit().isMain()) {
+            compilationUnit = compileController.compile(sourceFileMap.get(id).getParseTree());
+            precompileUnit = sourceFileMap.get(id).getPrecompileUnit();
+            if (precompileUnit.isMain()) {
                 mainTS = compilationUnit.getTransitionSystem();
                 break;
             }
         }
-        return mainTS;
+        if (mainTS == null) {
+            throw new CompilationException("", "Main transition system does not exist.");
+        }
+
+        List<TransitionSystem> transitionSystems = new ArrayList<>();
+        if (mainTS.isControl()) {
+            // Control system
+            transitionSystems.addAll(mainTS.getControlSystemIds().stream().map(GlobalEnvironment.getInstance()::getTransitionSystem).collect(Collectors.toList()));
+        } else {
+            // Common TS
+            transitionSystems.add(mainTS);
+        }
+
+        return transitionSystems;
     }
 
     private Set<PrecompileUnit> precompile(Set<String> sourceFilePaths) {

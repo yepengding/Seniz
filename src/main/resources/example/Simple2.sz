@@ -1,4 +1,4 @@
-system Simple2(i::int, j::bool) over Vars {
+main system Simple2(i::int, j::bool) over Vars {
 
     init s0 -> a0() {v0: i + 1} -> a1() {v2: true} -> a2() s0
 

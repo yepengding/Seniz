@@ -15,11 +15,19 @@ systemDeclaration
     ;
 
 systemHeader
-    : systemModifier? SYSTEM systemIdentifier LPAREN formalParameterList? RPAREN systemParameter?
+    : systemModifiers SYSTEM systemIdentifier LPAREN formalParameterList? RPAREN systemParameter?
     ;
 
-systemModifier
+systemModifiers
+    : mainModifier? controlModifier?
+    ;
+
+mainModifier
     : MAIN
+    ;
+
+controlModifier
+    : CONTROL
     ;
 
 systemParameter
@@ -43,7 +51,7 @@ controlSystemDeclaration
     ;
 
 controlStatement
-    : systemIdentifier (PAR systemIdentifier)*
+    : systemIdentifier (INTERLEAVE systemIdentifier)*
     ;
 
 systemIdentifier

@@ -15,10 +15,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -44,8 +41,8 @@ public class FunctionTest {
         assertEquals(6, sourceFilePaths.size());
 
         MasterController masterController = new MasterController();
-        masterController.compile(sourceFilePaths);
-
+        List<TransitionSystem> transitionSystems = masterController.compile(sourceFilePaths);
+        transitionSystems.forEach(ts -> System.out.println(ts.getIdentifier()));
     }
 
     @Test
@@ -80,8 +77,8 @@ public class FunctionTest {
         sourceFilePaths.add(path);
 
         MasterController masterController = new MasterController();
-        TransitionSystem mainTS = masterController.compile(sourceFilePaths);
-        DOTGenerator dotGenerator = new DOTGenerator(mainTS);
+        List<TransitionSystem> mainTS = masterController.compile(sourceFilePaths);
+        DOTGenerator dotGenerator = new DOTGenerator(mainTS.get(0));
         dotGenerator.generateToConsole();
 
     }

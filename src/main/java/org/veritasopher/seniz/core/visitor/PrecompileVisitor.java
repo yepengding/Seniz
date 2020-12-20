@@ -39,10 +39,10 @@ public class PrecompileVisitor extends SenizParserBaseVisitor<PrecompileUnit> {
                 name = context.qualifiedName().getText();
                 if (!idSet.contains(name)) {
                     // Module does not exist in source files
-                    throw new PrecompileException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Module (" + name + ") is missing.");
+                    throw new PrecompileException(identifier, ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Module (" + name + ") is missing.");
                 } else if (identifier.equals(name)) {
                     // Self importing
-                    throw new PrecompileException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot import self (" + name + ").");
+                    throw new PrecompileException(identifier, ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot import self (" + name + ").");
                 }
             }
             ctx.importDeclaration().forEach(pred -> precompileUnit.addPredecessorId(pred.qualifiedName().getText()));
@@ -52,11 +52,7 @@ public class PrecompileVisitor extends SenizParserBaseVisitor<PrecompileUnit> {
             this.visitSystemHeader(ctx.systemDeclaration().systemHeader());
             this.visitStateVarSetHeader(ctx.stateVarSetDeclaration().stateVarSetHeader());
         } else if (ctx.systemDeclaration() != null) {
-            if (ctx.systemDeclaration().systemBody().controlSystemDeclaration() != null) {
-                precompileUnit.setType(UnitType.CTRL);
-            } else {
-                precompileUnit.setType(UnitType.TS);
-            }
+            precompileUnit.setType(UnitType.TS);
             this.visitSystemHeader(ctx.systemDeclaration().systemHeader());
         } else if (ctx.stateVarSetDeclaration() != null) {
             precompileUnit.setType(UnitType.VAR);
@@ -71,14 +67,21 @@ public class PrecompileVisitor extends SenizParserBaseVisitor<PrecompileUnit> {
         String id = ctx.systemIdentifier().IDENTIFIER().getText();
         // Identifier must be the same with the file name
         if (!identifier.equals(id)) {
-            throw new PrecompileException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "System identifier (" + id + ") is different from file name.");
+            throw new PrecompileException(identifier, ctx.start.getLine(), ctx.start.getCharPositionInLine(), "System identifier (" + id + ") is different from file name.");
         }
 
         // Set identifier
         precompileUnit.setIdentifier(id);
 
-        // Set whether is main system
-        precompileUnit.setMain(ctx.systemModifier() != null);
+        if (ctx.systemModifiers() != null) {
+            // Set whether is main system
+            precompileUnit.setMain(ctx.systemModifiers().mainModifier() != null);
+
+            // Set whether is control system
+            if (ctx.systemModifiers().controlModifier() != null) {
+                precompileUnit.setType(UnitType.CTRL);
+            }
+        }
 
         return super.visitSystemHeader(ctx);
     }
@@ -88,7 +91,7 @@ public class PrecompileVisitor extends SenizParserBaseVisitor<PrecompileUnit> {
         String id = ctx.stateVarSetIdentifer().IDENTIFIER().getText();
         // Identifier must be the same with the file name
         if (precompileUnit.getType() == UnitType.VAR && !identifier.equals(id)) {
-            throw new PrecompileException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "State variable set identifier (" + id + ") is different from file name.");
+            throw new PrecompileException(identifier, ctx.start.getLine(), ctx.start.getCharPositionInLine(), "State variable set identifier (" + id + ") is different from file name.");
         }
         precompileUnit.setIdentifier(id);
         return super.visitStateVarSetHeader(ctx);

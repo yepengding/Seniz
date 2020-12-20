@@ -1,4 +1,4 @@
-system Simple(v::int) over Vars {
+main system Simple(v::int) over Vars {
 
     init s0 -> s1
     s1 -> a0() s2

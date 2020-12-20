@@ -31,7 +31,7 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
         compilationUnit.setIdentifier(identifier);
 
         // Create new transition system
-        TransitionSystem ts = new TransitionSystem(identifier);
+        TransitionSystem ts = new TransitionSystem(identifier, ctx.systemHeader().systemModifiers().controlModifier() != null);
         compilationUnit.setTransitionSystem(ts);
 
         // Create new system variable set

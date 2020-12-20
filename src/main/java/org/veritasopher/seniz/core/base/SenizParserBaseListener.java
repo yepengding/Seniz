@@ -64,13 +64,37 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSystemModifier(SenizParser.SystemModifierContext ctx) { }
+	@Override public void enterSystemModifiers(SenizParser.SystemModifiersContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSystemModifier(SenizParser.SystemModifierContext ctx) { }
+	@Override public void exitSystemModifiers(SenizParser.SystemModifiersContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMainModifier(SenizParser.MainModifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMainModifier(SenizParser.MainModifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterControlModifier(SenizParser.ControlModifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitControlModifier(SenizParser.ControlModifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

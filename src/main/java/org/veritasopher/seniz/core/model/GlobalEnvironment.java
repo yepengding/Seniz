@@ -13,6 +13,7 @@ public final class GlobalEnvironment {
 
     private static GlobalEnvironment INSTANCE;
 
+    // Transition System Map<Identifier, Transition System>
     private final Map<String, TransitionSystem> transitionSystems;
 
     // State Variable Map<Identifier, State Variable Set>
@@ -38,6 +39,16 @@ public final class GlobalEnvironment {
      */
     public void addTransitionSystem(TransitionSystem ts) {
         this.transitionSystems.put(ts.getIdentifier(), ts);
+    }
+
+    /**
+     * Get a transition system
+     *
+     * @param identifier transition system identifier
+     * @return transition system
+     */
+    public TransitionSystem getTransitionSystem(String identifier) {
+        return this.transitionSystems.get(identifier);
     }
 
     /**

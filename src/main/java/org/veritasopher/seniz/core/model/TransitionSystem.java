@@ -40,7 +40,15 @@ public class TransitionSystem {
     // State naming map <Name, State>
     private final Map<String, State> stateNames;
 
-    public TransitionSystem(String identifier) {
+    // True if is control system
+    private final boolean isControl;
+
+    // List of system identifiers in control system
+    @Setter
+    @Getter
+    private List<String> controlSystemIds;
+
+    public TransitionSystem(String identifier, boolean isControl) {
         this.identifier = identifier;
         this.stateVariables = new StateVariableSet();
         this.systemVariables = new SystemVariableSet();
@@ -49,6 +57,7 @@ public class TransitionSystem {
         this.transitions = new HashMap<>();
         this.initStates = new HashSet<>();
         this.stateNames = new HashMap<>();
+        this.isControl = isControl;
     }
 
     /**

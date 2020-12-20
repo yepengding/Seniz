@@ -1,6 +1,7 @@
 package org.veritasopher.seniz.controller;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.veritasopher.seniz.builder.ControlSystemBuilder;
 import org.veritasopher.seniz.builder.TransitionSystemBuilder;
 import org.veritasopher.seniz.builder.VariableSetBuilder;
 import org.veritasopher.seniz.core.model.*;
@@ -21,13 +22,16 @@ public class CompileController {
 
     private final TransitionSystemBuilder transitionSystemBuilder;
 
+    private final ControlSystemBuilder controlSystemBuilder;
+
     private final VariableSetBuilder variableSetBuilder;
 
-    private Map<String, SourceFile> sourceFileMap;
+    private final Map<String, SourceFile> sourceFileMap;
 
     public CompileController(Map<String, SourceFile> sourceFileMap) {
         this.sourceFileMap = sourceFileMap;
         this.transitionSystemBuilder = new TransitionSystemBuilder();
+        this.controlSystemBuilder = new ControlSystemBuilder();
         this.variableSetBuilder = new VariableSetBuilder();
     }
 
@@ -52,8 +56,9 @@ public class CompileController {
                 GlobalEnvironment.getInstance().addTransitionSystem(ts);
                 break;
             }
-            case CTRL:{
-                TransitionSystem ts = compileCtrl(compilationUnit, precompileUnit, parseTree);
+            case CTRL: {
+                TransitionSystem cs = compileCtrl(compilationUnit, precompileUnit, parseTree);
+                GlobalEnvironment.getInstance().addTransitionSystem(cs);
                 break;
             }
         }
@@ -107,8 +112,7 @@ public class CompileController {
     }
 
     private TransitionSystem compileCtrl(CompilationUnit compilationUnit, PrecompileUnit precompileUnit, ParseTree parseTree) {
-
-        return null;
+        return controlSystemBuilder.build(compilationUnit.getTransitionSystem(), parseTree);
     }
 
 }
