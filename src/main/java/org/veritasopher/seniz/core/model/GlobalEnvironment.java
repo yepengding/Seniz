@@ -1,5 +1,8 @@
 package org.veritasopher.seniz.core.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,11 +10,9 @@ import java.util.Map;
  * Global Environment
  *
  * @author Yepeng Ding
- * @date 12/18/2020
+ * @date 12/21/2020
  */
-public final class GlobalEnvironment {
-
-    private static GlobalEnvironment INSTANCE;
+public class GlobalEnvironment {
 
     // Transition System Map<Identifier, Transition System>
     private final Map<String, TransitionSystem> transitionSystems;
@@ -19,18 +20,15 @@ public final class GlobalEnvironment {
     // State Variable Map<Identifier, State Variable Set>
     private final Map<String, StateVariableSet> stateVariableSets;
 
-    private GlobalEnvironment() {
+    @Getter
+    @Setter
+    private TransitionSystem mainTS;
+
+    public GlobalEnvironment() {
         this.transitionSystems = new HashMap<>();
         this.stateVariableSets = new HashMap<>();
     }
 
-    public synchronized static GlobalEnvironment getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new GlobalEnvironment();
-        }
-
-        return INSTANCE;
-    }
 
     /**
      * Add a transition system to global environment

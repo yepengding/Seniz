@@ -20,6 +20,8 @@ import java.util.Map;
  */
 public class CompileController {
 
+    private final GlobalEnvironment env;
+
     private final TransitionSystemBuilder transitionSystemBuilder;
 
     private final ControlSystemBuilder controlSystemBuilder;
@@ -28,7 +30,8 @@ public class CompileController {
 
     private final Map<String, SourceFile> sourceFileMap;
 
-    public CompileController(Map<String, SourceFile> sourceFileMap) {
+    public CompileController(GlobalEnvironment environment, Map<String, SourceFile> sourceFileMap) {
+        this.env = environment;
         this.sourceFileMap = sourceFileMap;
         this.transitionSystemBuilder = new TransitionSystemBuilder();
         this.controlSystemBuilder = new ControlSystemBuilder();
@@ -43,22 +46,22 @@ public class CompileController {
         switch (precompileUnit.getType()) {
             case TS: {
                 TransitionSystem ts = compileTS(compilationUnit, precompileUnit, parseTree);
-                GlobalEnvironment.getInstance().addTransitionSystem(ts);
+                env.addTransitionSystem(ts);
                 break;
             }
             case VAR: {
                 StateVariableSet varset = compileVar(compilationUnit);
-                GlobalEnvironment.getInstance().addStateVariableSet(varset);
+                env.addStateVariableSet(varset);
                 break;
             }
             case TS_VAR: {
                 TransitionSystem ts = compileTSVar(compilationUnit, precompileUnit, parseTree);
-                GlobalEnvironment.getInstance().addTransitionSystem(ts);
+                env.addTransitionSystem(ts);
                 break;
             }
             case CTRL: {
                 TransitionSystem cs = compileCtrl(compilationUnit, precompileUnit, parseTree);
-                GlobalEnvironment.getInstance().addTransitionSystem(cs);
+                env.addTransitionSystem(cs);
                 break;
             }
         }
@@ -70,7 +73,7 @@ public class CompileController {
         // Check defined variable set
         String parameter = compilationUnit.getSystemParameter();
 
-        StateVariableSet stateVariableSet = GlobalEnvironment.getInstance().getStateVariableSet(parameter);
+        StateVariableSet stateVariableSet = env.getStateVariableSet(parameter);
 
         // System parameter is defined
         if (parameter != null) {
@@ -112,7 +115,7 @@ public class CompileController {
     }
 
     private TransitionSystem compileCtrl(CompilationUnit compilationUnit, PrecompileUnit precompileUnit, ParseTree parseTree) {
-        return controlSystemBuilder.build(compilationUnit.getTransitionSystem(), parseTree);
+        return controlSystemBuilder.build(compilationUnit.getTransitionSystem(), parseTree, env);
     }
 
 }

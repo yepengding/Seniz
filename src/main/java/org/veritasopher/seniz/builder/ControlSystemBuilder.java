@@ -18,7 +18,7 @@ import java.util.Objects;
  */
 public class ControlSystemBuilder {
 
-    public TransitionSystem build(TransitionSystem controlSystem, ParseTree tree) {
+    public TransitionSystem build(TransitionSystem controlSystem, ParseTree tree, GlobalEnvironment env) {
         List<String> identifiers = new ArrayList<>();
         ControlStatementVisitor controlStatementVisitor = new ControlStatementVisitor(identifiers);
         controlStatementVisitor.visit(tree);
@@ -29,7 +29,6 @@ public class ControlSystemBuilder {
         }
 
         // Dependency existence check
-        GlobalEnvironment env = GlobalEnvironment.getInstance();
         if (identifiers.stream().map(env::getTransitionSystem).anyMatch(Objects::isNull)) {
             throw new BuilderException(controlSystem.getIdentifier(), "Lack dependencies.");
         }

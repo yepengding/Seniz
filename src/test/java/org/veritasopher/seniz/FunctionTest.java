@@ -8,6 +8,7 @@ import org.veritasopher.seniz.config.Info;
 import org.veritasopher.seniz.controller.MasterController;
 import org.veritasopher.seniz.core.base.SenizLexer;
 import org.veritasopher.seniz.core.base.SenizParser;
+import org.veritasopher.seniz.core.model.GlobalEnvironment;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.generator.DOTGenerator;
 
@@ -41,8 +42,9 @@ public class FunctionTest {
         assertEquals(6, sourceFilePaths.size());
 
         MasterController masterController = new MasterController();
-        List<TransitionSystem> transitionSystems = masterController.compile(sourceFilePaths);
-        transitionSystems.forEach(ts -> System.out.println(ts.getIdentifier()));
+        GlobalEnvironment env = masterController.compile(sourceFilePaths);
+        System.out.println(env.getMainTS().getIdentifier());
+
     }
 
     @Test
@@ -56,20 +58,6 @@ public class FunctionTest {
 
     }
 
-//    @Test
-//    public void testGenerateDOTString() throws IOException {
-//        String path = resourcePath("example/TestTS.sz");
-//        File file = new File(path);
-//        String sourceFileContent = Files.toString(file, Charsets.UTF_8);
-//        CompileController compileController = new CompileController();
-//        TransitionSystem ts = compileController.compile(sourceFileContent);
-//        if (ts != null) {
-//            DOTGenerator dotGenerator = new DOTGenerator(ts);
-//            String dotProgram = dotGenerator.generateAsString();
-//            System.out.println(dotProgram);
-//        }
-//    }
-
     @Test
     public void testDOTGenerator() {
         String path = resourcePath("example/TestTS.sz");
@@ -77,47 +65,14 @@ public class FunctionTest {
         sourceFilePaths.add(path);
 
         MasterController masterController = new MasterController();
-        List<TransitionSystem> mainTS = masterController.compile(sourceFilePaths);
-        DOTGenerator dotGenerator = new DOTGenerator(mainTS.get(0));
+        TransitionSystem mainTS = masterController.compile(sourceFilePaths).getMainTS();
+        DOTGenerator dotGenerator = new DOTGenerator(mainTS);
         dotGenerator.generateToConsole();
 
     }
 
-
-//    @Test
-//    public void testCompilationController() {
-//        String path = resourcePath("example/Transaction.sz");
-//        Set<String> sourceFilePaths = new HashSet<>();
-//        sourceFilePaths.add(path);
-//
-//        CompileController compileController = new CompileController();
-//        compileController.compile(sourceFilePaths);
-//
-//        compileController.getTransitionSystems().forEach(ts -> {
-//            System.out.println(ts.getTransitions());
-//        });
-//    }
-
     private String resourcePath(String filePath) {
         return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource(filePath)).getPath();
-    }
-
-    private ParseTree getParserTreeFromFile(String resourcePath) {
-        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePath);
-        assertNotNull(inputStream);
-
-        SenizParser parser = null;
-
-        try {
-            SenizLexer lexer = new SenizLexer(CharStreams.fromStream(inputStream));
-            parser = new SenizParser(new CommonTokenStream(lexer));
-            parser.setBuildParseTree(true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        assertNotNull(parser);
-        return parser.compilationUnit();
     }
 
 }

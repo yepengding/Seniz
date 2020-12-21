@@ -1,7 +1,6 @@
 package org.veritasopher.seniz.controller;
 
 import org.veritasopher.seniz.core.model.*;
-import org.veritasopher.seniz.core.model.domain.UnitType;
 import org.veritasopher.seniz.core.visitor.PrecompileVisitor;
 import org.veritasopher.seniz.exception.CompilationException;
 import org.veritasopher.seniz.exception.PrecompileException;
@@ -27,14 +26,16 @@ public class MasterController {
         this.sourceFileMap = new HashMap<>();
     }
 
-    public List<TransitionSystem> compile(Set<String> sourceFilePaths) {
+    public GlobalEnvironment compile(Set<String> sourceFilePaths) {
+        GlobalEnvironment env = new GlobalEnvironment();
+
         Set<PrecompileUnit> precompileUnits = precompile(sourceFilePaths);
 
         // Sort units by topological sort algorithm
         DependencyGraph<String> graph = new DependencyGraph<>(sourceFileMap.keySet());
         precompileUnits.forEach(d -> d.getPredIdSet().forEach(pred -> graph.addEdge(pred, d.getIdentifier())));
         List<String> sortedIdentifier = graph.getTopologicalSortedStack();
-        CompileController compileController = new CompileController(sourceFileMap);
+        CompileController compileController = new CompileController(env, sourceFileMap);
 
         CompilationUnit compilationUnit;
         PrecompileUnit precompileUnit;
@@ -52,16 +53,9 @@ public class MasterController {
             throw new CompilationException("", "Main transition system does not exist.");
         }
 
-        List<TransitionSystem> transitionSystems = new ArrayList<>();
-        if (mainTS.isControl()) {
-            // Control system
-            transitionSystems.addAll(mainTS.getControlSystemIds().stream().map(GlobalEnvironment.getInstance()::getTransitionSystem).collect(Collectors.toList()));
-        } else {
-            // Common TS
-            transitionSystems.add(mainTS);
-        }
+        env.setMainTS(mainTS);
 
-        return transitionSystems;
+        return env;
     }
 
     private Set<PrecompileUnit> precompile(Set<String> sourceFilePaths) {
