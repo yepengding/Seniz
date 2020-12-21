@@ -26,10 +26,39 @@ public class MasterController {
         this.sourceFileMap = new HashMap<>();
     }
 
+    /**
+     * Compile all source files from paths
+     *
+     * @param sourceFilePaths set of source file paths
+     * @return compiled global environment
+     */
     public GlobalEnvironment compile(Set<String> sourceFilePaths) {
+        List<SourceFile> sourceFiles = new ArrayList<>();
+        sourceFilePaths.forEach(throwingConsumerWrapper(path -> sourceFiles.add(new SourceFile(path))));
+
+        return compileSourceFiles(sourceFiles);
+    }
+
+    /**
+     * Compile all source files
+     *
+     * @param sourceFiles list of source files
+     * @return compiled global environment
+     */
+    public GlobalEnvironment compile(List<SourceFile> sourceFiles) {
+        return compileSourceFiles(sourceFiles);
+    }
+
+    /**
+     * Compile source files
+     *
+     * @param sourceFiles list of source files
+     * @return compiled global environment
+     */
+    private GlobalEnvironment compileSourceFiles(List<SourceFile> sourceFiles) {
         GlobalEnvironment env = new GlobalEnvironment();
 
-        Set<PrecompileUnit> precompileUnits = precompile(sourceFilePaths);
+        Set<PrecompileUnit> precompileUnits = precompile(sourceFiles);
 
         // Sort units by topological sort algorithm
         DependencyGraph<String> graph = new DependencyGraph<>(sourceFileMap.keySet());
@@ -58,9 +87,14 @@ public class MasterController {
         return env;
     }
 
-    private Set<PrecompileUnit> precompile(Set<String> sourceFilePaths) {
-        List<SourceFile> sourceFiles = new ArrayList<>();
-        sourceFilePaths.forEach(throwingConsumerWrapper(path -> sourceFiles.add(new SourceFile(path))));
+
+    /**
+     * Precompile source files
+     *
+     * @param sourceFiles set of source files
+     * @return set of precompile units
+     */
+    private Set<PrecompileUnit> precompile(List<SourceFile> sourceFiles) {
 
         sourceFiles.forEach(src -> sourceFileMap.put(src.getIdentifier(), src));
 

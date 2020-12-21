@@ -29,6 +29,12 @@ public class SourceFile {
 
     private PrecompileUnit precompileUnit;
 
+    /**
+     * Constructor with path
+     *
+     * @param path source file path
+     * @throws IOException
+     */
     public SourceFile(String path) throws IOException {
         this.path = path;
         this.identifier = Files.getNameWithoutExtension(path);
@@ -37,6 +43,21 @@ public class SourceFile {
         this.charStream = CharStreams.fromStream(new FileInputStream(path));
 
         // Get parse tree from char streams
+        this.parseTree = Parsing.getParseTreeFromSource(charStream);
+    }
+
+    /**
+     * Constructor with path and content
+     *
+     * @param path    source file path
+     * @param content source file content
+     */
+    public SourceFile(String path, String content) {
+        this.path = path;
+        this.identifier = Files.getNameWithoutExtension(path);
+
+        // Read source file content as char streams
+        this.charStream = CharStreams.fromString(content);
         this.parseTree = Parsing.getParseTreeFromSource(charStream);
     }
 }
