@@ -1,21 +1,17 @@
 package org.veritasopher.seniz;
 
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 import org.veritasopher.seniz.config.Info;
 import org.veritasopher.seniz.controller.MasterController;
-import org.veritasopher.seniz.core.base.SenizLexer;
-import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.model.GlobalEnvironment;
-import org.veritasopher.seniz.core.model.TransitionSystem;
+import org.veritasopher.seniz.core.model.SourceFile;
 import org.veritasopher.seniz.generator.DOTGenerator;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,7 +28,7 @@ import static org.junit.Assert.assertNotNull;
 public class FunctionTest {
 
     @Test
-    public void testMultiFileCompile() {
+    public void testMultiFileCompileByPaths() {
         String path = resourcePath("example/MultiTS");
         File folder = new File(path);
         FilenameFilter filter = (f, name) -> name.endsWith(Info.SUFFIX);
@@ -43,30 +39,65 @@ public class FunctionTest {
 
         MasterController masterController = new MasterController();
         GlobalEnvironment env = masterController.compile(sourceFilePaths);
-        System.out.println(env.getMainTS().getIdentifier());
+
+        DOTGenerator dotGenerator = new DOTGenerator(env, env.getMainTS());
+        dotGenerator.generateToConsole();
+
+    }
+
+    @Test
+    public void testMultiFileCompileBySourceFiles() {
+        String path = resourcePath("example/MultiTS");
+        File folder = new File(path);
+        FilenameFilter filter = (f, name) -> name.endsWith(Info.SUFFIX);
+        File[] files = folder.listFiles(filter);
+        assertNotNull(files);
+
+        List<SourceFile> sourceFiles = Arrays.stream(files).map(file -> {
+            try {
+                return new SourceFile(file.getAbsolutePath(), Files.readString(Path.of(file.getAbsolutePath())));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }).collect(Collectors.toList());
+        assertEquals(6, sourceFiles.size());
+
+        MasterController masterController = new MasterController();
+        GlobalEnvironment env = masterController.compile(sourceFiles);
+
+        DOTGenerator dotGenerator = new DOTGenerator(env, env.getMainTS());
+        dotGenerator.generateToConsole();
 
     }
 
     @Test
     public void testDPP() {
-//        String path = resourcePath("example/DiningPhilosopher/Fork.sz");
-//        String path = resourcePath("example/DiningPhilosopher/ForkRefine.sz");
-//        String path = resourcePath("example/DiningPhilosopher/Philosopher.sz");
-        String path = resourcePath("example/DiningPhilosopher/PhilosopherRefine.sz");
-        Set<String> sourceFilePaths = new HashSet<>();
-        sourceFilePaths.add(path);
+        String path = resourcePath("example/DPP");
+        File folder = new File(path);
+        FilenameFilter filter = (f, name) -> name.endsWith(Info.SUFFIX);
+        File[] files = folder.listFiles(filter);
+        assertNotNull(files);
+        Set<String> sourceFilePaths = Arrays.stream(files).parallel().map(File::getAbsolutePath).collect(Collectors.toSet());
+
+        MasterController masterController = new MasterController();
+        GlobalEnvironment env = masterController.compile(sourceFilePaths);
+
+        DOTGenerator dotGenerator = new DOTGenerator(env, env.getMainTS());
+        dotGenerator.generateToConsole();
+
 
     }
 
     @Test
-    public void testDOTGenerator() {
+    public void testSingleFileCompile() {
         String path = resourcePath("example/TestTS.sz");
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 
         MasterController masterController = new MasterController();
-        TransitionSystem mainTS = masterController.compile(sourceFilePaths).getMainTS();
-        DOTGenerator dotGenerator = new DOTGenerator(mainTS);
+        GlobalEnvironment env = masterController.compile(sourceFilePaths);
+        DOTGenerator dotGenerator = new DOTGenerator(env, env.getMainTS());
         dotGenerator.generateToConsole();
 
     }
