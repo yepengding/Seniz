@@ -77,11 +77,23 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitControlSystemDeclaration(SenizParser.ControlSystemDeclarationContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SenizParser#formalismStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFormalismStatement(SenizParser.FormalismStatementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SenizParser#controlStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitControlStatement(SenizParser.ControlStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#subSystemIdentifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSubSystemIdentifier(SenizParser.SubSystemIdentifierContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#systemIdentifier}.
 	 * @param ctx the parse tree
@@ -223,6 +235,12 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVariableIdentifier(SenizParser.VariableIdentifierContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SenizParser#parameterList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameterList(SenizParser.ParameterListContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SenizParser#propositionStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -274,6 +292,80 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPropositionIdentifer(SenizParser.PropositionIdentiferContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#ltlStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLtlStatement(SenizParser.LtlStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#ltlBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLtlBody(SenizParser.LtlBodyContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ltlNotExpression}
+	 * labeled alternative in {@link SenizParser#ltlExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLtlNotExpression(SenizParser.LtlNotExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ltlConditionalAndExpression}
+	 * labeled alternative in {@link SenizParser#ltlExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLtlConditionalAndExpression(SenizParser.LtlConditionalAndExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ltlPrimaryExpression}
+	 * labeled alternative in {@link SenizParser#ltlExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLtlPrimaryExpression(SenizParser.LtlPrimaryExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code alwaysExpression}
+	 * labeled alternative in {@link SenizParser#ltlExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAlwaysExpression(SenizParser.AlwaysExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ltlConditionalOrExpression}
+	 * labeled alternative in {@link SenizParser#ltlExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLtlConditionalOrExpression(SenizParser.LtlConditionalOrExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code nextExpression}
+	 * labeled alternative in {@link SenizParser#ltlExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNextExpression(SenizParser.NextExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code eventuallyExpression}
+	 * labeled alternative in {@link SenizParser#ltlExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEventuallyExpression(SenizParser.EventuallyExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code untilExpression}
+	 * labeled alternative in {@link SenizParser#ltlExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUntilExpression(SenizParser.UntilExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#ltlPrimary}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLtlPrimary(SenizParser.LtlPrimaryContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#stateVarSetDeclaration}.
 	 * @param ctx the parse tree

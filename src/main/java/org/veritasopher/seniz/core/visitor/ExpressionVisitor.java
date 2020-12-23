@@ -1,5 +1,6 @@
 package org.veritasopher.seniz.core.visitor;
 
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.StateVariableSet;
@@ -10,6 +11,8 @@ import org.veritasopher.seniz.core.model.common.Value;
 import org.veritasopher.seniz.core.model.domain.Operator;
 import org.veritasopher.seniz.core.model.domain.PrimaryType;
 import org.veritasopher.seniz.exception.ExpressionException;
+
+import java.util.stream.Collectors;
 
 public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
 
@@ -34,7 +37,7 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
         if (ctx.primary().literal() != null) {
             evaluation.addTerm(new Term(ctx.primary().literal().accept(literalVisitor)));
         } else if (ctx.primary().variableIdentifier() != null) {
-            String name = ctx.primary().variableIdentifier().IDENTIFIER().getText();
+            String name = ctx.primary().variableIdentifier().IDENTIFIER().stream().map(ParseTree::getText).collect(Collectors.joining("."));
             // Check whether variable is defined as system variable or state variable
             if (!systemVariableSet.hasVariable(name) && !stateVariableSet.hasVariable(name)) {
                 throw new ExpressionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined variable.");

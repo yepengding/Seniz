@@ -2,6 +2,6 @@ import TS2
 
 control system TS3(i::int, j::string) {
 
-    TS2
+    TS2(i, j)
 
 }

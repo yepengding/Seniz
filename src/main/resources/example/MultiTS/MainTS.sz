@@ -3,6 +3,6 @@ import TS3
 
 main control system MainTS(i::int, j::string) {
 
-    TS1 ||| TS3
+    TS1(1, "ts 1") ||| TS3(3, "ts 3")
 
 }

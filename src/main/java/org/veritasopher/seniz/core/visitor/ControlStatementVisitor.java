@@ -16,7 +16,7 @@ public class ControlStatementVisitor extends SenizParserBaseVisitor<List<String>
     // TODO Support interleaving only
     @Override
     public List<String> visitControlStatement(SenizParser.ControlStatementContext ctx) {
-        ctx.systemIdentifier().forEach(i -> identifiers.add(i.IDENTIFIER().getText()));
+        ctx.subSystemIdentifier().forEach(i -> identifiers.add(i.systemIdentifier().IDENTIFIER().getText()));
         return super.visitControlStatement(ctx);
     }
 }

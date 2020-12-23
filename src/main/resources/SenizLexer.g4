@@ -29,6 +29,14 @@ INIT
     : 'init'
     ;
 
+AS
+    : 'as'
+    ;
+
+LTL
+    : 'ltl'
+    ;
+
 // Types
 BOOLEAN
     : 'bool'
@@ -71,6 +79,12 @@ CARET:              '^';
 MOD:                '%';
 PAR:                '||';
 INTERLEAVE:         '|||';
+
+// Temporal Operator
+ALWAYS:             'always';
+EVENTUALLY:         'eventually';
+NEXT:               'next';
+UNTIL:              'until';
 
 // Literals
 

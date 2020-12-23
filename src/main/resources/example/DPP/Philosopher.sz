@@ -40,6 +40,18 @@ system Philosopher(id::int, n::int) {
         leftHand: -1,
         rightHand: (id + 1) % n
     }
+    
+    WaitingRight = {
+        WaitingRight
+    }
+    
+    WaitingLeft = {
+        waitingLeft
+    }
+    
+    Waiting = {
+        waitingLeft | waitingRight
+    }
 
 }
 

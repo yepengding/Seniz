@@ -1,5 +1,6 @@
 package org.veritasopher.seniz.core.visitor;
 
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.CompilationUnit;
@@ -10,6 +11,9 @@ import org.veritasopher.seniz.core.model.common.SystemVariable;
 import org.veritasopher.seniz.core.model.domain.PrimaryType;
 import org.veritasopher.seniz.exception.FormalParameterException;
 import org.veritasopher.seniz.exception.StateVariableException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Compilation Unit Visitor
@@ -90,7 +94,7 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
         @Override
         public SystemVariable visitFormalParameter(SenizParser.FormalParameterContext ctx) {
 
-            String name = ctx.variableIdentifier().IDENTIFIER().getText();
+            String name = ctx.variableIdentifier().IDENTIFIER().stream().map(ParseTree::getText).collect(Collectors.joining("."));
             // Check the name uniqueness
             if (systemVariableSet.hasVariable(name)) {
                 throw new FormalParameterException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied system variable name (" + name + ").");

@@ -42,16 +42,24 @@ systemBody
 systemBodyDeclaration
     : stateNaming
     | transitionStatement
-    | propositionStatement
+    | formalismStatement
     ;
 
 controlSystemDeclaration
-    : controlStatement
-    | propositionStatement*
+    : controlStatement? formalismStatement*
+    ;
+
+formalismStatement
+    : propositionStatement
+    | ltlStatement
     ;
 
 controlStatement
-    : systemIdentifier (INTERLEAVE systemIdentifier)*
+    : subSystemIdentifier (INTERLEAVE subSystemIdentifier)*
+    ;
+
+subSystemIdentifier
+    : systemIdentifier LPAREN parameterList? RPAREN (AS IDENTIFIER)?
     ;
 
 systemIdentifier
@@ -130,9 +138,14 @@ formalParameter
     ;
 
 variableIdentifier
-    : IDENTIFIER
+    : IDENTIFIER (DOT IDENTIFIER)*
     ;
 
+// Parameter
+
+parameterList
+    : expression (COMMA expression)*
+    ;
 
 // Proposition
 
@@ -153,11 +166,36 @@ propositionExpression
 
 propositionPrimary
     : LPAREN propositionExpression RPAREN
-    | stateNameIdentifier
+    | IDENTIFIER (DOT IDENTIFIER)*
     ;
 
 propositionIdentifer
     : IDENTIFIER
+    ;
+
+// Linear Temporal Logic
+ltlStatement
+    : LTL IDENTIFIER bop=EQ ltlBody
+    ;
+
+ltlBody
+    : LBRACE ltlExpression RBRACE
+    ;
+
+ltlExpression
+    : ltlPrimary #ltlPrimaryExpression
+    | prefix=BANG ltlExpression #ltlNotExpression
+    | ltlExpression bop=AND ltlExpression #ltlConditionalAndExpression
+    | ltlExpression bop=OR ltlExpression #ltlConditionalOrExpression
+    | ltlExpression bop=UNTIL ltlExpression #untilExpression
+    | prefix=ALWAYS ltlExpression #alwaysExpression
+    | prefix=EVENTUALLY ltlExpression #eventuallyExpression
+    | prefix=NEXT ltlExpression #nextExpression
+    ;
+
+ltlPrimary
+    : LPAREN ltlExpression RPAREN
+    | propositionIdentifer
     ;
 
 
