@@ -12,7 +12,7 @@ system Fork(id::int, n::int) over ForkVars {
     }
 
     occupiedByRight = {
-        occupiedBy: i
+        occupiedBy: id
     }
 }
 

@@ -86,7 +86,6 @@ public class FunctionTest {
         DOTGenerator dotGenerator = new DOTGenerator(env, env.getMainTS());
         dotGenerator.generateToConsole();
 
-
     }
 
     @Test

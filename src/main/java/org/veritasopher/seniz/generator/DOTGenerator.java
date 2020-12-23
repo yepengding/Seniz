@@ -124,16 +124,16 @@ public class DOTGenerator {
         StringBuilder systemBody = new StringBuilder();
         // Generate transitions
         ts.getTransitions().forEach((hashCode, transition) -> {
-            systemBody.append(getStateName(transition.getSrcState())).append(' ');
+            systemBody.append(getStateName(ts, transition.getSrcState())).append(' ');
             systemBody.append("->").append(' ');
-            systemBody.append(getStateName(transition.getDstState())).append(' ');
-            systemBody.append("[label=\"").append(getActionName(transition)).append("\"]");
+            systemBody.append(getStateName(ts, transition.getDstState())).append(' ');
+            systemBody.append("[label=\"").append(getActionName(ts, transition)).append("\"]");
             systemBody.append(System.lineSeparator());
         });
 
         // Highlight initial states
         ts.getInitStates().forEach(hashCode -> {
-            systemBody.append(getStateName(hashCode)).append("[color=blue]").append(System.lineSeparator());
+            systemBody.append(getStateName(ts, hashCode)).append("[color=blue]").append(System.lineSeparator());
         });
 
         return systemBody.toString();
@@ -142,10 +142,11 @@ public class DOTGenerator {
     /**
      * Get state name
      *
+     * @param ts transition system
      * @param hashCode state hash code
      * @return state name
      */
-    private String getStateName(int hashCode) {
+    private String getStateName(TransitionSystem ts, int hashCode) {
         StringBuilder nameBuilder = new StringBuilder();
         Set<String> names = new HashSet<>();
         State state = ts.getState(hashCode);
@@ -166,7 +167,15 @@ public class DOTGenerator {
         return nameBuilder.substring(0, nameBuilder.length() - 1) + '\"';
     }
 
-    private String getActionName(Transition transition) {
+
+    /**
+     * Get action name
+     *
+     * @param ts transition system
+     * @param transition transition
+     * @return action name
+     */
+    private String getActionName(TransitionSystem ts, Transition transition) {
         Optional<Action> action = ts.getAction(transition.getAction());
 
         return action.map(Action::getName).orElse(Prefix.ACTION + transition.hashCode());

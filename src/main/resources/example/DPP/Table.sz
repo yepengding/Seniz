@@ -1,3 +1,6 @@
-main system Table() {
+import Philosopher
+import Fork
 
+main control system Table() {
+    Philosopher ||| Fork
 }
