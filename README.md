@@ -1,6 +1,11 @@
 # Seniz
 Seniz is a domain-specific language designed for formal specification in Formalism-Driven Development (FDD).
 
+## Compile
+```
+mvn clean compile assembly:single
+```
+
 ## Related Project
 - [Seniz GUI](https://github.com/yepengding/Seniz-GUI): a graphical interface for Seniz
 - [Seniz Web](https://github.com/yepengding/Seniz-Web): web service to support Seniz GUI

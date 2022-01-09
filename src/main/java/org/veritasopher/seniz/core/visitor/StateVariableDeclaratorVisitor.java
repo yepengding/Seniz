@@ -52,9 +52,9 @@ public class StateVariableDeclaratorVisitor extends SenizParserBaseVisitor<State
 
             // Check the name uniqueness
             if (stateVariableSet.hasVariable(name)) {
-                throw new StateVariableException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied state variable name (" + name + ").");
+                throw new StateVariableException(stateVariableSet.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied state variable name (" + name + ").");
             } else if (systemVariableSet.hasVariable(name)) {
-                throw new StateVariableException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied system variable name (" + name + ").");
+                throw new StateVariableException(stateVariableSet.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied system variable name (" + name + ").");
             }
 
             // Get type by type name

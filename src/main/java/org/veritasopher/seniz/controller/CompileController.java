@@ -83,7 +83,7 @@ public class CompileController {
         }
 
         // Build state variable set
-        stateVariableSet = variableSetBuilder.build(stateVariableSet, parseTree);
+        stateVariableSet = variableSetBuilder.build(stateVariableSet, compilationUnit.getTransitionSystem().getSystemVariables(), parseTree);
 
         // Build transition system
         return transitionSystemBuilder.build(compilationUnit.getTransitionSystem(), stateVariableSet, parseTree);
