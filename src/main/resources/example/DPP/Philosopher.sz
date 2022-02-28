@@ -41,15 +41,15 @@ system Philosopher(id::int, n::int) {
         rightHand: (id + 1) % n
     }
     
-    WaitingRight = {
+    prop WaitingRight {
         WaitingRight
     }
     
-    WaitingLeft = {
+    prop WaitingLeft {
         waitingLeft
     }
     
-    Waiting = {
+    prop Waiting {
         waitingLeft | waitingRight
     }
 

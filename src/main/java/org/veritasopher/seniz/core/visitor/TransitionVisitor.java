@@ -1,5 +1,6 @@
 package org.veritasopher.seniz.core.visitor;
 
+import lombok.Setter;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.TransitionSystem;
@@ -27,10 +28,13 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
 
     private final ActionDeclarationVisitor actionDeclarationVisitor;
 
+    private final TransitionDeclarationVisitor transitionDeclarationVisitor;
+
     public TransitionVisitor(TransitionSystem transitionSystem) {
         this.transitionSystem = transitionSystem;
         this.stateIdentifierVisitor = new StateIdentifierVisitor(transitionSystem);
         this.actionDeclarationVisitor = new ActionDeclarationVisitor();
+        this.transitionDeclarationVisitor = new TransitionDeclarationVisitor(transitionSystem);
     }
 
     /**
@@ -41,16 +45,14 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
      */
     @Override
     public TransitionSystem visitTransitionStatement(SenizParser.TransitionStatementContext ctx) {
-        int i = 0;
 
         // Check init identifier
-        boolean isInit = false;
-        if (ctx.initIdentifier() != null) {
-            isInit = true;
-            i++;
-        }
+        boolean isInit = ctx.initIdentifier() != null;
 
-        State state = ctx.getChild(i).accept(stateIdentifierVisitor);
+        State state = ctx.stateIdentifier().accept(stateIdentifierVisitor);
+        if (state.isStutter()) {
+            throw new TransitionException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Transition statement cannot start with a stuttering state declarator.");
+        }
 
         // Infer the first state
         state = inferState(state);
@@ -60,42 +62,130 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
             transitionSystem.addInitState(state);
         }
 
-        Transition transition;
-        while (i < ctx.getChildCount() - 1) {
-            transition = new Transition();
-
-            transition.setSrcState(state.hashCode());
-
-            i += 2;
-            Action action = ctx.getChild(i).accept(actionDeclarationVisitor);
-
-            if (action != null) {
-                // Add new action
-                transitionSystem.addAction(action);
-
-                transition.setAction(action.hashCode());
-
-                // Get destination state
-                i++;
-            }
-            state = ctx.getChild(i).accept(stateIdentifierVisitor);
-
-            // Infer destination state
-            state = inferState(transitionSystem.getState(transition.getSrcState()), state);
-            transition.setDstState(state.hashCode());
-
-            // Transition duplicated
-            if (transitionSystem.hasTransition(transition)) {
-                throw new TransitionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Transition is duplicated.");
-            }
-
-            transitionSystem.addTransition(transition);
-
-        }
+        transitionDeclarationVisitor.setSrcState(state.hashCode());
+        ctx.transitionDeclaration().forEach(transitionDeclarationContext ->
+                transitionDeclarationContext.accept(transitionDeclarationVisitor));
+//        Transition transition;
+//        while (i < ctx.getChildCount() - 1) {
+//            transition = new Transition();
+//
+//            transition.setSrcState(state.hashCode());
+//
+//            i += 2;
+//            Action action = ctx.getChild(i).accept(actionDeclarationVisitor);
+//
+//            if (action != null) {
+//                // Add new action
+//                transitionSystem.addAction(action);
+//
+//                transition.setAction(action.hashCode());
+//
+//                // Get destination state
+//                i++;
+//            }
+//            state = ctx.getChild(i).accept(stateIdentifierVisitor);
+//
+//            // Infer destination state
+//            state = inferState(transitionSystem.getState(transition.getSrcState()), state);
+//            transition.setDstState(state.hashCode());
+//
+//            // Transition duplicated
+//            if (transitionSystem.hasTransition(transition)) {
+//                throw new TransitionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Transition is duplicated.");
+//            }
+//
+//            transitionSystem.addTransition(transition);
+//
+//        }
 
         return super.visitTransitionStatement(ctx);
 
     }
+
+    private static class TransitionDeclarationVisitor extends SenizParserBaseVisitor<Transition> {
+
+        private final TransitionSystem transitionSystem;
+
+        private final StateIdentifierVisitor stateIdentifierVisitor;
+
+        private final ActionDeclarationVisitor actionDeclarationVisitor;
+
+        @Setter
+        private int srcState;
+
+        private TransitionDeclarationVisitor(TransitionSystem transitionSystem) {
+            this.transitionSystem = transitionSystem;
+            this.stateIdentifierVisitor = new StateIdentifierVisitor(transitionSystem);
+            this.actionDeclarationVisitor = new ActionDeclarationVisitor();
+        }
+
+        @Override
+        public Transition visitTransitionDeclaration(SenizParser.TransitionDeclarationContext ctx) {
+            Transition transition = new Transition();
+
+            // Set source state
+            transition.setSrcState(srcState);
+
+            // Set action
+            ActionDeclarationVisitor actionDeclarationVisitor = new ActionDeclarationVisitor();
+            if (ctx.actionDeclaration() != null) {
+                // Add new action
+                Action action = ctx.actionDeclaration().accept(actionDeclarationVisitor);
+                transitionSystem.addAction(action);
+                transition.setAction(action.hashCode());
+            }
+
+            // Set destination state
+            State dstState = ctx.stateIdentifier().accept(stateIdentifierVisitor);
+            // Infer destination state
+            dstState = inferState(transitionSystem.getState(transition.getSrcState()), dstState);
+            transition.setDstState(dstState.hashCode());
+
+
+            // Check duplicated transitions
+            if (transitionSystem.hasTransition(transition)) {
+                throw new TransitionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Transition is duplicated.");
+            }
+
+            // Add new transition
+            transitionSystem.addTransition(transition);
+
+            // Reset the source state for the recursive visit
+            setSrcState(dstState.hashCode());
+
+            return transition;
+        }
+
+        /**
+         * Infer destination state from source state
+         *
+         * @param src source state
+         * @param dst destination state
+         * @return inferred state
+         */
+        private State inferState(State src, State dst) {
+            State inferredState;
+
+            Set<StateVariable> variables = new HashSet<>(dst.getVariables());
+
+            Set<String> varNames = dst.getVariables()
+                    .stream()
+                    .map(StateVariable::getName)
+                    .collect(Collectors.toSet());
+
+            src.getVariables()
+                    .stream()
+                    .filter(v -> !varNames.contains(v.getName()))
+                    .forEach(variables::add);
+
+            inferredState = new State(variables);
+
+            // Add state
+            transitionSystem.addState(inferredState);
+            return inferredState;
+        }
+    }
+
 
     /**
      * Infer the first state of a transition
@@ -126,33 +216,5 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
         return inferredState;
     }
 
-    /**
-     * Infer destination state from source state
-     *
-     * @param src source state
-     * @param dst destination state
-     * @return inferred state
-     */
-    private State inferState(State src, State dst) {
-        State inferredState;
-
-        Set<StateVariable> variables = new HashSet<>(dst.getVariables());
-
-        Set<String> varNames = dst.getVariables()
-                .stream()
-                .map(StateVariable::getName)
-                .collect(Collectors.toSet());
-
-        src.getVariables()
-                .stream()
-                .filter(v -> !varNames.contains(v.getName()))
-                .forEach(variables::add);
-
-        inferredState = new State(variables);
-
-        // Add state
-        transitionSystem.addState(inferredState);
-        return inferredState;
-    }
 
 }

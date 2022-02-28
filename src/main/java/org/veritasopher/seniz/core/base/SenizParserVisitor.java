@@ -211,6 +211,24 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInitIdentifier(SenizParser.InitIdentifierContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SenizParser#transitionDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTransitionDeclaration(SenizParser.TransitionDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#guardIdentifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGuardIdentifier(SenizParser.GuardIdentifierContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#guardDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGuardDeclaration(SenizParser.GuardDeclarationContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SenizParser#actionDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -253,19 +271,19 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPropositionBody(SenizParser.PropositionBodyContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code propConditionalOrExpression}
+	 * Visit a parse tree produced by the {@code propConditionalExpression}
 	 * labeled alternative in {@link SenizParser#propositionExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPropConditionalOrExpression(SenizParser.PropConditionalOrExpressionContext ctx);
+	T visitPropConditionalExpression(SenizParser.PropConditionalExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code propConditionalAndExpression}
+	 * Visit a parse tree produced by the {@code propRelationalExpression}
 	 * labeled alternative in {@link SenizParser#propositionExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPropConditionalAndExpression(SenizParser.PropConditionalAndExpressionContext ctx);
+	T visitPropRelationalExpression(SenizParser.PropRelationalExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code propPrimaryExpression}
 	 * labeled alternative in {@link SenizParser#propositionExpression}.
@@ -346,6 +364,13 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNextExpression(SenizParser.NextExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ltlConditionalImplyExpression}
+	 * labeled alternative in {@link SenizParser#ltlExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLtlConditionalImplyExpression(SenizParser.LtlConditionalImplyExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code eventuallyExpression}
 	 * labeled alternative in {@link SenizParser#ltlExpression}.

@@ -1,10 +1,10 @@
 main system Transaction() over TransactionVar {
 
-    init { status: 0 } -> PayGas() pending
-    pending -> Proceed() success -> Notify() notified
-    pending -> Cancel() dropped
+    init { status: 0, paid: false } -> Channel() waiting -> PayGas() pending -> waiting
+    pending (paid=true & consensus = true) -> Proceed() success -> Notify() notified
+    pending (beforeCancel) -> Cancel() dropped -> Notify() notified
 
-    dropped -> Notify() notified
+    notified -> Channel() waiting
 
     pending = {
         status: 1
@@ -21,8 +21,25 @@ main system Transaction() over TransactionVar {
     notified = {
         status: 4
     }
+
+    prop beforeCancel {
+        paid = true & consensus = false
+    }
+
+    prop paidGas {
+        status = 1
+    }
+
+    prop notified {
+        status = 4
+    }
+
+    ltl infinitelyOftenNotified {
+        G (paidGas -> F notified)
+    }
 }
 
 varset TransactionVar {
-    status :: int
+    status :: int,
+    paid :: bool
 }

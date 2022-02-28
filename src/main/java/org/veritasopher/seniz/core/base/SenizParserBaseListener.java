@@ -400,6 +400,42 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTransitionDeclaration(SenizParser.TransitionDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTransitionDeclaration(SenizParser.TransitionDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGuardIdentifier(SenizParser.GuardIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGuardIdentifier(SenizParser.GuardIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGuardDeclaration(SenizParser.GuardDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGuardDeclaration(SenizParser.GuardDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterActionDeclaration(SenizParser.ActionDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -484,25 +520,25 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPropConditionalOrExpression(SenizParser.PropConditionalOrExpressionContext ctx) { }
+	@Override public void enterPropConditionalExpression(SenizParser.PropConditionalExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPropConditionalOrExpression(SenizParser.PropConditionalOrExpressionContext ctx) { }
+	@Override public void exitPropConditionalExpression(SenizParser.PropConditionalExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPropConditionalAndExpression(SenizParser.PropConditionalAndExpressionContext ctx) { }
+	@Override public void enterPropRelationalExpression(SenizParser.PropRelationalExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPropConditionalAndExpression(SenizParser.PropConditionalAndExpressionContext ctx) { }
+	@Override public void exitPropRelationalExpression(SenizParser.PropRelationalExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -647,6 +683,18 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNextExpression(SenizParser.NextExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLtlConditionalImplyExpression(SenizParser.LtlConditionalImplyExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLtlConditionalImplyExpression(SenizParser.LtlConditionalImplyExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

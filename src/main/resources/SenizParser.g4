@@ -114,11 +114,25 @@ primary
 // Transition
 
 transitionStatement
-    : initIdentifier? stateIdentifier (TO actionDeclaration? stateIdentifier)*
+    : initIdentifier? stateIdentifier transitionDeclaration*
     ;
 
 initIdentifier
     : INIT
+    ;
+
+transitionDeclaration
+    : guardIdentifier? TO actionDeclaration? stateIdentifier
+    ;
+
+// Guard
+guardIdentifier
+    : LPAREN guardDeclaration RPAREN
+    ;
+
+guardDeclaration
+    : propositionIdentifer
+    | propositionExpression
     ;
 
 // Action
@@ -150,7 +164,7 @@ parameterList
 // Proposition
 
 propositionStatement
-    : propositionIdentifer bop=EQ propositionBody
+    : PROP propositionIdentifer propositionBody
     ;
 
 propositionBody
@@ -160,12 +174,13 @@ propositionBody
 propositionExpression
     : propositionPrimary #propPrimaryExpression
     | prefix=BANG propositionExpression #propNotExpression
-    | propositionExpression bop=AND propositionExpression #propConditionalAndExpression
-    | propositionExpression bop=OR propositionExpression #propConditionalOrExpression
+    | propositionExpression bop=(EQ|NEQ|LE|GE|GT|LT) propositionExpression #propRelationalExpression
+    | propositionExpression bop=(AND|OR|TO) propositionExpression #propConditionalExpression
     ;
 
 propositionPrimary
-    : LPAREN propositionExpression RPAREN
+    : literal
+    | variableIdentifier
     | IDENTIFIER (DOT IDENTIFIER)*
     ;
 
@@ -175,7 +190,7 @@ propositionIdentifer
 
 // Linear Temporal Logic
 ltlStatement
-    : LTL IDENTIFIER bop=EQ ltlBody
+    : LTL IDENTIFIER ltlBody
     ;
 
 ltlBody
@@ -187,6 +202,7 @@ ltlExpression
     | prefix=BANG ltlExpression #ltlNotExpression
     | ltlExpression bop=AND ltlExpression #ltlConditionalAndExpression
     | ltlExpression bop=OR ltlExpression #ltlConditionalOrExpression
+    | ltlExpression bop=TO ltlExpression #ltlConditionalImplyExpression
     | ltlExpression bop=UNTIL ltlExpression #untilExpression
     | prefix=ALWAYS ltlExpression #alwaysExpression
     | prefix=EVENTUALLY ltlExpression #eventuallyExpression

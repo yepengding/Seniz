@@ -344,6 +344,36 @@ public interface SenizParserListener extends ParseTreeListener {
 	 */
 	void exitInitIdentifier(SenizParser.InitIdentifierContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SenizParser#transitionDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterTransitionDeclaration(SenizParser.TransitionDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#transitionDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitTransitionDeclaration(SenizParser.TransitionDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#guardIdentifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterGuardIdentifier(SenizParser.GuardIdentifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#guardIdentifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitGuardIdentifier(SenizParser.GuardIdentifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#guardDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterGuardDeclaration(SenizParser.GuardDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#guardDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitGuardDeclaration(SenizParser.GuardDeclarationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SenizParser#actionDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -414,29 +444,29 @@ public interface SenizParserListener extends ParseTreeListener {
 	 */
 	void exitPropositionBody(SenizParser.PropositionBodyContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code propConditionalOrExpression}
+	 * Enter a parse tree produced by the {@code propConditionalExpression}
 	 * labeled alternative in {@link SenizParser#propositionExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterPropConditionalOrExpression(SenizParser.PropConditionalOrExpressionContext ctx);
+	void enterPropConditionalExpression(SenizParser.PropConditionalExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code propConditionalOrExpression}
+	 * Exit a parse tree produced by the {@code propConditionalExpression}
 	 * labeled alternative in {@link SenizParser#propositionExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitPropConditionalOrExpression(SenizParser.PropConditionalOrExpressionContext ctx);
+	void exitPropConditionalExpression(SenizParser.PropConditionalExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code propConditionalAndExpression}
+	 * Enter a parse tree produced by the {@code propRelationalExpression}
 	 * labeled alternative in {@link SenizParser#propositionExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterPropConditionalAndExpression(SenizParser.PropConditionalAndExpressionContext ctx);
+	void enterPropRelationalExpression(SenizParser.PropRelationalExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code propConditionalAndExpression}
+	 * Exit a parse tree produced by the {@code propRelationalExpression}
 	 * labeled alternative in {@link SenizParser#propositionExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitPropConditionalAndExpression(SenizParser.PropConditionalAndExpressionContext ctx);
+	void exitPropRelationalExpression(SenizParser.PropRelationalExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code propPrimaryExpression}
 	 * labeled alternative in {@link SenizParser#propositionExpression}.
@@ -573,6 +603,18 @@ public interface SenizParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNextExpression(SenizParser.NextExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ltlConditionalImplyExpression}
+	 * labeled alternative in {@link SenizParser#ltlExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLtlConditionalImplyExpression(SenizParser.LtlConditionalImplyExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ltlConditionalImplyExpression}
+	 * labeled alternative in {@link SenizParser#ltlExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLtlConditionalImplyExpression(SenizParser.LtlConditionalImplyExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code eventuallyExpression}
 	 * labeled alternative in {@link SenizParser#ltlExpression}.

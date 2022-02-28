@@ -1,8 +1,6 @@
 package org.veritasopher.seniz.core.model.common;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Set;
 
@@ -13,10 +11,14 @@ import java.util.Set;
  * @date 12/2/2020
  */
 @Data
+@RequiredArgsConstructor
 @AllArgsConstructor
 @ToString
 public class State {
 
+    private boolean isStutter;
+
+    @NonNull
     private Set<StateVariable> variables;
 
 }

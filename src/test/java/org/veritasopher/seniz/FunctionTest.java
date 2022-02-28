@@ -89,6 +89,19 @@ public class FunctionTest {
     }
 
     @Test
+    public void testTransaction() {
+        String path = resourcePath("example/Transaction.sz");
+        Set<String> sourceFilePaths = new HashSet<>();
+        sourceFilePaths.add(path);
+
+        MasterController masterController = new MasterController();
+        GlobalEnvironment env = masterController.compile(sourceFilePaths);
+        DOTGenerator dotGenerator = new DOTGenerator(env, env.getMainTS());
+        dotGenerator.generateToConsole();
+
+    }
+
+    @Test
     public void testSingleFileCompile() {
         String path = resourcePath("example/TestTS.sz");
         Set<String> sourceFilePaths = new HashSet<>();

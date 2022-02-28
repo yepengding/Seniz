@@ -33,6 +33,10 @@ AS
     : 'as'
     ;
 
+PROP
+    : 'prop'
+    ;
+
 LTL
     : 'ltl'
     ;
@@ -81,10 +85,10 @@ PAR:                '||';
 INTERLEAVE:         '|||';
 
 // Temporal Operator
-ALWAYS:             'always';
-EVENTUALLY:         'eventually';
-NEXT:               'next';
-UNTIL:              'until';
+ALWAYS:             'G';
+EVENTUALLY:         'F';
+NEXT:               'X';
+UNTIL:              'U';
 
 // Literals
 

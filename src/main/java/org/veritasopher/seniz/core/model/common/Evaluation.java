@@ -1,5 +1,7 @@
 package org.veritasopher.seniz.core.model.common;
 
+import lombok.ToString;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
@@ -11,6 +13,7 @@ import java.util.stream.Collectors;
  * @author Yepeng Ding
  * @date 12/16/2020
  */
+@ToString
 public class Evaluation {
 
     // Stack of Reverse Polish notation

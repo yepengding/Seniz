@@ -6,6 +6,7 @@ import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.common.State;
 import org.veritasopher.seniz.exception.StateException;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 /**
@@ -35,10 +36,7 @@ public class StateIdentifierVisitor extends SenizParserBaseVisitor<State> {
             Optional<State> s = transitionSystem.getStateName(name);
 
             // Check whether state associated with identifier exists
-            if (s.isEmpty()) {
-                throw new StateException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "State named (" + name + ") does not exist.");
-            }
-            state = s.get();
+            state = s.orElseGet(() -> new State(true, new HashSet<>()));
 
         } else if (ctx.stateBody() != null) {
             // Unnamed state
