@@ -10,7 +10,9 @@ import org.veritasopher.seniz.core.model.common.StateVariable;
 import org.veritasopher.seniz.core.model.common.Transition;
 import org.veritasopher.seniz.exception.TransitionException;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,15 +28,9 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
 
     private final StateIdentifierVisitor stateIdentifierVisitor;
 
-    private final ActionDeclarationVisitor actionDeclarationVisitor;
-
-    private final TransitionDeclarationVisitor transitionDeclarationVisitor;
-
     public TransitionVisitor(TransitionSystem transitionSystem) {
         this.transitionSystem = transitionSystem;
         this.stateIdentifierVisitor = new StateIdentifierVisitor(transitionSystem);
-        this.actionDeclarationVisitor = new ActionDeclarationVisitor();
-        this.transitionDeclarationVisitor = new TransitionDeclarationVisitor(transitionSystem);
     }
 
     /**
@@ -50,11 +46,11 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
         boolean isInit = ctx.initIdentifier() != null;
 
         State state = ctx.stateIdentifier().accept(stateIdentifierVisitor);
-        if (state.isStutter()) {
+        if (state.isStuttering()) {
             throw new TransitionException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Transition statement cannot start with a stuttering state declarator.");
         }
 
-        // Infer the first state
+        // Infer the first state of this transition
         state = inferState(state);
 
         if (isInit) {
@@ -62,41 +58,11 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
             transitionSystem.addInitState(state);
         }
 
+        TransitionDeclarationVisitor transitionDeclarationVisitor = new TransitionDeclarationVisitor(transitionSystem);
+
         transitionDeclarationVisitor.setSrcState(state.hashCode());
         ctx.transitionDeclaration().forEach(transitionDeclarationContext ->
                 transitionDeclarationContext.accept(transitionDeclarationVisitor));
-//        Transition transition;
-//        while (i < ctx.getChildCount() - 1) {
-//            transition = new Transition();
-//
-//            transition.setSrcState(state.hashCode());
-//
-//            i += 2;
-//            Action action = ctx.getChild(i).accept(actionDeclarationVisitor);
-//
-//            if (action != null) {
-//                // Add new action
-//                transitionSystem.addAction(action);
-//
-//                transition.setAction(action.hashCode());
-//
-//                // Get destination state
-//                i++;
-//            }
-//            state = ctx.getChild(i).accept(stateIdentifierVisitor);
-//
-//            // Infer destination state
-//            state = inferState(transitionSystem.getState(transition.getSrcState()), state);
-//            transition.setDstState(state.hashCode());
-//
-//            // Transition duplicated
-//            if (transitionSystem.hasTransition(transition)) {
-//                throw new TransitionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Transition is duplicated.");
-//            }
-//
-//            transitionSystem.addTransition(transition);
-//
-//        }
 
         return super.visitTransitionStatement(ctx);
 
@@ -105,6 +71,8 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
     private static class TransitionDeclarationVisitor extends SenizParserBaseVisitor<Transition> {
 
         private final TransitionSystem transitionSystem;
+
+        private final Map<String, State> stutteringStates;
 
         private final StateIdentifierVisitor stateIdentifierVisitor;
 
@@ -115,6 +83,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
 
         private TransitionDeclarationVisitor(TransitionSystem transitionSystem) {
             this.transitionSystem = transitionSystem;
+            this.stutteringStates = new HashMap<>();
             this.stateIdentifierVisitor = new StateIdentifierVisitor(transitionSystem);
             this.actionDeclarationVisitor = new ActionDeclarationVisitor();
         }
@@ -127,18 +96,36 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
             transition.setSrcState(srcState);
 
             // Set action
-            ActionDeclarationVisitor actionDeclarationVisitor = new ActionDeclarationVisitor();
+            Action action;
             if (ctx.actionDeclaration() != null) {
                 // Add new action
-                Action action = ctx.actionDeclaration().accept(actionDeclarationVisitor);
-                transitionSystem.addAction(action);
-                transition.setAction(action.hashCode());
+                action = ctx.actionDeclaration().accept(actionDeclarationVisitor);
+            } else {
+                // Add epsilon action
+                action = new Action(true, "");
             }
+            transitionSystem.addAction(action);
+            transition.setAction(action.hashCode());
 
             // Set destination state
             State dstState = ctx.stateIdentifier().accept(stateIdentifierVisitor);
-            // Infer destination state
-            dstState = inferState(transitionSystem.getState(transition.getSrcState()), dstState);
+            if (!dstState.isStuttering()) {
+                // Infer destination state
+                dstState = inferState(transitionSystem.getState(transition.getSrcState()), dstState);
+            } else {
+                // If stuttering state
+                String stutteringName = dstState.getStutteringName();
+                State stutteringState = this.stutteringStates.get(stutteringName);
+                if (stutteringState == null) {
+                    // Add this stuttering state if not existing
+                    dstState = inferState(transitionSystem.getState(transition.getSrcState()), dstState);
+                    this.stutteringStates.put(dstState.getStutteringName(), dstState);
+                } else {
+                    // Infer destination stuttering state
+                    dstState = inferState(transitionSystem.getState(transition.getSrcState()), stutteringState);
+                }
+            }
+
             transition.setDstState(dstState.hashCode());
 
 
@@ -178,7 +165,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
                     .filter(v -> !varNames.contains(v.getName()))
                     .forEach(variables::add);
 
-            inferredState = new State(variables);
+            inferredState = new State(dst.isStuttering(), dst.getStutteringName(), variables);
 
             // Add state
             transitionSystem.addState(inferredState);

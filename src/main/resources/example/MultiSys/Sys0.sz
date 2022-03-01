@@ -1,0 +1,19 @@
+import Vars
+
+system Sys0() over Vars {
+
+    init s0 -> s1
+    s0 -> s2
+
+    s0 = {
+        v0: 1
+    }
+
+    s1 = {
+        v1: 1
+    }
+
+    s2 = {
+        v2: true
+    }
+}

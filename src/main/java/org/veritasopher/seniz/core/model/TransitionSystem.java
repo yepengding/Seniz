@@ -201,7 +201,7 @@ public class TransitionSystem {
      * @param state
      */
     public void addStateName(String name, State state) {
-        this.stateNames.put(name, state);
+        this.stateNames.put(getGlobalStateName(name), state);
     }
 
     /**
@@ -211,7 +211,7 @@ public class TransitionSystem {
      * @return Either a named state or null
      */
     public Optional<State> getStateName(String name) {
-        return Optional.ofNullable(this.stateNames.get(name));
+        return Optional.ofNullable(this.stateNames.get(getGlobalStateName(name)));
     }
 
     /**
@@ -221,7 +221,11 @@ public class TransitionSystem {
      * @return true if state name exists. Otherwise false.
      */
     public boolean hasStateName(String name) {
-        return this.stateNames.containsKey(name);
+        return this.stateNames.containsKey(getGlobalStateName(name));
+    }
+
+    private String getGlobalStateName(String name) {
+        return identifier + "." + name;
     }
 
 }

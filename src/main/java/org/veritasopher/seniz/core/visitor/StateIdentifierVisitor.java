@@ -36,7 +36,7 @@ public class StateIdentifierVisitor extends SenizParserBaseVisitor<State> {
             Optional<State> s = transitionSystem.getStateName(name);
 
             // Check whether state associated with identifier exists
-            state = s.orElseGet(() -> new State(true, new HashSet<>()));
+            state = s.orElseGet(() -> new State(true, name, new HashSet<>()));
 
         } else if (ctx.stateBody() != null) {
             // Unnamed state

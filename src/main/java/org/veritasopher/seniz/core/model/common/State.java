@@ -8,7 +8,7 @@ import java.util.Set;
  * State
  *
  * @author Yepeng Ding
- * @date 12/2/2020
+ * @date 3/1/2022
  */
 @Data
 @RequiredArgsConstructor
@@ -16,7 +16,9 @@ import java.util.Set;
 @ToString
 public class State {
 
-    private boolean isStutter;
+    private boolean isStuttering;
+
+    private String stutteringName;
 
     @NonNull
     private Set<StateVariable> variables;

@@ -1,6 +1,6 @@
 import Vars
 
-system TS1(i::int, j::string) over Vars {
+system Sys1(i::int, j::string) over Vars {
 
     init s0 -> a0() {v0: !v0} -> a1() {v1: v1 + 1}
 

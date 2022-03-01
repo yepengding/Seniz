@@ -2,9 +2,9 @@ package org.veritasopher.seniz.core.visitor;
 
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
-import org.veritasopher.seniz.exception.StateException;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.common.State;
+import org.veritasopher.seniz.exception.StateException;
 
 /**
  * State Declaration Visitor
@@ -26,8 +26,8 @@ public class StateNamingVisitor extends SenizParserBaseVisitor<TransitionSystem>
     /**
      * Visit states with explicit declarations
      *
-     * @param ctx
-     * @return
+     * @param ctx StateNamingContext
+     * @return TransitionSystem
      */
     @Override
     public TransitionSystem visitStateNaming(SenizParser.StateNamingContext ctx) {

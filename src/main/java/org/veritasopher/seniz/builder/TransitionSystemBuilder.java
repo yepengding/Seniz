@@ -31,7 +31,7 @@ public class TransitionSystemBuilder {
         }
         transitionSystem.setStateVariables(stateVariableSet);
 
-        // Collect named states
+        // Collect state naming (name -> state declarator)
         StateNamingVisitor stateNamingVisitor = new StateNamingVisitor(transitionSystem);
         stateNamingVisitor.visit(tree);
 

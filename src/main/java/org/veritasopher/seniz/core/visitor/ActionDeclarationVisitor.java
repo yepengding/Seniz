@@ -18,6 +18,11 @@ public class ActionDeclarationVisitor extends SenizParserBaseVisitor<Action> {
         if (ctx.IDENTIFIER() == null) {
             throw new ActionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported action type.");
         }
+
+        String actionName = ctx.IDENTIFIER().getText();
+        if (actionName.equals("")) {
+            throw new ActionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Action name cannot be empty.");
+        }
 //        if (ctx.formalParameterList() != null) {
 //            ctx.formalParameterList().formalParameter().forEach(param -> {
 //                System.out.println(param.variableIdentifier().IDENTIFIER().getText());

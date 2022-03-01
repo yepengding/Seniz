@@ -1,8 +1,8 @@
 import Vars
 
-system TS2(i::int, j::string) over Vars {
+system Sys2(i::int, j::string) over Vars {
 
-    init s0 -> a0() {v0: !v0} -> a1() {v1: v1 + 1}
+    init s0 -> a0() {v0: !v0} -> a1() {v1: i + 1}
 
     s0 = {
         v0: !(i>1 & j<2)

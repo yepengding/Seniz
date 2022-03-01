@@ -1,0 +1,7 @@
+import Sys2
+
+control system Sys3(i::int, j::string) {
+
+    Sys2(i, j)
+
+}

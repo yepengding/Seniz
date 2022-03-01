@@ -157,6 +157,10 @@ public class DOTGenerator {
             }
         });
 
+        if (state.isStuttering()) {
+            names.add("_" + state.getStutteringName());
+        }
+
         nameBuilder.append('\"');
         if (names.size() == 0) {
             // No explicit name

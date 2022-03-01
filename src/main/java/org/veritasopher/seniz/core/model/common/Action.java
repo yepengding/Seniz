@@ -1,18 +1,21 @@
 package org.veritasopher.seniz.core.model.common;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * Action
  *
  * @author Yepeng Ding
- * @date 12/4/2020
+ * @date 3/1/2022
  */
 @Data
+@RequiredArgsConstructor
 @AllArgsConstructor
 @ToString
 public class Action {
+
+    private boolean isEpsilon;
+
+    @NonNull
     private String name;
 }

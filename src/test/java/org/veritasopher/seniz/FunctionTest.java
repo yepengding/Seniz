@@ -29,7 +29,7 @@ public class FunctionTest {
 
     @Test
     public void testMultiFileCompileByPaths() {
-        String path = resourcePath("example/MultiTS");
+        String path = resourcePath("example/MultiSys");
         File folder = new File(path);
         FilenameFilter filter = (f, name) -> name.endsWith(Info.SUFFIX);
         File[] files = folder.listFiles(filter);
@@ -47,7 +47,7 @@ public class FunctionTest {
 
     @Test
     public void testMultiFileCompileBySourceFiles() {
-        String path = resourcePath("example/MultiTS");
+        String path = resourcePath("example/MultiSys");
         File folder = new File(path);
         FilenameFilter filter = (f, name) -> name.endsWith(Info.SUFFIX);
         File[] files = folder.listFiles(filter);
