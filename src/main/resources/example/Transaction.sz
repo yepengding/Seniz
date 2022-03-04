@@ -1,21 +1,31 @@
 main system Transaction() over TransactionVar {
 
-    init { status: 0, paid: false } -> Channel() waiting -> PayGas() pending -> waiting
+    init { status: 0, paid: false } -> Channel() waiting -> PayGas() pending
     pending (paid=true & consensus = true) -> Proceed() success -> Notify() notified
     pending (beforeCancel) -> Cancel() dropped -> Notify() notified
 
     notified -> Channel() waiting
 
+    waiting = {
+        status: 0,
+        paid: false
+    }
+
     pending = {
-        status: 1
+        status: 1,
+        paid: true
     }
 
     success = {
-        status: 2
+        status: 2,
+        paid: true,
+        consensus: true
     }
 
     dropped = {
-        status: 3
+        status: 3,
+        paid: true,
+        consensus: false
     }
 
     notified = {
@@ -41,5 +51,6 @@ main system Transaction() over TransactionVar {
 
 varset TransactionVar {
     status :: int,
-    paid :: bool
+    paid :: bool,
+    consensus :: bool
 }

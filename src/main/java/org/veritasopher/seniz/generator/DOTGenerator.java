@@ -124,16 +124,28 @@ public class DOTGenerator {
         StringBuilder systemBody = new StringBuilder();
         // Generate transitions
         ts.getTransitions().forEach((hashCode, transition) -> {
-            systemBody.append(getStateName(ts, transition.getSrcState())).append(' ');
-            systemBody.append("->").append(' ');
-            systemBody.append(getStateName(ts, transition.getDstState())).append(' ');
-            systemBody.append("[label=\"").append(getActionName(ts, transition)).append("\"]");
+            systemBody.append(String.format("\"%d\"", transition.getSrcState()));
+            systemBody.append(" -> ");
+            systemBody.append(String.format("\"%d\"", transition.getDstState()));
+            systemBody.append(String.format("[label=\"%s\"]", getActionName(ts, transition)));
             systemBody.append(System.lineSeparator());
         });
 
+        systemBody.append(System.lineSeparator());
+
+        // Append state labels
+        ts.getStates().forEach((hashCode, state) -> {
+            systemBody.append(String.format("\"%d\"", hashCode));
+            systemBody.append(String.format("[label=\"%s\"]", getStateName(ts, hashCode)));
+            systemBody.append(System.lineSeparator());
+        });
+
+        systemBody.append(System.lineSeparator());
+
         // Highlight initial states
         ts.getInitStates().forEach(hashCode -> {
-            systemBody.append(getStateName(ts, hashCode)).append("[color=blue]").append(System.lineSeparator());
+            systemBody.append(String.format("\"%d\"", hashCode)).append("[color=blue]");
+            systemBody.append(System.lineSeparator());
         });
 
         return systemBody.toString();
@@ -142,7 +154,7 @@ public class DOTGenerator {
     /**
      * Get state name
      *
-     * @param ts transition system
+     * @param ts       transition system
      * @param hashCode state hash code
      * @return state name
      */
@@ -161,21 +173,20 @@ public class DOTGenerator {
             names.add("_" + state.getStutteringName());
         }
 
-        nameBuilder.append('\"');
         if (names.size() == 0) {
             // No explicit name
             nameBuilder.append(Prefix.STATE).append(hashCode).append(",");
         } else {
             names.forEach(n -> nameBuilder.append(n).append(","));
         }
-        return nameBuilder.substring(0, nameBuilder.length() - 1) + '\"';
+        return nameBuilder.substring(0, nameBuilder.length() - 1);
     }
 
 
     /**
      * Get action name
      *
-     * @param ts transition system
+     * @param ts         transition system
      * @param transition transition
      * @return action name
      */

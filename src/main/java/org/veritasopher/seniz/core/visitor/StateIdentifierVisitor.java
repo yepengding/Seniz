@@ -35,7 +35,7 @@ public class StateIdentifierVisitor extends SenizParserBaseVisitor<State> {
             String name = ctx.stateNameIdentifier().IDENTIFIER().getText();
             Optional<State> s = transitionSystem.getStateName(name);
 
-            // Check whether state associated with identifier exists
+            // If naming does not exist, mark it as a stuttering state
             state = s.orElseGet(() -> new State(true, name, new HashSet<>()));
 
         } else if (ctx.stateBody() != null) {
