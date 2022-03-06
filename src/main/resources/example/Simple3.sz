@@ -1,0 +1,48 @@
+main system Simple3() over Vars {
+
+    init s0 -> a0() s1 -> a1() s2
+
+    s2 -> a2() s3 -> a4() s5
+
+    s2 -> a3() s4 -> a5() s5
+
+    s5 -> a6() s6
+
+    s6 -> a7() s1
+
+    s0 = {
+        status: 0,
+        flag: false
+    }
+
+    s1 = {
+        status: 1
+    }
+
+    s2 = {
+        status: 2
+    }
+
+    s3 = {
+        status: 3,
+        flag: true
+    }
+
+    s4 = {
+        status: 4,
+        flag: false
+    }
+
+    s5 = {
+        status: 5
+    }
+
+    s6 = {
+        status: 6
+    }
+}
+
+varset Vars {
+    status :: int,
+    flag :: bool
+}

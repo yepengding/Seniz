@@ -3,49 +3,45 @@ package org.veritasopher.seniz.core.visitor;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.TransitionSystem;
-import org.veritasopher.seniz.core.model.common.State;
+import org.veritasopher.seniz.core.model.common.StateDeclarator;
 import org.veritasopher.seniz.exception.StateException;
 
-import java.util.HashSet;
 import java.util.Optional;
 
 /**
  * State Identifier Visitor
  *
  * @author Yepeng Ding
- * @date 12/15/2020
+ * @date 3/5/2022
  */
-public class StateIdentifierVisitor extends SenizParserBaseVisitor<State> {
+public class StateIdentifierVisitor extends SenizParserBaseVisitor<Optional<StateDeclarator>> {
 
     private final TransitionSystem transitionSystem;
 
-    private final StateDeclaratorVisitor stateDeclaratorVisitor;
 
     StateIdentifierVisitor(TransitionSystem transitionSystem) {
         this.transitionSystem = transitionSystem;
-        this.stateDeclaratorVisitor = new StateDeclaratorVisitor(transitionSystem);
     }
 
     @Override
-    public State visitStateIdentifier(SenizParser.StateIdentifierContext ctx) {
-        State state;
-
+    public Optional<StateDeclarator> visitStateIdentifier(SenizParser.StateIdentifierContext ctx) {
+        Optional<StateDeclarator> stateDeclarator;
         if (ctx.stateNameIdentifier() != null) {
-            // Named state
+            // Named state declarator (including stuttering state declarator)
             String name = ctx.stateNameIdentifier().IDENTIFIER().getText();
-            Optional<State> s = transitionSystem.getStateName(name);
-
-            // If naming does not exist, mark it as a stuttering state
-            state = s.orElseGet(() -> new State(true, name, new HashSet<>()));
-
+            stateDeclarator = transitionSystem.getStateDeclarator(name);
         } else if (ctx.stateBody() != null) {
-            // Unnamed state
-            state = ctx.stateBody().stateDeclarator().accept(stateDeclaratorVisitor);
+            // Unnamed state declarator
+            int id = ctx.stateBody().stateDeclarator().hashCode();
+            stateDeclarator = transitionSystem.getStateDeclarator(id);
+            if (stateDeclarator.isEmpty()) {
+                // If not exist, then throw exception
+                throw new StateException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined state declarator.");
+            }
         } else {
-            throw new StateException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported state type.");
+            throw new StateException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported state declarator type.");
         }
-
-        return state;
+        return stateDeclarator;
     }
 
 }

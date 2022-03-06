@@ -4,7 +4,7 @@ import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.common.Evaluation;
-import org.veritasopher.seniz.core.model.common.State;
+import org.veritasopher.seniz.core.model.common.StateDeclarator;
 import org.veritasopher.seniz.core.model.common.StateVariable;
 import org.veritasopher.seniz.exception.StateVariableException;
 
@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
  * State Declarator Visitor
  *
  * @author Yepeng Ding
- * @date 12/4/2020
+ * @date 3/5/2022
  */
-public class StateDeclaratorVisitor extends SenizParserBaseVisitor<State> {
+public class StateDeclaratorVisitor extends SenizParserBaseVisitor<StateDeclarator> {
 
     private final StateExpressionVisitor stateExpressionVisitor;
 
@@ -26,13 +26,13 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<State> {
     }
 
     @Override
-    public State visitStateDeclarator(SenizParser.StateDeclaratorContext ctx) {
+    public StateDeclarator visitStateDeclarator(SenizParser.StateDeclaratorContext ctx) {
         Set<StateVariable> stateVariables = ctx.stateExpression()
                 .stream()
                 .map(expr -> expr.accept(stateExpressionVisitor))
                 .collect(Collectors.toSet());
 
-        return new State(stateVariables);
+        return new StateDeclarator(ctx.hashCode(), stateVariables);
     }
 
     private static class StateExpressionVisitor extends SenizParserBaseVisitor<StateVariable> {

@@ -6,21 +6,21 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * Transition relation over unfold states
+ * Abstract transition relation over state declarators
  *
  * @author Yepeng Ding
- * @date 12/3/2020
+ * @date 3/5/2022
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Transition {
+public class TransitionRule {
 
-    private int srcState;
+    private int srcStateDeclarator;
 
     private Integer action;
 
-    private int dstState;
+    private int dstStateDeclarator;
 
 }

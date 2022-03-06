@@ -162,16 +162,13 @@ public class DOTGenerator {
         StringBuilder nameBuilder = new StringBuilder();
         Set<String> names = new HashSet<>();
         State state = ts.getState(hashCode);
-        ts.getStateNames().forEach((n, s) -> {
+        ts.getStateDeclarators().forEach((n, s) -> {
             // If variables of a named state is the subset of the current state, then naming the current state with the same name
             if (state.getVariables().containsAll(s.getVariables())) {
                 names.add(n);
             }
         });
 
-        if (state.isStuttering()) {
-            names.add("_" + state.getStutteringName());
-        }
 
         if (names.size() == 0) {
             // No explicit name

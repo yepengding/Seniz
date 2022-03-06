@@ -3,6 +3,7 @@ package org.veritasopher.seniz.core.visitor;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.common.Action;
+import org.veritasopher.seniz.core.tool.Naming;
 import org.veritasopher.seniz.exception.ActionException;
 
 /**
@@ -20,8 +21,8 @@ public class ActionDeclarationVisitor extends SenizParserBaseVisitor<Action> {
         }
 
         String actionName = ctx.IDENTIFIER().getText();
-        if (actionName.equals("")) {
-            throw new ActionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Action name cannot be empty.");
+        if (!Naming.satisfyActionNamingRule(actionName)) {
+            throw new ActionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Action name (" + actionName + ") is invalid.");
         }
 //        if (ctx.formalParameterList() != null) {
 //            ctx.formalParameterList().formalParameter().forEach(param -> {

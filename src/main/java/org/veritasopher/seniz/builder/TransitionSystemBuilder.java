@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.veritasopher.seniz.core.model.StateVariableSet;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.visitor.StateNamingVisitor;
+import org.veritasopher.seniz.core.visitor.TransitionRuleVisitor;
 import org.veritasopher.seniz.core.visitor.TransitionVisitor;
 import org.veritasopher.seniz.exception.StateException;
 
@@ -33,8 +34,15 @@ public class TransitionSystemBuilder {
 
         // Collect state naming (name -> state declarator)
         StateNamingVisitor stateNamingVisitor = new StateNamingVisitor(transitionSystem);
-        stateNamingVisitor.visit(tree);
+        StateNamingVisitor.ExplicitNamingVisitor explicitNamingVisitor = stateNamingVisitor.new ExplicitNamingVisitor();
+        explicitNamingVisitor.visit(tree);
 
+        StateNamingVisitor.ImplicitNamingVisitor implicitNamingVisitor = stateNamingVisitor.new ImplicitNamingVisitor();
+        implicitNamingVisitor.visit(tree);
+
+        // Construct transition rule base
+        TransitionRuleVisitor transitionRuleVisitor = new TransitionRuleVisitor(transitionSystem);
+        transitionRuleVisitor.visit(tree);
 
         // Collect all transitions, inferred states, initial states and actions
         TransitionVisitor transitionVisitor = new TransitionVisitor(transitionSystem);

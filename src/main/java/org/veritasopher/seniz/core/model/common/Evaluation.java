@@ -1,5 +1,6 @@
 package org.veritasopher.seniz.core.model.common;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.Collections;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
  * @date 12/16/2020
  */
 @ToString
+@EqualsAndHashCode
 public class Evaluation {
 
     // Stack of Reverse Polish notation
@@ -39,7 +41,7 @@ public class Evaluation {
      */
     public List<String> getRPN() {
         List<String> result = rpn.stream()
-                .map(term -> term.isOperand()?term.getOperand().getValue().toString():term.getOperator().getValue())
+                .map(term -> term.isOperand() ? term.getOperand().getValue().toString() : term.getOperator().getValue())
                 .collect(Collectors.toList());
         Collections.reverse(result);
         return result;

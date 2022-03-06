@@ -8,7 +8,8 @@ main system Transaction() over TransactionVar {
 
     waiting = {
         status: 0,
-        paid: false
+        paid: false,
+        consensus: false
     }
 
     pending = {
