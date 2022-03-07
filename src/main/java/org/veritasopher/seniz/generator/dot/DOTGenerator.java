@@ -1,15 +1,20 @@
-package org.veritasopher.seniz.generator;
+package org.veritasopher.seniz.generator.dot;
 
 import org.veritasopher.seniz.core.model.GlobalEnvironment;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.common.Action;
 import org.veritasopher.seniz.core.model.common.State;
 import org.veritasopher.seniz.core.model.common.Transition;
-import org.veritasopher.seniz.generator.dict.Prefix;
+import org.veritasopher.seniz.core.tool.Naming;
+import org.veritasopher.seniz.exception.GeneratorException;
+import org.veritasopher.seniz.generator.base.BaseGenerator;
+import org.veritasopher.seniz.generator.dot.dict.Prefix;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * DOT Generator
@@ -17,14 +22,10 @@ import java.util.Set;
  * @author Yepeng Ding
  * @date 12/5/2020
  */
-public class DOTGenerator {
-
-    private final GlobalEnvironment env;
-    private final TransitionSystem ts;
+public class DOTGenerator extends BaseGenerator {
 
     public DOTGenerator(GlobalEnvironment globalEnvironment, TransitionSystem transitionSystem) {
-        this.env = globalEnvironment;
-        this.ts = transitionSystem;
+        super(globalEnvironment, transitionSystem);
     }
 
     /**
@@ -53,17 +54,7 @@ public class DOTGenerator {
      * @return DOT program describing plain transition system
      */
     private String build() {
-        StringBuilder program = new StringBuilder();
-
-        // Generate header
-        program.append("digraph").append(' ').append(ts.getIdentifier()).append('{').append(System.lineSeparator());
-
-        // Generate body
-        program.append(getSystemBody(ts));
-
-        // Generate footer
-        program.append('}');
-        return program.toString();
+        return String.format("digraph %s { %s%s }", ts.getIdentifier(), System.lineSeparator(), getSystemBody(ts));
     }
 
     /**
@@ -169,14 +160,26 @@ public class DOTGenerator {
             }
         });
 
-
         if (names.size() == 0) {
-            // No explicit name
-            nameBuilder.append(Prefix.STATE).append(hashCode).append(",");
+            throw new GeneratorException(ts.getIdentifier(), String.format("Unlabeled state (%s)", hashCode));
+        } else if (names.size() == 1) {
+            nameBuilder.append(Naming.eliminateSpecialChars(names.iterator().next()));
         } else {
-            names.forEach(n -> nameBuilder.append(n).append(","));
+            // Filter names (only includes explicit names if exists. Otherwise, includes all names)
+            String delimiter = "\\n";
+            Pattern explicitNamePattern = Pattern.compile(String.format("^%s\\.(?!\\$)(.+)", ts.getIdentifier()));
+            if (names.stream().anyMatch(n -> explicitNamePattern.matcher(n).matches())) {
+                nameBuilder.append(names.stream()
+                        .filter(n -> explicitNamePattern.matcher(n).matches())
+                        .map(Naming::eliminateSpecialChars)
+                        .collect(Collectors.joining(delimiter)));
+            } else {
+                nameBuilder.append(names.stream()
+                        .map(Naming::eliminateSpecialChars)
+                        .collect(Collectors.joining(delimiter)));
+            }
         }
-        return nameBuilder.substring(0, nameBuilder.length() - 1);
+        return nameBuilder.toString();
     }
 
 

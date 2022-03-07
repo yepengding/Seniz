@@ -29,7 +29,7 @@ public class StateVariableSet {
     /**
      * Add a state variable
      *
-     * @param stateVariable
+     * @param stateVariable state variable
      */
     public void addVariable(StateVariable stateVariable) {
         this.variables.put(stateVariable.getName(), stateVariable);
@@ -39,7 +39,7 @@ public class StateVariableSet {
      * Get a state variable by name
      *
      * @param name variable name
-     * @return
+     * @return state variable
      */
     public StateVariable getVariable(String name) {
         return this.variables.get(name);

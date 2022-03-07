@@ -5,7 +5,7 @@ import org.veritasopher.seniz.config.Info;
 import org.veritasopher.seniz.controller.MasterController;
 import org.veritasopher.seniz.core.model.GlobalEnvironment;
 import org.veritasopher.seniz.core.model.SourceFile;
-import org.veritasopher.seniz.generator.DOTGenerator;
+import org.veritasopher.seniz.generator.dot.DOTGenerator;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.veritasopher.seniz.util.PathUtil.getFilePathInResource;
 
 /**
  * Function Test
@@ -29,7 +30,7 @@ public class FunctionTest {
 
     @Test
     public void testMultiFileCompileByPaths() {
-        String path = resourcePath("example/MultiSys");
+        String path = getFilePathInResource("example/MultiSys");
         File folder = new File(path);
         FilenameFilter filter = (f, name) -> name.endsWith(Info.SUFFIX);
         File[] files = folder.listFiles(filter);
@@ -47,7 +48,7 @@ public class FunctionTest {
 
     @Test
     public void testMultiFileCompileBySourceFiles() {
-        String path = resourcePath("example/MultiSys");
+        String path = getFilePathInResource("example/MultiSys");
         File folder = new File(path);
         FilenameFilter filter = (f, name) -> name.endsWith(Info.SUFFIX);
         File[] files = folder.listFiles(filter);
@@ -73,7 +74,7 @@ public class FunctionTest {
 
     @Test
     public void testDPP() {
-        String path = resourcePath("example/DPP");
+        String path = getFilePathInResource("example/DPP");
         File folder = new File(path);
         FilenameFilter filter = (f, name) -> name.endsWith(Info.SUFFIX);
         File[] files = folder.listFiles(filter);
@@ -90,7 +91,7 @@ public class FunctionTest {
 
     @Test
     public void testSingleFileCompile() {
-        String path = resourcePath("example/TestTS.sz");
+        String path = getFilePathInResource("example/TestSys.sz");
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 
@@ -99,10 +100,6 @@ public class FunctionTest {
         DOTGenerator dotGenerator = new DOTGenerator(env, env.getMainTS());
         dotGenerator.generateToConsole();
 
-    }
-
-    private String resourcePath(String filePath) {
-        return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource(filePath)).getPath();
     }
 
 }

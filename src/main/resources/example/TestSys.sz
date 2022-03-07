@@ -1,4 +1,4 @@
-main system TestTS(i::int, j::string) over Vars {
+main system TestSys(i::int, j::string) over Vars {
 
     init s0 -> a0() {v0: !v0} -> a1() {v1: v1 + 1}
 
