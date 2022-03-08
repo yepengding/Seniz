@@ -1,10 +1,8 @@
 package org.veritasopher.seniz.core.model.common;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.veritasopher.seniz.core.model.domain.Operator;
-import org.veritasopher.seniz.core.model.domain.PrimaryType;
 import org.veritasopher.seniz.core.model.domain.TermType;
 
 import java.util.Objects;
@@ -18,7 +16,6 @@ import java.util.Objects;
  */
 @Getter
 @ToString
-@EqualsAndHashCode
 public class Term {
 
     private final TermType type;
@@ -44,4 +41,22 @@ public class Term {
         this.parenthesis = parenthesis;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Term term = (Term) o;
+        return type == term.type && Objects.equals(operand, term.operand) && operator == term.operator && Objects.equals(parenthesis, term.parenthesis);
+    }
+
+    /**
+     * Overriding hash code calculation
+     * Using string form of operand as value for hash.
+     *
+     * @return hash code
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, operator, parenthesis) + (operand == null ? 0 : operand.toString().hashCode());
+    }
 }

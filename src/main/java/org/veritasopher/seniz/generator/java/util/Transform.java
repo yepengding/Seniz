@@ -44,11 +44,11 @@ public class Transform {
         return evaluation.getInfixList().stream()
                 .map(t -> switch (t.getType()) {
                     case OPERATOR -> t.getOperator().getValue();
-                    case OPERAND -> switch (t.getOperand().getPrimaryType()) {
-                        case VARIABLE -> "varSet.get(%s)".formatted(t.getOperand().getValue().toString());
-                        case STRING -> "".equals(t.getOperand().getValue()) ?
-                                "\"\"" : t.getOperand().getValue().toString();
-                        default -> t.getOperand().getValue().toString();
+                    case OPERAND -> switch (t.getOperand().primaryType()) {
+                        case VARIABLE -> "varSet.get(%s)".formatted(t.getOperand().value().toString());
+                        case STRING -> "".equals(t.getOperand().value()) ?
+                                "\"\"" : t.getOperand().value().toString();
+                        default -> t.getOperand().value().toString();
                     };
                     case PARENTHESIS -> t.getParenthesis();
                 }).collect(Collectors.joining());

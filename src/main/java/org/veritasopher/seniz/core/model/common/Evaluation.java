@@ -2,7 +2,6 @@ package org.veritasopher.seniz.core.model.common;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.veritasopher.seniz.core.model.domain.TermType;
 import org.veritasopher.seniz.exception.type.ExpressionException;
 
 import java.util.ArrayList;
@@ -15,13 +14,13 @@ import java.util.stream.Collectors;
  * Expression Evaluation
  *
  * @author Yepeng Ding
- * @date 12/16/2020
+ * @date 3/9/2022
  */
 @ToString
 @EqualsAndHashCode
 public class Evaluation {
 
-    // Stack of Reverse Polish notation
+    // Stack of Polish notation
     private final Stack<Term> pn;
 
     public Evaluation() {
@@ -69,16 +68,36 @@ public class Evaluation {
         return evaluatedStack.pop();
     }
 
+
+    /**
+     * Get Reverse Polish notation list
+     *
+     * @return term list showing Polish notation
+     */
     public List<Term> getRPNList() {
         List<Term> result = new ArrayList<>(pn);
         Collections.reverse(result);
         return result;
     }
 
+    /**
+     * Get Polish notation list
+     *
+     * @return term list showing Polish notation
+     */
+    public List<Term> getPNList() {
+        return new ArrayList<>(pn);
+    }
+
+    /**
+     * Get infix string list
+     *
+     * @return string list showing Polish notation
+     */
     public List<String> getInfixStringList() {
         return getInfixList().stream()
                 .map(term -> switch (term.getType()) {
-                    case OPERAND -> term.getOperand().getValue().toString();
+                    case OPERAND -> term.getOperand().value().toString();
                     case OPERATOR -> term.getOperator().getValue();
                     case PARENTHESIS -> term.getParenthesis();
                 })
@@ -86,29 +105,19 @@ public class Evaluation {
     }
 
     /**
-     * Get Reverse Polish notation list
+     * Get Reverse Polish notation string list
      *
      * @return string list showing Reverse Polish notation
      */
     public List<String> getRPNStringList() {
         return getRPNList().stream()
                 .map(term -> switch (term.getType()) {
-                    case OPERAND -> term.getOperand().getValue().toString();
+                    case OPERAND -> term.getOperand().value().toString();
                     case OPERATOR -> term.getOperator().getValue();
                     default -> throw new ExpressionException("", "Unexpected term type in reverse polish notation");
                 })
                 .collect(Collectors.toList());
     }
 
-    /**
-     * TODO Affecting Hash Code calculation, two same objects may have different hash codes.
-     *
-     * @return
-     */
-    public List<String> getPN() {
-        return pn.stream()
-                .map(term -> term.getType() == TermType.OPERAND ? term.getOperand().getValue().toString() : term.getOperator().getValue())
-                .collect(Collectors.toList());
-    }
 
 }
