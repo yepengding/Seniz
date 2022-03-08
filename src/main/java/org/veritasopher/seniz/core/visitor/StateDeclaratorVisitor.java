@@ -6,7 +6,7 @@ import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.StateDeclarator;
 import org.veritasopher.seniz.core.model.common.StateVariable;
-import org.veritasopher.seniz.exception.StateVariableException;
+import org.veritasopher.seniz.exception.type.StateVariableException;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -45,7 +45,7 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<StateDeclarat
 
         @Override
         public StateVariable visitStateExpression(SenizParser.StateExpressionContext ctx) {
-            String name = ctx.stateVarIdentifier().IDENTIFIER().getText();
+            String name = ctx.varIdentifier().IDENTIFIER().getText();
             StateVariable var = transitionSystem.getStateVariable(name);
 
             // Check if variable is defined
@@ -55,7 +55,7 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<StateDeclarat
 
             // Get evaluation of the variable
             Evaluation evaluation = new Evaluation();
-            ExpressionVisitor expressionVisitor = new ExpressionVisitor(evaluation, transitionSystem.getSystemVariables(), transitionSystem.getStateVariables());
+            ExpressionVisitor expressionVisitor = new ExpressionVisitor(evaluation, transitionSystem.getSystemArguments(), transitionSystem.getStateVariables());
             ctx.expression().accept(expressionVisitor);
 
             return var.withEvaluation(evaluation);

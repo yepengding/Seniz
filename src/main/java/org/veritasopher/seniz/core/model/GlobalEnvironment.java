@@ -18,7 +18,7 @@ public class GlobalEnvironment {
     private final Map<String, TransitionSystem> transitionSystems;
 
     // State Variable Map<Identifier, State Variable Set>
-    private final Map<String, StateVariableSet> stateVariableSets;
+    private final Map<String, VariableSet> stateVariableSets;
 
     @Getter
     @Setter
@@ -54,7 +54,7 @@ public class GlobalEnvironment {
      *
      * @param varset state variable set
      */
-    public void addStateVariableSet(StateVariableSet varset) {
+    public void addStateVariableSet(VariableSet varset) {
         this.stateVariableSets.put(varset.getIdentifier(), varset);
     }
 
@@ -64,7 +64,7 @@ public class GlobalEnvironment {
      * @param identifier state variable set identifier
      * @return state variable set
      */
-    public StateVariableSet getStateVariableSet(String identifier) {
+    public VariableSet getStateVariableSet(String identifier) {
         return this.stateVariableSets.get(identifier);
     }
 }

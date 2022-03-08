@@ -4,7 +4,7 @@ import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.PrecompileUnit;
 import org.veritasopher.seniz.core.model.domain.UnitType;
-import org.veritasopher.seniz.exception.PrecompileException;
+import org.veritasopher.seniz.exception.type.PrecompileException;
 
 import java.util.Set;
 
@@ -47,16 +47,16 @@ public class PrecompileVisitor extends SenizParserBaseVisitor<PrecompileUnit> {
             }
             ctx.importDeclaration().forEach(pred -> precompileUnit.addPredecessorId(pred.qualifiedName().getText()));
         }
-        if (ctx.systemDeclaration() != null && ctx.stateVarSetDeclaration() != null) {
+        if (ctx.systemDeclaration() != null && ctx.varSetDeclaration() != null) {
             precompileUnit.setType(UnitType.TS_VAR);
             this.visitSystemHeader(ctx.systemDeclaration().systemHeader());
-            this.visitStateVarSetHeader(ctx.stateVarSetDeclaration().stateVarSetHeader());
+            this.visitVarSetHeader(ctx.varSetDeclaration().varSetHeader());
         } else if (ctx.systemDeclaration() != null) {
             precompileUnit.setType(UnitType.TS);
             this.visitSystemHeader(ctx.systemDeclaration().systemHeader());
-        } else if (ctx.stateVarSetDeclaration() != null) {
+        } else if (ctx.varSetDeclaration() != null) {
             precompileUnit.setType(UnitType.VAR);
-            this.visitStateVarSetHeader(ctx.stateVarSetDeclaration().stateVarSetHeader());
+            this.visitVarSetHeader(ctx.varSetDeclaration().varSetHeader());
         }
 
         return precompileUnit;
@@ -87,13 +87,13 @@ public class PrecompileVisitor extends SenizParserBaseVisitor<PrecompileUnit> {
     }
 
     @Override
-    public PrecompileUnit visitStateVarSetHeader(SenizParser.StateVarSetHeaderContext ctx) {
-        String id = ctx.stateVarSetIdentifer().IDENTIFIER().getText();
+    public PrecompileUnit visitVarSetHeader(SenizParser.VarSetHeaderContext ctx) {
+        String id = ctx.varSetIdentifer().IDENTIFIER().getText();
         // Identifier must be the same with the file name
         if (precompileUnit.getType() == UnitType.VAR && !identifier.equals(id)) {
             throw new PrecompileException(identifier, ctx.start.getLine(), ctx.start.getCharPositionInLine(), "State variable set identifier (" + id + ") is different from file name.");
         }
         precompileUnit.setIdentifier(id);
-        return super.visitStateVarSetHeader(ctx);
+        return super.visitVarSetHeader(ctx);
     }
 }

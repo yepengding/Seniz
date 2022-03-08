@@ -1,4 +1,6 @@
-package org.veritasopher.seniz.exception;
+package org.veritasopher.seniz.exception.type;
+
+import org.veritasopher.seniz.exception.BaseException;
 
 public class ExpressionException extends BaseException {
 

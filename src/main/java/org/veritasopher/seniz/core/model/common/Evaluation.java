@@ -28,7 +28,7 @@ public class Evaluation {
     /**
      * Add a new term
      *
-     * @param t
+     * @param t term
      */
     public void addTerm(Term t) {
         this.rpn.push(t);

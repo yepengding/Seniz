@@ -4,15 +4,14 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.CompilationUnit;
-import org.veritasopher.seniz.core.model.StateVariableSet;
-import org.veritasopher.seniz.core.model.SystemVariableSet;
+import org.veritasopher.seniz.core.model.VariableSet;
+import org.veritasopher.seniz.core.model.SystemArgumentSet;
 import org.veritasopher.seniz.core.model.TransitionSystem;
-import org.veritasopher.seniz.core.model.common.SystemVariable;
+import org.veritasopher.seniz.core.model.common.SystemArgument;
 import org.veritasopher.seniz.core.model.domain.PrimaryType;
-import org.veritasopher.seniz.exception.FormalParameterException;
-import org.veritasopher.seniz.exception.StateVariableException;
+import org.veritasopher.seniz.exception.type.CompilationException;
+import org.veritasopher.seniz.exception.type.FormalParameterException;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -39,7 +38,7 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
         compilationUnit.setTransitionSystem(ts);
 
         // Create new system variable set
-        SystemVariableSet systemVariableSet = ts.getSystemVariables();
+        SystemArgumentSet systemVariableSet = ts.getSystemArguments();
         FormalParameterVisitor formalParameterVisitor = new FormalParameterVisitor(systemVariableSet);
         SenizParser.FormalParameterListContext formalParameterListContext = ctx.systemHeader().formalParameterList();
         if (formalParameterListContext != null) {
@@ -50,63 +49,73 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
 
     @Override
     public CompilationUnit visitSystemParameter(SenizParser.SystemParameterContext ctx) {
-        compilationUnit.setSystemParameter(ctx.stateVarSetIdentifer().IDENTIFIER().getText());
+        if (ctx.varSetIdentifer() != null) {
+            // Set
+            compilationUnit.setVariableSetIdentifier(ctx.varSetIdentifer().IDENTIFIER().getText());
+        }
         return super.visitSystemParameter(ctx);
     }
 
     @Override
-    public CompilationUnit visitStateVarSetDeclaration(SenizParser.StateVarSetDeclarationContext ctx) {
-        String identifier = ctx.stateVarSetHeader().stateVarSetIdentifer().IDENTIFIER().getText();
+    public CompilationUnit visitVarSetDeclaration(SenizParser.VarSetDeclarationContext ctx) {
+        String identifier = ctx.varSetHeader().varSetIdentifer().IDENTIFIER().getText();
 
-        // If state variable set only exists in the source file, then set identifier
+        // If a source file only contains a state variable set, then set compilation unit identifier as variable set identifier
+        // This can be ensured by the visiting order (system declaration goes first)
         if (compilationUnit.getIdentifier() == null) {
             compilationUnit.setIdentifier(identifier);
         }
 
-        StateVariableSet stateVariableSet;
+        VariableSet variableSet;
 
-        // Pass system variable set for checking name uniqueness
-        SystemVariableSet systemVariableSet;
+        // Check name uniqueness wrt system variable set
+        SystemArgumentSet systemVariableSet;
         if (compilationUnit.getTransitionSystem() != null) {
-            systemVariableSet = compilationUnit.getTransitionSystem().getSystemVariables();
+            systemVariableSet = compilationUnit.getTransitionSystem().getSystemArguments();
         } else {
-            systemVariableSet = new SystemVariableSet();
+            systemVariableSet = new SystemArgumentSet();
         }
 
-        StateVariableDeclaratorVisitor stateVariableDeclaratorVisitor = new StateVariableDeclaratorVisitor(systemVariableSet);
-        stateVariableSet = ctx.stateVarSetBody().stateVarSetDeclarator().accept(stateVariableDeclaratorVisitor);
+        VariableDeclaratorVisitor stateVariableDeclaratorVisitor = new VariableDeclaratorVisitor(systemVariableSet);
+        variableSet = ctx.varSetBody().varSetDeclarator().accept(stateVariableDeclaratorVisitor);
 
-        stateVariableSet.setIdentifier(identifier);
+        variableSet.setIdentifier(identifier);
 
-        compilationUnit.setStateVariableSet(stateVariableSet);
+        compilationUnit.setStateVariableSet(variableSet);
 
-        return super.visitStateVarSetDeclaration(ctx);
+        return super.visitVarSetDeclaration(ctx);
     }
 
-    private static class FormalParameterVisitor extends SenizParserBaseVisitor<SystemVariable> {
+    private static class FormalParameterVisitor extends SenizParserBaseVisitor<SystemArgument> {
 
-        private final SystemVariableSet systemVariableSet;
+        private final SystemArgumentSet systemArgumentSet;
 
-        private FormalParameterVisitor(SystemVariableSet systemVariableSet) {
-            this.systemVariableSet = systemVariableSet;
+        private FormalParameterVisitor(SystemArgumentSet systemArgumentSet) {
+            this.systemArgumentSet = systemArgumentSet;
         }
 
+        /**
+         * Visit system arguments
+         *
+         * @param ctx FormalParameterContext
+         * @return system argument
+         */
         @Override
-        public SystemVariable visitFormalParameter(SenizParser.FormalParameterContext ctx) {
+        public SystemArgument visitFormalParameter(SenizParser.FormalParameterContext ctx) {
 
             String name = ctx.variableIdentifier().IDENTIFIER().stream().map(ParseTree::getText).collect(Collectors.joining("."));
             // Check the name uniqueness
-            if (systemVariableSet.hasVariable(name)) {
-                throw new FormalParameterException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied system variable name (" + name + ").");
+            if (systemArgumentSet.hasArgument(name)) {
+                throw new FormalParameterException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied system argument name (" + name + ").");
             }
 
             // Get type by type name
             PrimaryType primaryType = PrimaryType.getType(ctx.primitiveType().getText());
             if (primaryType == PrimaryType.NULL) {
-                throw new StateVariableException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported variable type.");
+                throw new CompilationException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported system argument type.");
             }
 
-            return new SystemVariable(name, primaryType, null);
+            return new SystemArgument(name, primaryType, null);
         }
 
     }

@@ -3,14 +3,14 @@ package org.veritasopher.seniz.core.visitor;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
-import org.veritasopher.seniz.core.model.StateVariableSet;
-import org.veritasopher.seniz.core.model.SystemVariableSet;
+import org.veritasopher.seniz.core.model.VariableSet;
+import org.veritasopher.seniz.core.model.SystemArgumentSet;
 import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.Term;
 import org.veritasopher.seniz.core.model.common.Value;
 import org.veritasopher.seniz.core.model.domain.Operator;
 import org.veritasopher.seniz.core.model.domain.PrimaryType;
-import org.veritasopher.seniz.exception.ExpressionException;
+import org.veritasopher.seniz.exception.type.ExpressionException;
 
 import java.util.stream.Collectors;
 
@@ -20,14 +20,14 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
 
     private final Evaluation evaluation;
 
-    private final SystemVariableSet systemVariableSet;
+    private final SystemArgumentSet systemArgumentSet;
 
-    private final StateVariableSet stateVariableSet;
+    private final VariableSet stateVariableSet;
 
-    public ExpressionVisitor(Evaluation evaluation, SystemVariableSet systemVariableSet, StateVariableSet stateVariableSet) {
+    public ExpressionVisitor(Evaluation evaluation, SystemArgumentSet systemArgumentSet, VariableSet stateVariableSet) {
         this.literalVisitor = new LiteralVisitor();
         this.evaluation = evaluation;
-        this.systemVariableSet = systemVariableSet;
+        this.systemArgumentSet = systemArgumentSet;
         this.stateVariableSet = stateVariableSet;
     }
 
@@ -39,7 +39,7 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
         } else if (ctx.primary().variableIdentifier() != null) {
             String name = ctx.primary().variableIdentifier().IDENTIFIER().stream().map(ParseTree::getText).collect(Collectors.joining("."));
             // Check whether variable is defined as system variable or state variable
-            if (!systemVariableSet.hasVariable(name) && !stateVariableSet.hasVariable(name)) {
+            if (!systemArgumentSet.hasArgument(name) && !stateVariableSet.hasVariable(name)) {
                 throw new ExpressionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined variable.");
             }
             evaluation.addTerm(new Term(new Value(PrimaryType.VARIABLE, name)));

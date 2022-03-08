@@ -4,7 +4,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.veritasopher.seniz.core.model.GlobalEnvironment;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.visitor.ControlStatementVisitor;
-import org.veritasopher.seniz.exception.BuilderException;
+import org.veritasopher.seniz.exception.type.BuilderException;
 
 import java.util.ArrayList;
 import java.util.List;

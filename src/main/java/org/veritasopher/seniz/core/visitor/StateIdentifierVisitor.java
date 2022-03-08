@@ -4,7 +4,7 @@ import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.common.StateDeclarator;
-import org.veritasopher.seniz.exception.StateException;
+import org.veritasopher.seniz.exception.type.StateException;
 
 import java.util.Optional;
 

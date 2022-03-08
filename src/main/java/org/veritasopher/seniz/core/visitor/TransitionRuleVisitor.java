@@ -7,7 +7,7 @@ import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.common.Action;
 import org.veritasopher.seniz.core.model.common.StateDeclarator;
 import org.veritasopher.seniz.core.model.common.TransitionRule;
-import org.veritasopher.seniz.exception.TransitionException;
+import org.veritasopher.seniz.exception.type.TransitionException;
 
 import java.util.HashMap;
 import java.util.Map;

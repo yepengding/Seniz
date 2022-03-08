@@ -2,6 +2,8 @@ package org.veritasopher.seniz.core.model.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.ToString;
+import lombok.With;
 import org.veritasopher.seniz.core.model.domain.PrimaryType;
 
 /**
@@ -13,7 +15,9 @@ import org.veritasopher.seniz.core.model.domain.PrimaryType;
  */
 @Data
 @AllArgsConstructor
-public class SystemVariable {
+@With
+@ToString
+public class SystemArgument {
 
     private String name;
 

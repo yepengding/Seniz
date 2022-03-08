@@ -392,47 +392,47 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLtlPrimary(SenizParser.LtlPrimaryContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#stateVarSetDeclaration}.
+	 * Visit a parse tree produced by {@link SenizParser#varSetDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStateVarSetDeclaration(SenizParser.StateVarSetDeclarationContext ctx);
+	T visitVarSetDeclaration(SenizParser.VarSetDeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#stateVarSetHeader}.
+	 * Visit a parse tree produced by {@link SenizParser#varSetHeader}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStateVarSetHeader(SenizParser.StateVarSetHeaderContext ctx);
+	T visitVarSetHeader(SenizParser.VarSetHeaderContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#stateVarSetBody}.
+	 * Visit a parse tree produced by {@link SenizParser#varSetBody}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStateVarSetBody(SenizParser.StateVarSetBodyContext ctx);
+	T visitVarSetBody(SenizParser.VarSetBodyContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#stateVarSetDeclarator}.
+	 * Visit a parse tree produced by {@link SenizParser#varSetDeclarator}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStateVarSetDeclarator(SenizParser.StateVarSetDeclaratorContext ctx);
+	T visitVarSetDeclarator(SenizParser.VarSetDeclaratorContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#stateVarExpression}.
+	 * Visit a parse tree produced by {@link SenizParser#varExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStateVarExpression(SenizParser.StateVarExpressionContext ctx);
+	T visitVarExpression(SenizParser.VarExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#stateVarSetIdentifer}.
+	 * Visit a parse tree produced by {@link SenizParser#varSetIdentifer}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStateVarSetIdentifer(SenizParser.StateVarSetIdentiferContext ctx);
+	T visitVarSetIdentifer(SenizParser.VarSetIdentiferContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#stateVarIdentifier}.
+	 * Visit a parse tree produced by {@link SenizParser#varIdentifier}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStateVarIdentifier(SenizParser.StateVarIdentifierContext ctx);
+	T visitVarIdentifier(SenizParser.VarIdentifierContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#primitiveType}.
 	 * @param ctx the parse tree

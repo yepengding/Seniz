@@ -1,10 +1,10 @@
 package org.veritasopher.seniz.builder;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.veritasopher.seniz.core.model.StateVariableSet;
-import org.veritasopher.seniz.core.model.SystemVariableSet;
+import org.veritasopher.seniz.core.model.SystemArgumentSet;
+import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.model.common.StateVariable;
-import org.veritasopher.seniz.exception.StateVariableException;
+import org.veritasopher.seniz.exception.type.StateVariableException;
 
 /**
  * Variable Set Builder
@@ -17,35 +17,35 @@ public class VariableSetBuilder {
     /**
      * Build variable set for TS with var set
      *
-     * @param stateVariableSet defined variable set
-     * @param tree             parse tree
+     * @param variableSet defined variable set
+     * @param tree        parse tree
      * @return built variable set
      */
-    public StateVariableSet build(StateVariableSet stateVariableSet, ParseTree tree) {
-        if (stateVariableSet == null) {
-            stateVariableSet = new StateVariableSet();
+    public VariableSet build(VariableSet variableSet, ParseTree tree) {
+        if (variableSet == null) {
+            variableSet = new VariableSet();
         }
         // TODO may allow defining variable in system body
-        return stateVariableSet;
+        return variableSet;
     }
 
     /**
      * Build variable set for single TS
      *
-     * @param stateVariableSet defined variable set
+     * @param variableSet defined variable set
      * @param tree             parse tree
      * @return built variable set
      */
-    public StateVariableSet build(StateVariableSet stateVariableSet, SystemVariableSet systemVariableSet, ParseTree tree) {
-        if (stateVariableSet == null) {
-            return new StateVariableSet();
+    public VariableSet build(VariableSet variableSet, SystemArgumentSet systemArgumentSet, ParseTree tree) {
+        if (variableSet == null) {
+            return new VariableSet();
         }
         for (StateVariable var :
-                stateVariableSet.getVariableSet()) {
-            if (systemVariableSet.hasVariable(var.getName())) {
-                throw new StateVariableException(stateVariableSet.getIdentifier(), "Cannot use occupied system variable name (" + var.getName() + ").");
+                variableSet.getVariableSet()) {
+            if (systemArgumentSet.hasArgument(var.getName())) {
+                throw new StateVariableException(variableSet.getIdentifier(), "Cannot use occupied system argument name (" + var.getName() + ").");
             }
         }
-        return stateVariableSet;
+        return variableSet;
     }
 }

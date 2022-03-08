@@ -4,10 +4,8 @@ import org.junit.Test;
 import org.veritasopher.seniz.controller.MasterController;
 import org.veritasopher.seniz.core.model.GlobalEnvironment;
 import org.veritasopher.seniz.generator.dot.DOTGenerator;
-import org.veritasopher.seniz.util.PathUtil;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import static org.veritasopher.seniz.util.PathUtil.getFilePathInResource;

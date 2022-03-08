@@ -6,8 +6,8 @@ import org.veritasopher.seniz.builder.TransitionSystemBuilder;
 import org.veritasopher.seniz.builder.VariableSetBuilder;
 import org.veritasopher.seniz.core.model.*;
 import org.veritasopher.seniz.core.visitor.CompilationUnitVisitor;
-import org.veritasopher.seniz.exception.CompilationException;
-import org.veritasopher.seniz.exception.StateVariableException;
+import org.veritasopher.seniz.exception.type.CompilationException;
+import org.veritasopher.seniz.exception.type.StateVariableException;
 
 import java.util.Map;
 
@@ -44,25 +44,21 @@ public class CompileController {
         compilationUnitVisitor.visit(parseTree);
         PrecompileUnit precompileUnit = sourceFileMap.get(compilationUnit.getIdentifier()).getPrecompileUnit();
         switch (precompileUnit.getType()) {
-            case TS: {
+            case TS -> {
                 TransitionSystem ts = compileTS(compilationUnit, precompileUnit, parseTree);
                 env.addTransitionSystem(ts);
-                break;
             }
-            case VAR: {
-                StateVariableSet varset = compileVar(compilationUnit);
+            case VAR -> {
+                VariableSet varset = compileVar(compilationUnit);
                 env.addStateVariableSet(varset);
-                break;
             }
-            case TS_VAR: {
+            case TS_VAR -> {
                 TransitionSystem ts = compileTSVar(compilationUnit, precompileUnit, parseTree);
                 env.addTransitionSystem(ts);
-                break;
             }
-            case CTRL: {
+            case CTRL -> {
                 TransitionSystem cs = compileCtrl(compilationUnit, precompileUnit, parseTree);
                 env.addTransitionSystem(cs);
-                break;
             }
         }
 
@@ -71,47 +67,45 @@ public class CompileController {
 
     private TransitionSystem compileTS(CompilationUnit compilationUnit, PrecompileUnit precompileUnit, ParseTree parseTree) {
         // Check defined variable set
-        String parameter = compilationUnit.getSystemParameter();
+        String variableSetId = compilationUnit.getVariableSetIdentifier();
 
-        StateVariableSet stateVariableSet = env.getStateVariableSet(parameter);
+        VariableSet variableSet = env.getStateVariableSet(variableSetId);
 
-        // System parameter is defined
-        if (parameter != null) {
-            if (stateVariableSet == null) {
-                throw new StateVariableException(compilationUnit.getIdentifier(), "Variable set (" + parameter + ") is not defined");
-            }
+        // Variable set is defined
+        if (variableSetId != null && variableSet == null) {
+            throw new StateVariableException(compilationUnit.getIdentifier(), "Variable set (" + variableSetId + ") is not defined");
         }
 
         // Build state variable set
-        stateVariableSet = variableSetBuilder.build(stateVariableSet, compilationUnit.getTransitionSystem().getSystemVariables(), parseTree);
+        variableSet = variableSetBuilder.build(variableSet, compilationUnit.getTransitionSystem().getSystemArguments(), parseTree);
 
         // Build transition system
-        return transitionSystemBuilder.build(compilationUnit.getTransitionSystem(), stateVariableSet, parseTree);
+        return transitionSystemBuilder.build(compilationUnit.getTransitionSystem(), variableSet, parseTree);
     }
 
-    private StateVariableSet compileVar(CompilationUnit compilationUnit) {
+    private VariableSet compileVar(CompilationUnit compilationUnit) {
         return compilationUnit.getStateVariableSet();
     }
 
     private TransitionSystem compileTSVar(CompilationUnit compilationUnit, PrecompileUnit precompileUnit, ParseTree parseTree) {
         // Check defined variable set
-        String parameter = compilationUnit.getSystemParameter();
-        StateVariableSet stateVariableSet = compilationUnit.getStateVariableSet();
+        String variableSetId = compilationUnit.getVariableSetIdentifier();
+        VariableSet variableSet = compilationUnit.getStateVariableSet();
 
-        // System parameter is defined
-        if (parameter != null) {
-            if (stateVariableSet == null && !precompileUnit.getPredIdSet().contains(parameter)) {
-                throw new StateVariableException(compilationUnit.getIdentifier(), "Variable set (" + parameter + ") is not defined");
-            } else if (stateVariableSet != null && parameter.equals(stateVariableSet.getIdentifier()) && precompileUnit.getPredIdSet().contains(parameter)) {
+        // Variable set is defined
+        if (variableSetId != null) {
+            if (variableSet == null && !precompileUnit.getPredIdSet().contains(variableSetId)) {
+                throw new StateVariableException(compilationUnit.getIdentifier(), "Variable set (" + variableSetId + ") is not defined");
+            } else if (variableSet != null && variableSetId.equals(variableSet.getIdentifier()) && precompileUnit.getPredIdSet().contains(variableSetId)) {
                 throw new CompilationException(compilationUnit.getIdentifier(), "Find both imported state variable set and internal state variable set");
             }
         }
 
         // Build state variable set
-        stateVariableSet = variableSetBuilder.build(stateVariableSet, parseTree);
+        variableSet = variableSetBuilder.build(variableSet, parseTree);
 
         // Build transition system
-        return transitionSystemBuilder.build(compilationUnit.getTransitionSystem(), stateVariableSet, parseTree);
+        return transitionSystemBuilder.build(compilationUnit.getTransitionSystem(), variableSet, parseTree);
     }
 
     private TransitionSystem compileCtrl(CompilationUnit compilationUnit, PrecompileUnit precompileUnit, ParseTree parseTree) {

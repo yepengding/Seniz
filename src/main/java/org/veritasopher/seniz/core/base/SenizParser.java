@@ -40,9 +40,9 @@ public class SenizParser extends Parser {
 		RULE_formalParameter = 30, RULE_variableIdentifier = 31, RULE_parameterList = 32, 
 		RULE_propositionStatement = 33, RULE_propositionBody = 34, RULE_propositionExpression = 35, 
 		RULE_propositionPrimary = 36, RULE_propositionIdentifer = 37, RULE_ltlStatement = 38, 
-		RULE_ltlBody = 39, RULE_ltlExpression = 40, RULE_ltlPrimary = 41, RULE_stateVarSetDeclaration = 42, 
-		RULE_stateVarSetHeader = 43, RULE_stateVarSetBody = 44, RULE_stateVarSetDeclarator = 45, 
-		RULE_stateVarExpression = 46, RULE_stateVarSetIdentifer = 47, RULE_stateVarIdentifier = 48, 
+		RULE_ltlBody = 39, RULE_ltlExpression = 40, RULE_ltlPrimary = 41, RULE_varSetDeclaration = 42, 
+		RULE_varSetHeader = 43, RULE_varSetBody = 44, RULE_varSetDeclarator = 45, 
+		RULE_varExpression = 46, RULE_varSetIdentifer = 47, RULE_varIdentifier = 48, 
 		RULE_primitiveType = 49, RULE_literal = 50, RULE_numberLiteral = 51, RULE_stringLiteral = 52, 
 		RULE_booleanLiteral = 53, RULE_otherLiteral = 54, RULE_integerLiteral = 55, 
 		RULE_floatLiteral = 56, RULE_qualifiedName = 57;
@@ -58,10 +58,10 @@ public class SenizParser extends Parser {
 			"actionDeclaration", "formalParameterList", "formalParameter", "variableIdentifier", 
 			"parameterList", "propositionStatement", "propositionBody", "propositionExpression", 
 			"propositionPrimary", "propositionIdentifer", "ltlStatement", "ltlBody", 
-			"ltlExpression", "ltlPrimary", "stateVarSetDeclaration", "stateVarSetHeader", 
-			"stateVarSetBody", "stateVarSetDeclarator", "stateVarExpression", "stateVarSetIdentifer", 
-			"stateVarIdentifier", "primitiveType", "literal", "numberLiteral", "stringLiteral", 
-			"booleanLiteral", "otherLiteral", "integerLiteral", "floatLiteral", "qualifiedName"
+			"ltlExpression", "ltlPrimary", "varSetDeclaration", "varSetHeader", "varSetBody", 
+			"varSetDeclarator", "varExpression", "varSetIdentifer", "varIdentifier", 
+			"primitiveType", "literal", "numberLiteral", "stringLiteral", "booleanLiteral", 
+			"otherLiteral", "integerLiteral", "floatLiteral", "qualifiedName"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -153,8 +153,8 @@ public class SenizParser extends Parser {
 		public SystemDeclarationContext systemDeclaration() {
 			return getRuleContext(SystemDeclarationContext.class,0);
 		}
-		public StateVarSetDeclarationContext stateVarSetDeclaration() {
-			return getRuleContext(StateVarSetDeclarationContext.class,0);
+		public VarSetDeclarationContext varSetDeclaration() {
+			return getRuleContext(VarSetDeclarationContext.class,0);
 		}
 		public CompilationUnitContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -212,7 +212,7 @@ public class SenizParser extends Parser {
 			if (_la==VARSET) {
 				{
 				setState(125);
-				stateVarSetDeclaration();
+				varSetDeclaration();
 				}
 			}
 
@@ -564,8 +564,8 @@ public class SenizParser extends Parser {
 
 	public static class SystemParameterContext extends ParserRuleContext {
 		public TerminalNode OVER() { return getToken(SenizParser.OVER, 0); }
-		public StateVarSetIdentiferContext stateVarSetIdentifer() {
-			return getRuleContext(StateVarSetIdentiferContext.class,0);
+		public VarSetIdentiferContext varSetIdentifer() {
+			return getRuleContext(VarSetIdentiferContext.class,0);
 		}
 		public SystemParameterContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -595,7 +595,7 @@ public class SenizParser extends Parser {
 			setState(157);
 			match(OVER);
 			setState(158);
-			stateVarSetIdentifer();
+			varSetIdentifer();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1261,8 +1261,8 @@ public class SenizParser extends Parser {
 
 	public static class StateExpressionContext extends ParserRuleContext {
 		public Token bop;
-		public StateVarIdentifierContext stateVarIdentifier() {
-			return getRuleContext(StateVarIdentifierContext.class,0);
+		public VarIdentifierContext varIdentifier() {
+			return getRuleContext(VarIdentifierContext.class,0);
 		}
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
@@ -1294,7 +1294,7 @@ public class SenizParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(228);
-			stateVarIdentifier();
+			varIdentifier();
 			setState(229);
 			((StateExpressionContext)_localctx).bop = match(VALUEOF);
 			setState(230);
@@ -3511,42 +3511,42 @@ public class SenizParser extends Parser {
 		return _localctx;
 	}
 
-	public static class StateVarSetDeclarationContext extends ParserRuleContext {
-		public StateVarSetHeaderContext stateVarSetHeader() {
-			return getRuleContext(StateVarSetHeaderContext.class,0);
+	public static class VarSetDeclarationContext extends ParserRuleContext {
+		public VarSetHeaderContext varSetHeader() {
+			return getRuleContext(VarSetHeaderContext.class,0);
 		}
-		public StateVarSetBodyContext stateVarSetBody() {
-			return getRuleContext(StateVarSetBodyContext.class,0);
+		public VarSetBodyContext varSetBody() {
+			return getRuleContext(VarSetBodyContext.class,0);
 		}
-		public StateVarSetDeclarationContext(ParserRuleContext parent, int invokingState) {
+		public VarSetDeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_stateVarSetDeclaration; }
+		@Override public int getRuleIndex() { return RULE_varSetDeclaration; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).enterStateVarSetDeclaration(this);
+			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).enterVarSetDeclaration(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).exitStateVarSetDeclaration(this);
+			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).exitVarSetDeclaration(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SenizParserVisitor ) return ((SenizParserVisitor<? extends T>)visitor).visitStateVarSetDeclaration(this);
+			if ( visitor instanceof SenizParserVisitor ) return ((SenizParserVisitor<? extends T>)visitor).visitVarSetDeclaration(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final StateVarSetDeclarationContext stateVarSetDeclaration() throws RecognitionException {
-		StateVarSetDeclarationContext _localctx = new StateVarSetDeclarationContext(_ctx, getState());
-		enterRule(_localctx, 84, RULE_stateVarSetDeclaration);
+	public final VarSetDeclarationContext varSetDeclaration() throws RecognitionException {
+		VarSetDeclarationContext _localctx = new VarSetDeclarationContext(_ctx, getState());
+		enterRule(_localctx, 84, RULE_varSetDeclaration);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(418);
-			stateVarSetHeader();
+			varSetHeader();
 			setState(419);
-			stateVarSetBody();
+			varSetBody();
 			}
 		}
 		catch (RecognitionException re) {
@@ -3560,40 +3560,40 @@ public class SenizParser extends Parser {
 		return _localctx;
 	}
 
-	public static class StateVarSetHeaderContext extends ParserRuleContext {
+	public static class VarSetHeaderContext extends ParserRuleContext {
 		public TerminalNode VARSET() { return getToken(SenizParser.VARSET, 0); }
-		public StateVarSetIdentiferContext stateVarSetIdentifer() {
-			return getRuleContext(StateVarSetIdentiferContext.class,0);
+		public VarSetIdentiferContext varSetIdentifer() {
+			return getRuleContext(VarSetIdentiferContext.class,0);
 		}
-		public StateVarSetHeaderContext(ParserRuleContext parent, int invokingState) {
+		public VarSetHeaderContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_stateVarSetHeader; }
+		@Override public int getRuleIndex() { return RULE_varSetHeader; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).enterStateVarSetHeader(this);
+			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).enterVarSetHeader(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).exitStateVarSetHeader(this);
+			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).exitVarSetHeader(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SenizParserVisitor ) return ((SenizParserVisitor<? extends T>)visitor).visitStateVarSetHeader(this);
+			if ( visitor instanceof SenizParserVisitor ) return ((SenizParserVisitor<? extends T>)visitor).visitVarSetHeader(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final StateVarSetHeaderContext stateVarSetHeader() throws RecognitionException {
-		StateVarSetHeaderContext _localctx = new StateVarSetHeaderContext(_ctx, getState());
-		enterRule(_localctx, 86, RULE_stateVarSetHeader);
+	public final VarSetHeaderContext varSetHeader() throws RecognitionException {
+		VarSetHeaderContext _localctx = new VarSetHeaderContext(_ctx, getState());
+		enterRule(_localctx, 86, RULE_varSetHeader);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(421);
 			match(VARSET);
 			setState(422);
-			stateVarSetIdentifer();
+			varSetIdentifer();
 			}
 		}
 		catch (RecognitionException re) {
@@ -3607,41 +3607,41 @@ public class SenizParser extends Parser {
 		return _localctx;
 	}
 
-	public static class StateVarSetBodyContext extends ParserRuleContext {
+	public static class VarSetBodyContext extends ParserRuleContext {
 		public TerminalNode LBRACE() { return getToken(SenizParser.LBRACE, 0); }
-		public StateVarSetDeclaratorContext stateVarSetDeclarator() {
-			return getRuleContext(StateVarSetDeclaratorContext.class,0);
+		public VarSetDeclaratorContext varSetDeclarator() {
+			return getRuleContext(VarSetDeclaratorContext.class,0);
 		}
 		public TerminalNode RBRACE() { return getToken(SenizParser.RBRACE, 0); }
-		public StateVarSetBodyContext(ParserRuleContext parent, int invokingState) {
+		public VarSetBodyContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_stateVarSetBody; }
+		@Override public int getRuleIndex() { return RULE_varSetBody; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).enterStateVarSetBody(this);
+			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).enterVarSetBody(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).exitStateVarSetBody(this);
+			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).exitVarSetBody(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SenizParserVisitor ) return ((SenizParserVisitor<? extends T>)visitor).visitStateVarSetBody(this);
+			if ( visitor instanceof SenizParserVisitor ) return ((SenizParserVisitor<? extends T>)visitor).visitVarSetBody(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final StateVarSetBodyContext stateVarSetBody() throws RecognitionException {
-		StateVarSetBodyContext _localctx = new StateVarSetBodyContext(_ctx, getState());
-		enterRule(_localctx, 88, RULE_stateVarSetBody);
+	public final VarSetBodyContext varSetBody() throws RecognitionException {
+		VarSetBodyContext _localctx = new VarSetBodyContext(_ctx, getState());
+		enterRule(_localctx, 88, RULE_varSetBody);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(424);
 			match(LBRACE);
 			setState(425);
-			stateVarSetDeclarator();
+			varSetDeclarator();
 			setState(426);
 			match(RBRACE);
 			}
@@ -3657,45 +3657,45 @@ public class SenizParser extends Parser {
 		return _localctx;
 	}
 
-	public static class StateVarSetDeclaratorContext extends ParserRuleContext {
-		public List<StateVarExpressionContext> stateVarExpression() {
-			return getRuleContexts(StateVarExpressionContext.class);
+	public static class VarSetDeclaratorContext extends ParserRuleContext {
+		public List<VarExpressionContext> varExpression() {
+			return getRuleContexts(VarExpressionContext.class);
 		}
-		public StateVarExpressionContext stateVarExpression(int i) {
-			return getRuleContext(StateVarExpressionContext.class,i);
+		public VarExpressionContext varExpression(int i) {
+			return getRuleContext(VarExpressionContext.class,i);
 		}
 		public List<TerminalNode> COMMA() { return getTokens(SenizParser.COMMA); }
 		public TerminalNode COMMA(int i) {
 			return getToken(SenizParser.COMMA, i);
 		}
-		public StateVarSetDeclaratorContext(ParserRuleContext parent, int invokingState) {
+		public VarSetDeclaratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_stateVarSetDeclarator; }
+		@Override public int getRuleIndex() { return RULE_varSetDeclarator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).enterStateVarSetDeclarator(this);
+			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).enterVarSetDeclarator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).exitStateVarSetDeclarator(this);
+			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).exitVarSetDeclarator(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SenizParserVisitor ) return ((SenizParserVisitor<? extends T>)visitor).visitStateVarSetDeclarator(this);
+			if ( visitor instanceof SenizParserVisitor ) return ((SenizParserVisitor<? extends T>)visitor).visitVarSetDeclarator(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final StateVarSetDeclaratorContext stateVarSetDeclarator() throws RecognitionException {
-		StateVarSetDeclaratorContext _localctx = new StateVarSetDeclaratorContext(_ctx, getState());
-		enterRule(_localctx, 90, RULE_stateVarSetDeclarator);
+	public final VarSetDeclaratorContext varSetDeclarator() throws RecognitionException {
+		VarSetDeclaratorContext _localctx = new VarSetDeclaratorContext(_ctx, getState());
+		enterRule(_localctx, 90, RULE_varSetDeclarator);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(428);
-			stateVarExpression();
+			varExpression();
 			setState(433);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -3705,7 +3705,7 @@ public class SenizParser extends Parser {
 				setState(429);
 				match(COMMA);
 				setState(430);
-				stateVarExpression();
+				varExpression();
 				}
 				}
 				setState(435);
@@ -3725,44 +3725,44 @@ public class SenizParser extends Parser {
 		return _localctx;
 	}
 
-	public static class StateVarExpressionContext extends ParserRuleContext {
+	public static class VarExpressionContext extends ParserRuleContext {
 		public Token bop;
-		public StateVarIdentifierContext stateVarIdentifier() {
-			return getRuleContext(StateVarIdentifierContext.class,0);
+		public VarIdentifierContext varIdentifier() {
+			return getRuleContext(VarIdentifierContext.class,0);
 		}
 		public PrimitiveTypeContext primitiveType() {
 			return getRuleContext(PrimitiveTypeContext.class,0);
 		}
 		public TerminalNode TYPEOF() { return getToken(SenizParser.TYPEOF, 0); }
-		public StateVarExpressionContext(ParserRuleContext parent, int invokingState) {
+		public VarExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_stateVarExpression; }
+		@Override public int getRuleIndex() { return RULE_varExpression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).enterStateVarExpression(this);
+			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).enterVarExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).exitStateVarExpression(this);
+			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).exitVarExpression(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SenizParserVisitor ) return ((SenizParserVisitor<? extends T>)visitor).visitStateVarExpression(this);
+			if ( visitor instanceof SenizParserVisitor ) return ((SenizParserVisitor<? extends T>)visitor).visitVarExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final StateVarExpressionContext stateVarExpression() throws RecognitionException {
-		StateVarExpressionContext _localctx = new StateVarExpressionContext(_ctx, getState());
-		enterRule(_localctx, 92, RULE_stateVarExpression);
+	public final VarExpressionContext varExpression() throws RecognitionException {
+		VarExpressionContext _localctx = new VarExpressionContext(_ctx, getState());
+		enterRule(_localctx, 92, RULE_varExpression);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(436);
-			stateVarIdentifier();
+			varIdentifier();
 			setState(437);
-			((StateVarExpressionContext)_localctx).bop = match(TYPEOF);
+			((VarExpressionContext)_localctx).bop = match(TYPEOF);
 			setState(438);
 			primitiveType();
 			}
@@ -3778,30 +3778,30 @@ public class SenizParser extends Parser {
 		return _localctx;
 	}
 
-	public static class StateVarSetIdentiferContext extends ParserRuleContext {
+	public static class VarSetIdentiferContext extends ParserRuleContext {
 		public TerminalNode IDENTIFIER() { return getToken(SenizParser.IDENTIFIER, 0); }
-		public StateVarSetIdentiferContext(ParserRuleContext parent, int invokingState) {
+		public VarSetIdentiferContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_stateVarSetIdentifer; }
+		@Override public int getRuleIndex() { return RULE_varSetIdentifer; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).enterStateVarSetIdentifer(this);
+			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).enterVarSetIdentifer(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).exitStateVarSetIdentifer(this);
+			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).exitVarSetIdentifer(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SenizParserVisitor ) return ((SenizParserVisitor<? extends T>)visitor).visitStateVarSetIdentifer(this);
+			if ( visitor instanceof SenizParserVisitor ) return ((SenizParserVisitor<? extends T>)visitor).visitVarSetIdentifer(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final StateVarSetIdentiferContext stateVarSetIdentifer() throws RecognitionException {
-		StateVarSetIdentiferContext _localctx = new StateVarSetIdentiferContext(_ctx, getState());
-		enterRule(_localctx, 94, RULE_stateVarSetIdentifer);
+	public final VarSetIdentiferContext varSetIdentifer() throws RecognitionException {
+		VarSetIdentiferContext _localctx = new VarSetIdentiferContext(_ctx, getState());
+		enterRule(_localctx, 94, RULE_varSetIdentifer);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3820,30 +3820,30 @@ public class SenizParser extends Parser {
 		return _localctx;
 	}
 
-	public static class StateVarIdentifierContext extends ParserRuleContext {
+	public static class VarIdentifierContext extends ParserRuleContext {
 		public TerminalNode IDENTIFIER() { return getToken(SenizParser.IDENTIFIER, 0); }
-		public StateVarIdentifierContext(ParserRuleContext parent, int invokingState) {
+		public VarIdentifierContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_stateVarIdentifier; }
+		@Override public int getRuleIndex() { return RULE_varIdentifier; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).enterStateVarIdentifier(this);
+			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).enterVarIdentifier(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).exitStateVarIdentifier(this);
+			if ( listener instanceof SenizParserListener ) ((SenizParserListener)listener).exitVarIdentifier(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SenizParserVisitor ) return ((SenizParserVisitor<? extends T>)visitor).visitStateVarIdentifier(this);
+			if ( visitor instanceof SenizParserVisitor ) return ((SenizParserVisitor<? extends T>)visitor).visitVarIdentifier(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final StateVarIdentifierContext stateVarIdentifier() throws RecognitionException {
-		StateVarIdentifierContext _localctx = new StateVarIdentifierContext(_ctx, getState());
-		enterRule(_localctx, 96, RULE_stateVarIdentifier);
+	public final VarIdentifierContext varIdentifier() throws RecognitionException {
+		VarIdentifierContext _localctx = new VarIdentifierContext(_ctx, getState());
+		enterRule(_localctx, 96, RULE_varIdentifier);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{

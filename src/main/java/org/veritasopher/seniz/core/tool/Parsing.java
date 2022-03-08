@@ -5,7 +5,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.veritasopher.seniz.core.base.SenizLexer;
 import org.veritasopher.seniz.core.base.SenizParser;
-import org.veritasopher.seniz.exception.ThrowingErrorListener;
+import org.veritasopher.seniz.exception.type.ThrowingErrorListener;
 
 public class Parsing {
 

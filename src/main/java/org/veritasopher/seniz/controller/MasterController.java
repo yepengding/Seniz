@@ -2,8 +2,8 @@ package org.veritasopher.seniz.controller;
 
 import org.veritasopher.seniz.core.model.*;
 import org.veritasopher.seniz.core.visitor.PrecompileVisitor;
-import org.veritasopher.seniz.exception.CompilationException;
-import org.veritasopher.seniz.exception.PrecompileException;
+import org.veritasopher.seniz.exception.type.CompilationException;
+import org.veritasopher.seniz.exception.type.PrecompileException;
 
 import java.util.*;
 import java.util.stream.Collectors;

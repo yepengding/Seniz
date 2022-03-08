@@ -2,12 +2,12 @@ package org.veritasopher.seniz.builder;
 
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.veritasopher.seniz.core.model.StateVariableSet;
+import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.visitor.StateNamingVisitor;
 import org.veritasopher.seniz.core.visitor.TransitionRuleVisitor;
 import org.veritasopher.seniz.core.visitor.TransitionVisitor;
-import org.veritasopher.seniz.exception.StateException;
+import org.veritasopher.seniz.exception.type.StateException;
 
 /**
  * Transition System Builder
@@ -25,10 +25,10 @@ public class TransitionSystemBuilder {
      * @param tree             parse tree
      * @return built transition system
      */
-    public TransitionSystem build(TransitionSystem transitionSystem, StateVariableSet stateVariableSet, ParseTree tree) {
+    public TransitionSystem build(TransitionSystem transitionSystem, VariableSet stateVariableSet, ParseTree tree) {
         // Collect defined state variables
         if (stateVariableSet == null) {
-            stateVariableSet = new StateVariableSet();
+            stateVariableSet = new VariableSet();
         }
         transitionSystem.setStateVariables(stateVariableSet);
 
@@ -56,7 +56,7 @@ public class TransitionSystemBuilder {
     }
 
     private void legacyCheck(TransitionSystem ts) {
-        if (ts.getInitStates().size() == 0) {
+        if (ts.getInitState() == null) {
             throw new StateException(ts.getIdentifier(), "Lack initial states.");
         }
     }

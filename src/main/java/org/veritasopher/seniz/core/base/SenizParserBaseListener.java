@@ -736,85 +736,85 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStateVarSetDeclaration(SenizParser.StateVarSetDeclarationContext ctx) { }
+	@Override public void enterVarSetDeclaration(SenizParser.VarSetDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStateVarSetDeclaration(SenizParser.StateVarSetDeclarationContext ctx) { }
+	@Override public void exitVarSetDeclaration(SenizParser.VarSetDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStateVarSetHeader(SenizParser.StateVarSetHeaderContext ctx) { }
+	@Override public void enterVarSetHeader(SenizParser.VarSetHeaderContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStateVarSetHeader(SenizParser.StateVarSetHeaderContext ctx) { }
+	@Override public void exitVarSetHeader(SenizParser.VarSetHeaderContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStateVarSetBody(SenizParser.StateVarSetBodyContext ctx) { }
+	@Override public void enterVarSetBody(SenizParser.VarSetBodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStateVarSetBody(SenizParser.StateVarSetBodyContext ctx) { }
+	@Override public void exitVarSetBody(SenizParser.VarSetBodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStateVarSetDeclarator(SenizParser.StateVarSetDeclaratorContext ctx) { }
+	@Override public void enterVarSetDeclarator(SenizParser.VarSetDeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStateVarSetDeclarator(SenizParser.StateVarSetDeclaratorContext ctx) { }
+	@Override public void exitVarSetDeclarator(SenizParser.VarSetDeclaratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStateVarExpression(SenizParser.StateVarExpressionContext ctx) { }
+	@Override public void enterVarExpression(SenizParser.VarExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStateVarExpression(SenizParser.StateVarExpressionContext ctx) { }
+	@Override public void exitVarExpression(SenizParser.VarExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStateVarSetIdentifer(SenizParser.StateVarSetIdentiferContext ctx) { }
+	@Override public void enterVarSetIdentifer(SenizParser.VarSetIdentiferContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStateVarSetIdentifer(SenizParser.StateVarSetIdentiferContext ctx) { }
+	@Override public void exitVarSetIdentifer(SenizParser.VarSetIdentiferContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStateVarIdentifier(SenizParser.StateVarIdentifierContext ctx) { }
+	@Override public void enterVarIdentifier(SenizParser.VarIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStateVarIdentifier(SenizParser.StateVarIdentifierContext ctx) { }
+	@Override public void exitVarIdentifier(SenizParser.VarIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

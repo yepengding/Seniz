@@ -6,7 +6,7 @@ import org.veritasopher.seniz.core.model.common.Action;
 import org.veritasopher.seniz.core.model.common.State;
 import org.veritasopher.seniz.core.model.common.Transition;
 import org.veritasopher.seniz.core.tool.Naming;
-import org.veritasopher.seniz.exception.GeneratorException;
+import org.veritasopher.seniz.exception.type.GeneratorException;
 import org.veritasopher.seniz.generator.base.BaseGenerator;
 import org.veritasopher.seniz.generator.dot.dict.Prefix;
 
@@ -72,8 +72,7 @@ public class DOTGenerator extends BaseGenerator {
         // Generate header
         program.append("digraph").append(' ').append(ts.getIdentifier()).append('{').append(System.lineSeparator());
 
-        for (String id :
-                identifiers) {
+        for (String id : identifiers) {
             // Generate subsystem header
             program.append("subgraph").append(' ').append("cluster").append(id).append(" {").append(System.lineSeparator());
 
@@ -94,8 +93,7 @@ public class DOTGenerator extends BaseGenerator {
     }
 
     private void collectIdentifiers(Set<String> identifiers, TransitionSystem system) {
-        for (String id :
-                system.getControlSystemIds()) {
+        for (String id : system.getControlSystemIds()) {
             system = env.getTransitionSystem(id);
             if (system.isControl()) {
                 collectIdentifiers(identifiers, system);
@@ -133,11 +131,9 @@ public class DOTGenerator extends BaseGenerator {
 
         systemBody.append(System.lineSeparator());
 
-        // Highlight initial states
-        ts.getInitStates().forEach(hashCode -> {
-            systemBody.append(String.format("\"%d\"", hashCode)).append("[color=blue]");
-            systemBody.append(System.lineSeparator());
-        });
+        // Highlight initial state
+        systemBody.append(String.format("\"%d\"", ts.getInitState().hashCode())).append("[color=blue]");
+        systemBody.append(System.lineSeparator());
 
         return systemBody.toString();
     }
@@ -169,14 +165,9 @@ public class DOTGenerator extends BaseGenerator {
             String delimiter = "\\n";
             Pattern explicitNamePattern = Pattern.compile(String.format("^%s\\.(?!\\$)(.+)", ts.getIdentifier()));
             if (names.stream().anyMatch(n -> explicitNamePattern.matcher(n).matches())) {
-                nameBuilder.append(names.stream()
-                        .filter(n -> explicitNamePattern.matcher(n).matches())
-                        .map(Naming::eliminateSpecialChars)
-                        .collect(Collectors.joining(delimiter)));
+                nameBuilder.append(names.stream().filter(n -> explicitNamePattern.matcher(n).matches()).map(Naming::eliminateSpecialChars).collect(Collectors.joining(delimiter)));
             } else {
-                nameBuilder.append(names.stream()
-                        .map(Naming::eliminateSpecialChars)
-                        .collect(Collectors.joining(delimiter)));
+                nameBuilder.append(names.stream().map(Naming::eliminateSpecialChars).collect(Collectors.joining(delimiter)));
             }
         }
         return nameBuilder.toString();

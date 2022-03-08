@@ -437,49 +437,49 @@ public class SenizParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStateVarSetDeclaration(SenizParser.StateVarSetDeclarationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVarSetDeclaration(SenizParser.VarSetDeclarationContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStateVarSetHeader(SenizParser.StateVarSetHeaderContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVarSetHeader(SenizParser.VarSetHeaderContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStateVarSetBody(SenizParser.StateVarSetBodyContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVarSetBody(SenizParser.VarSetBodyContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStateVarSetDeclarator(SenizParser.StateVarSetDeclaratorContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVarSetDeclarator(SenizParser.VarSetDeclaratorContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStateVarExpression(SenizParser.StateVarExpressionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVarExpression(SenizParser.VarExpressionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStateVarSetIdentifer(SenizParser.StateVarSetIdentiferContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVarSetIdentifer(SenizParser.VarSetIdentiferContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStateVarIdentifier(SenizParser.StateVarIdentifierContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVarIdentifier(SenizParser.VarIdentifierContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

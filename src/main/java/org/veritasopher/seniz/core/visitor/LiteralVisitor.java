@@ -4,7 +4,7 @@ import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.common.Value;
 import org.veritasopher.seniz.core.model.domain.PrimaryType;
-import org.veritasopher.seniz.exception.TypeException;
+import org.veritasopher.seniz.exception.type.TypeException;
 
 /**
  * Literal Visitor

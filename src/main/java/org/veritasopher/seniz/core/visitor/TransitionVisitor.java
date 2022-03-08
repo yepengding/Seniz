@@ -4,7 +4,8 @@ import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.common.*;
-import org.veritasopher.seniz.exception.TransitionException;
+import org.veritasopher.seniz.exception.Assert;
+import org.veritasopher.seniz.exception.type.TransitionException;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -42,6 +43,9 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
             return super.visitTransitionStatement(ctx);
         }
 
+        Assert.isNull(transitionSystem.getInitState(),
+                new TransitionException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot have multiple initial states."));
+
         Optional<StateDeclarator> stateDeclarator = ctx.stateIdentifier().accept(stateIdentifierVisitor);
         if (stateDeclarator.isEmpty()) {
             throw new TransitionException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Transition statement cannot start with a stuttering state declarator.");
@@ -51,7 +55,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
         State initState = inferState(stateDeclarator.get());
         // Add state and initState
         transitionSystem.addState(initState);
-        transitionSystem.addInitState(initState);
+        transitionSystem.setInitState(initState);
 
         // Generate transitions derived from the initial state
         generateTransitions(ctx, initState);

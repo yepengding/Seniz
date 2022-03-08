@@ -2,14 +2,14 @@ package org.veritasopher.seniz.core.visitor;
 
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
-import org.veritasopher.seniz.core.model.StateVariableSet;
-import org.veritasopher.seniz.core.model.SystemVariableSet;
+import org.veritasopher.seniz.core.model.SystemArgumentSet;
+import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.StateVariable;
 import org.veritasopher.seniz.core.model.common.Term;
 import org.veritasopher.seniz.core.model.common.Value;
 import org.veritasopher.seniz.core.model.domain.PrimaryType;
-import org.veritasopher.seniz.exception.StateVariableException;
+import org.veritasopher.seniz.exception.type.StateVariableException;
 
 /**
  * Variable Declarator Visitor
@@ -17,43 +17,43 @@ import org.veritasopher.seniz.exception.StateVariableException;
  * @author Yepeng Ding
  * @date 12/5/2020
  */
-public class StateVariableDeclaratorVisitor extends SenizParserBaseVisitor<StateVariableSet> {
+public class VariableDeclaratorVisitor extends SenizParserBaseVisitor<VariableSet> {
 
-    private final SystemVariableSet systemVariableSet;
+    private final SystemArgumentSet systemVariableSet;
 
-    public StateVariableDeclaratorVisitor(SystemVariableSet systemVariableSet) {
+    public VariableDeclaratorVisitor(SystemArgumentSet systemVariableSet) {
         this.systemVariableSet = systemVariableSet;
     }
 
     @Override
-    public StateVariableSet visitStateVarSetDeclarator(SenizParser.StateVarSetDeclaratorContext ctx) {
-        StateVariableSet stateVariableSet = new StateVariableSet();
+    public VariableSet visitVarSetDeclarator(SenizParser.VarSetDeclaratorContext ctx) {
+        VariableSet variableSet = new VariableSet();
 
-        StateVariableExpressionVisitor variableExpressionVisitor = new StateVariableExpressionVisitor(stateVariableSet, systemVariableSet);
-        ctx.stateVarExpression().forEach(expr -> stateVariableSet.addVariable(expr.accept(variableExpressionVisitor)));
+        VariableExpressionVisitor variableExpressionVisitor = new VariableExpressionVisitor(variableSet, systemVariableSet);
+        ctx.varExpression().forEach(expr -> variableSet.addVariable(expr.accept(variableExpressionVisitor)));
 
-        return stateVariableSet;
+        return variableSet;
     }
 
-    private static class StateVariableExpressionVisitor extends SenizParserBaseVisitor<StateVariable> {
+    private static class VariableExpressionVisitor extends SenizParserBaseVisitor<StateVariable> {
 
-        private final StateVariableSet stateVariableSet;
+        private final VariableSet stateVariableSet;
 
-        private final SystemVariableSet systemVariableSet;
+        private final SystemArgumentSet systemArgumentSet;
 
-        StateVariableExpressionVisitor(StateVariableSet stateVariableSet, SystemVariableSet systemVariableSet) {
+        VariableExpressionVisitor(VariableSet stateVariableSet, SystemArgumentSet systemArgumentSet) {
             this.stateVariableSet = stateVariableSet;
-            this.systemVariableSet = systemVariableSet;
+            this.systemArgumentSet = systemArgumentSet;
         }
 
         @Override
-        public StateVariable visitStateVarExpression(SenizParser.StateVarExpressionContext ctx) {
-            String name = ctx.stateVarIdentifier().IDENTIFIER().getText();
+        public StateVariable visitVarExpression(SenizParser.VarExpressionContext ctx) {
+            String name = ctx.varIdentifier().IDENTIFIER().getText();
 
             // Check the name uniqueness
-            if (stateVariableSet.hasVariable(name)) {
+            if (systemArgumentSet.hasArgument(name)) {
                 throw new StateVariableException(stateVariableSet.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied state variable name (" + name + ").");
-            } else if (systemVariableSet.hasVariable(name)) {
+            } else if (systemArgumentSet.hasArgument(name)) {
                 throw new StateVariableException(stateVariableSet.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied system variable name (" + name + ").");
             }
 

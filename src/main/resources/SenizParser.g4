@@ -3,7 +3,7 @@ parser grammar SenizParser;
 options { tokenVocab=SenizLexer; }
 
 compilationUnit
-    : importDeclaration* systemDeclaration? stateVarSetDeclaration? EOF
+    : importDeclaration* systemDeclaration? varSetDeclaration? EOF
     ;
 
 importDeclaration
@@ -31,7 +31,7 @@ controlModifier
     ;
 
 systemParameter
-    : OVER stateVarSetIdentifer
+    : OVER varSetIdentifer
     ;
 
 systemBody
@@ -81,7 +81,7 @@ stateDeclarator
     ;
 
 stateExpression
-    : stateVarIdentifier bop=VALUEOF expression
+    : varIdentifier bop=VALUEOF expression
     ;
 
 stateIdentifier
@@ -215,33 +215,33 @@ ltlPrimary
     ;
 
 
-// State Variable
+// State Variable Set
 
-stateVarSetDeclaration
-    : stateVarSetHeader stateVarSetBody
+varSetDeclaration
+    : varSetHeader varSetBody
     ;
 
-stateVarSetHeader
-    : VARSET stateVarSetIdentifer
+varSetHeader
+    : VARSET varSetIdentifer
     ;
 
-stateVarSetBody
-    : LBRACE stateVarSetDeclarator RBRACE
+varSetBody
+    : LBRACE varSetDeclarator RBRACE
     ;
 
-stateVarSetDeclarator
-    : stateVarExpression (COMMA stateVarExpression)*
+varSetDeclarator
+    : varExpression (COMMA varExpression)*
     ;
 
-stateVarExpression
-    : stateVarIdentifier bop=TYPEOF primitiveType
+varExpression
+    : varIdentifier bop=TYPEOF primitiveType
     ;
 
-stateVarSetIdentifer
+varSetIdentifer
     : IDENTIFIER
     ;
 
-stateVarIdentifier
+varIdentifier
     : IDENTIFIER
     ;
 

@@ -23,10 +23,10 @@ public class TransitionSystem {
 
     // State variable set
     @Setter
-    private StateVariableSet stateVariables;
+    private VariableSet stateVariables;
 
-    // System variable set
-    private final SystemVariableSet systemVariables;
+    // System argument set
+    private final SystemArgumentSet systemArguments;
 
     // State map <HashCode, State>
     private final Map<Integer, State> states;
@@ -37,8 +37,9 @@ public class TransitionSystem {
     // Epsilon action
     private final Action epsilonAction;
 
-    // Initial state set <HashCode>
-    private final Set<Integer> initStates;
+    // Initial state
+    @Setter
+    private State initState;
 
     // Transition map <HashCode, Transition>
     private final Map<Integer, Transition> transitions;
@@ -62,12 +63,11 @@ public class TransitionSystem {
 
     public TransitionSystem(String identifier, boolean isControl) {
         this.identifier = identifier;
-        this.stateVariables = new StateVariableSet();
-        this.systemVariables = new SystemVariableSet();
+        this.stateVariables = new VariableSet();
+        this.systemArguments = new SystemArgumentSet();
         this.states = new HashMap<>();
         this.actions = new HashMap<>();
         this.transitions = new HashMap<>();
-        this.initStates = new HashSet<>();
         this.stateDeclarators = new HashMap<>();
         this.transitionRules = new HashMap<>();
         this.transitionRuleBase = new HashMap<>();
@@ -108,22 +108,13 @@ public class TransitionSystem {
     }
 
     /**
-     * Add a state variable
+     * Look up if system argument exists.
      *
-     * @param systemVariable system variable
+     * @param systemArgument a system argument
+     * @return true if system argument exists. Otherwise, false.
      */
-    public void addSystemVariable(SystemVariable systemVariable) {
-        this.systemVariables.addVariable(systemVariable);
-    }
-
-    /**
-     * Look up if system variable exists.
-     *
-     * @param systemVariable
-     * @return true if system variable exists. Otherwise false.
-     */
-    public boolean hasSystemVariable(SystemVariable systemVariable) {
-        return this.systemVariables.hasVariable(systemVariable.getName());
+    public boolean hasSystemArgument(SystemArgument systemArgument) {
+        return this.systemArguments.hasArgument(systemArgument.getName());
     }
 
     /**
@@ -175,6 +166,15 @@ public class TransitionSystem {
     }
 
     /**
+     * Get action set
+     *
+     * @return action set
+     */
+    public Set<Action> getActionSet() {
+        return new HashSet<>(this.actions.values());
+    }
+
+    /**
      * Add a transition relation
      *
      * @param transition transition
@@ -194,22 +194,15 @@ public class TransitionSystem {
     }
 
     /**
-     * Add an initial state
+     * Get transition set by a given source state hash code
      *
-     * @param state initial state
+     * @param stateHashCode source state hash code
+     * @return a set of transitions starting from the given state
      */
-    public void addInitState(State state) {
-        this.initStates.add(state.hashCode());
-    }
-
-    /**
-     * Look up if initial state exists.
-     *
-     * @param state a state
-     * @return true if initial state exists. Otherwise, false.
-     */
-    public boolean hasInitState(State state) {
-        return this.getInitStates().contains(state.hashCode());
+    public Set<Transition> getTransitionsBySrcStateHashCode(int stateHashCode) {
+        return this.transitions.values().stream()
+                .filter(t -> t.getSrcState() == stateHashCode)
+                .collect(Collectors.toSet());
     }
 
     /**
