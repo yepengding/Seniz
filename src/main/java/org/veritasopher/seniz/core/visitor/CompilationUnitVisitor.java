@@ -4,9 +4,9 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.CompilationUnit;
-import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.model.SystemArgumentSet;
 import org.veritasopher.seniz.core.model.TransitionSystem;
+import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.model.common.SystemArgument;
 import org.veritasopher.seniz.core.model.domain.PrimaryType;
 import org.veritasopher.seniz.exception.type.CompilationException;
@@ -37,12 +37,12 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
         TransitionSystem ts = new TransitionSystem(identifier, ctx.systemHeader().systemModifiers().controlModifier() != null);
         compilationUnit.setTransitionSystem(ts);
 
-        // Create new system variable set
-        SystemArgumentSet systemVariableSet = ts.getSystemArguments();
-        FormalParameterVisitor formalParameterVisitor = new FormalParameterVisitor(systemVariableSet);
+        // Create new system argument set
+        SystemArgumentSet systemArgumentSet = ts.getSystemArguments();
+        FormalParameterVisitor formalParameterVisitor = new FormalParameterVisitor(systemArgumentSet);
         SenizParser.FormalParameterListContext formalParameterListContext = ctx.systemHeader().formalParameterList();
         if (formalParameterListContext != null) {
-            formalParameterListContext.formalParameter().forEach(p -> systemVariableSet.addVariable(p.accept(formalParameterVisitor)));
+            formalParameterListContext.formalParameter().forEach(p -> systemArgumentSet.addArgument(p.accept(formalParameterVisitor)));
         }
         return super.visitSystemDeclaration(ctx);
     }

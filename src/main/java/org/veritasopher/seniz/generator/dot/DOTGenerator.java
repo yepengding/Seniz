@@ -5,10 +5,11 @@ import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.common.Action;
 import org.veritasopher.seniz.core.model.common.State;
 import org.veritasopher.seniz.core.model.common.Transition;
-import org.veritasopher.seniz.core.tool.Naming;
+import org.veritasopher.seniz.exception.Assert;
 import org.veritasopher.seniz.exception.type.GeneratorException;
 import org.veritasopher.seniz.generator.base.BaseGenerator;
 import org.veritasopher.seniz.generator.dot.dict.Prefix;
+import org.veritasopher.seniz.generator.dot.util.Transform;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -148,10 +149,11 @@ public class DOTGenerator extends BaseGenerator {
     private String getStateName(TransitionSystem ts, int hashCode) {
         StringBuilder nameBuilder = new StringBuilder();
         Set<String> names = new HashSet<>();
-        State state = ts.getState(hashCode);
+        Optional<State> state = ts.getState(hashCode);
+        Assert.isTrue(state.isPresent(), new GeneratorException(ts.getIdentifier(), "Unknown state is found."));
         ts.getStateDeclarators().forEach((n, s) -> {
             // If variables of a named state is the subset of the current state, then naming the current state with the same name
-            if (state.getVariables().containsAll(s.getVariables())) {
+            if (state.get().getVariables().containsAll(s.getVariables())) {
                 names.add(n);
             }
         });
@@ -159,15 +161,15 @@ public class DOTGenerator extends BaseGenerator {
         if (names.size() == 0) {
             throw new GeneratorException(ts.getIdentifier(), String.format("Unlabeled state (%s)", hashCode));
         } else if (names.size() == 1) {
-            nameBuilder.append(Naming.eliminateSpecialChars(names.iterator().next()));
+            nameBuilder.append(Transform.toDotStateName(names.iterator().next()));
         } else {
             // Filter names (only includes explicit names if exists. Otherwise, includes all names)
             String delimiter = "\\n";
             Pattern explicitNamePattern = Pattern.compile(String.format("^%s\\.(?!\\$)(.+)", ts.getIdentifier()));
             if (names.stream().anyMatch(n -> explicitNamePattern.matcher(n).matches())) {
-                nameBuilder.append(names.stream().filter(n -> explicitNamePattern.matcher(n).matches()).map(Naming::eliminateSpecialChars).collect(Collectors.joining(delimiter)));
+                nameBuilder.append(names.stream().filter(n -> explicitNamePattern.matcher(n).matches()).map(Transform::toDotStateName).collect(Collectors.joining(delimiter)));
             } else {
-                nameBuilder.append(names.stream().map(Naming::eliminateSpecialChars).collect(Collectors.joining(delimiter)));
+                nameBuilder.append(names.stream().map(Transform::toDotStateName).collect(Collectors.joining(delimiter)));
             }
         }
         return nameBuilder.toString();

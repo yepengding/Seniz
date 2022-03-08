@@ -7,7 +7,7 @@ import lombok.With;
 import org.veritasopher.seniz.core.model.domain.PrimaryType;
 
 /**
- * System Variable
+ * System Argument
  * Passed into the system while instantiated
  *
  * @author Yepeng Ding

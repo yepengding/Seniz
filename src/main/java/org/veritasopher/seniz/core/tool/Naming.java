@@ -51,9 +51,4 @@ public class Naming {
         return identifier + "." + name;
     }
 
-    public static String eliminateSpecialChars(String name) {
-        return name.replace("-", "_");
-    }
-
-
 }

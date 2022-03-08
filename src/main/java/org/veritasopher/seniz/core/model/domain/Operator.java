@@ -1,5 +1,6 @@
 package org.veritasopher.seniz.core.model.domain;
 
+import lombok.Getter;
 import org.veritasopher.seniz.core.base.SenizLexer;
 
 /**
@@ -10,52 +11,43 @@ import org.veritasopher.seniz.core.base.SenizLexer;
  */
 public enum Operator {
 
-    ADD("+"), SUB("-"), MUL("*"), DIV("/"), NOT("!"), EQ("=="), NEQ("!="),
-    GT(">"), LT("<"), GE(">="), LE("<="), AND("&&"), OR("||"), MOD("%"), EXP("^");
+    ADD("+", 2), SUB("-", 2), MUL("*", 2), DIV("/", 2),
+    NOT("!", 1), EQ("==", 2), NEQ("!=", 2), GT(">", 2),
+    LT("<", 2), GE(">=", 2), LE("<=", 2), AND("&&", 2),
+    OR("||", 2), MOD("%", 2), EXP("^", 2);
 
+    // Operator symbol
+    @Getter
     private final String value;
 
-    Operator(String value) {
+    // Number of required operands
+    @Getter
+    private final int number;
+
+    Operator(String value, int number) {
         this.value = value;
+        this.number = number;
     }
 
     public static Operator getOperator(int type) {
-        switch (type) {
-            case SenizLexer.ADD:
-                return ADD;
-            case SenizLexer.SUB:
-                return SUB;
-            case SenizLexer.MUL:
-                return MUL;
-            case SenizLexer.DIV:
-                return DIV;
-            case SenizLexer.MOD:
-                return MOD;
-            case SenizLexer.CARET:
-                return EXP;
-            case SenizLexer.BANG:
-                return NOT;
-            case SenizLexer.EQ:
-                return EQ;
-            case SenizLexer.NEQ:
-                return NEQ;
-            case SenizLexer.GT:
-                return GT;
-            case SenizLexer.LT:
-                return LT;
-            case SenizLexer.GE:
-                return GE;
-            case SenizLexer.LE:
-                return LE;
-            case SenizLexer.AND:
-                return AND;
-            case SenizLexer.OR:
-                return OR;
-        }
-        return null;
+        return switch (type) {
+            case SenizLexer.ADD -> ADD;
+            case SenizLexer.SUB -> SUB;
+            case SenizLexer.MUL -> MUL;
+            case SenizLexer.DIV -> DIV;
+            case SenizLexer.MOD -> MOD;
+            case SenizLexer.CARET -> EXP;
+            case SenizLexer.BANG -> NOT;
+            case SenizLexer.EQ -> EQ;
+            case SenizLexer.NEQ -> NEQ;
+            case SenizLexer.GT -> GT;
+            case SenizLexer.LT -> LT;
+            case SenizLexer.GE -> GE;
+            case SenizLexer.LE -> LE;
+            case SenizLexer.AND -> AND;
+            case SenizLexer.OR -> OR;
+            default -> null;
+        };
     }
 
-    public String getValue() {
-        return value;
-    }
 }

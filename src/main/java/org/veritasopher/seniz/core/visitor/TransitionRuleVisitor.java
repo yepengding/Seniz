@@ -40,16 +40,16 @@ public class TransitionRuleVisitor extends SenizParserBaseVisitor<TransitionSyst
      */
     @Override
     public TransitionSystem visitTransitionStatement(SenizParser.TransitionStatementContext ctx) {
-        Optional<StateDeclarator> stateDeclarator = ctx.stateIdentifier().accept(stateIdentifierVisitor);
 
         // Ensure the first is not a stuttering state declarator
-        if (stateDeclarator.isEmpty()) {
+        StateDeclarator stateDeclarator = ctx.stateIdentifier().accept(stateIdentifierVisitor).orElseThrow(() -> {
             throw new TransitionException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Transition statement cannot start with a stuttering state declarator.");
-        }
+
+        });
 
         TransitionRuleVisitor.TransitionDeclarationVisitor transitionDeclarationVisitor = new TransitionRuleVisitor.TransitionDeclarationVisitor(transitionSystem);
 
-        transitionDeclarationVisitor.setSrcStateDeclaratorId(stateDeclarator.get().getId());
+        transitionDeclarationVisitor.setSrcStateDeclaratorId(stateDeclarator.getId());
 
         ctx.transitionDeclaration().forEach(transitionDeclarationContext ->
                 transitionDeclarationContext.accept(transitionDeclarationVisitor));

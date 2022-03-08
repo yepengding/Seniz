@@ -130,10 +130,10 @@ public class TransitionSystem {
      * Get a state by hash code
      *
      * @param hashCode state hashCode
-     * @return state
+     * @return either state or null
      */
-    public State getState(int hashCode) {
-        return this.states.get(hashCode);
+    public Optional<State> getState(int hashCode) {
+        return Optional.ofNullable(this.states.get(hashCode));
     }
 
     /**
@@ -318,6 +318,5 @@ public class TransitionSystem {
     public boolean hasTransitionRule(TransitionRule transitionRule) {
         return this.transitionRules.containsKey(transitionRule.hashCode());
     }
-
 
 }

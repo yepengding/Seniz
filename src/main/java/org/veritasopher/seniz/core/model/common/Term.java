@@ -1,8 +1,13 @@
 package org.veritasopher.seniz.core.model.common;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.veritasopher.seniz.core.model.domain.Operator;
+import org.veritasopher.seniz.core.model.domain.PrimaryType;
+import org.veritasopher.seniz.core.model.domain.TermType;
+
+import java.util.Objects;
 
 /**
  * Term
@@ -13,36 +18,30 @@ import org.veritasopher.seniz.core.model.domain.Operator;
  */
 @Getter
 @ToString
+@EqualsAndHashCode
 public class Term {
+
+    private final TermType type;
 
     private Value operand;
 
     private Operator operator;
 
+    private String parenthesis;
+
     public Term(Value operand) {
+        this.type = TermType.OPERAND;
         this.operand = operand;
     }
 
     public Term(Operator operator) {
+        this.type = TermType.OPERATOR;
         this.operator = operator;
     }
 
-    /**
-     * Is an operand
-     *
-     * @return true if this is an operand. Otherwise false.
-     */
-    public boolean isOperand() {
-        return operand != null;
-    }
-
-    /**
-     * Is an operator
-     *
-     * @return true if this is an operator. Otherwise false.
-     */
-    public boolean isOperator() {
-        return operator != null;
+    public Term(String parenthesis) {
+        this.type = TermType.PARENTHESIS;
+        this.parenthesis = parenthesis;
     }
 
 }

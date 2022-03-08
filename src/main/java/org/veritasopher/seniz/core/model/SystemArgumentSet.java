@@ -27,17 +27,17 @@ public class SystemArgumentSet {
      *
      * @param systemArgument system argument
      */
-    public void addVariable(SystemArgument systemArgument) {
+    public void addArgument(SystemArgument systemArgument) {
         this.arguments.put(systemArgument.getName(), systemArgument);
     }
 
     /**
-     * Get a system variable by name
+     * Get a system argument by name
      *
-     * @param name variable name
+     * @param name argument name
      * @return system argument
      */
-    public SystemArgument getVariable(String name) {
+    public SystemArgument getArgument(String name) {
         return this.arguments.get(name);
     }
 

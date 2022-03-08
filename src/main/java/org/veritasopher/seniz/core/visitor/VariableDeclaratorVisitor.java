@@ -63,7 +63,7 @@ public class VariableDeclaratorVisitor extends SenizParserBaseVisitor<VariableSe
             // Get default evaluation for different types
             Evaluation evaluation = getDefaultEvaluation(primaryType);
 
-            if (evaluation.getRPN().size() == 0) {
+            if (evaluation.getPN().size() == 0) {
                 // No default value for weird type
                 throw new StateVariableException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported variable type.");
             }

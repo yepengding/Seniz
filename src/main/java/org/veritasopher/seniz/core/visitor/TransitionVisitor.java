@@ -8,7 +8,6 @@ import org.veritasopher.seniz.exception.Assert;
 import org.veritasopher.seniz.exception.type.TransitionException;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,13 +45,13 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
         Assert.isNull(transitionSystem.getInitState(),
                 new TransitionException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot have multiple initial states."));
 
-        Optional<StateDeclarator> stateDeclarator = ctx.stateIdentifier().accept(stateIdentifierVisitor);
-        if (stateDeclarator.isEmpty()) {
+        StateDeclarator stateDeclarator = ctx.stateIdentifier().accept(stateIdentifierVisitor).orElseThrow(() -> {
             throw new TransitionException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Transition statement cannot start with a stuttering state declarator.");
-        }
+        });
 
         // Infer the first state of this transition (the init state)
-        State initState = inferState(stateDeclarator.get());
+        State initState = inferState(stateDeclarator);
+
         // Add state and initState
         transitionSystem.addState(initState);
         transitionSystem.setInitState(initState);
@@ -95,11 +94,10 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
         transition.setAction(rule.getAction());
 
         // Set destination state
-        Optional<StateDeclarator> dstStateDeclarator = transitionSystem.getStateDeclarator(rule.getDstStateDeclarator());
-        if (dstStateDeclarator.isEmpty()) {
+        StateDeclarator dstStateDeclarator = transitionSystem.getStateDeclarator(rule.getDstStateDeclarator()).orElseThrow(() -> {
             throw new TransitionException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Destination state declarator is unknown.");
-        }
-        State dstState = inferState(transitionSystem.getState(transition.getSrcState()), dstStateDeclarator.get());
+        });
+        State dstState = inferState(srcState, dstStateDeclarator);
         boolean dstStateExists = transitionSystem.hasState(dstState);
         if (!dstStateExists) {
             // Add the inferred destination state if not exists
