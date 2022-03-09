@@ -61,35 +61,13 @@ public class VariableDeclaratorVisitor extends SenizParserBaseVisitor<VariableSe
             PrimaryType primaryType = PrimaryType.getType(ctx.primitiveType().getText());
 
             // Get default evaluation for different types
-            Evaluation evaluation = getDefaultEvaluation(primaryType);
+            Evaluation evaluation = new Evaluation(primaryType);
 
             if (evaluation.getPNList().size() == 0) {
                 // No default value for weird type
                 throw new StateVariableException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported variable type.");
             }
             return new StateVariable(name, primaryType, evaluation);
-        }
-
-        private Evaluation getDefaultEvaluation(PrimaryType primaryType) {
-            Evaluation evaluation = new Evaluation();
-            switch (primaryType) {
-                case BOOLEAN: {
-                    evaluation.addTerm(new Term(new Value(PrimaryType.BOOLEAN, false)));
-                    break;
-                }
-                case INTEGER: {
-                    evaluation.addTerm(new Term(new Value(PrimaryType.INTEGER, 0)));
-                    break;
-                }
-                case FLOAT: {
-                    evaluation.addTerm(new Term(new Value(PrimaryType.FLOAT, 0.0)));
-                }
-                case STRING: {
-                    evaluation.addTerm(new Term(new Value(PrimaryType.STRING, "")));
-                }
-            }
-
-            return evaluation;
         }
     }
 

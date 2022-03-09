@@ -82,10 +82,20 @@ public class TransitionSystem {
      * Get a state variable by name
      *
      * @param name state variable name
-     * @return state variable
+     * @return either a state variable or null
      */
-    public StateVariable getStateVariable(String name) {
-        return this.stateVariables.getVariable(name);
+    public Optional<StateVariable> getStateVariable(String name) {
+        return Optional.ofNullable(this.stateVariables.getVariable(name));
+    }
+
+    /**
+     * Get a system argument by name
+     *
+     * @param name system argument name
+     * @return either a system argument or null
+     */
+    public Optional<SystemArgument> getSystemArgument(String name) {
+        return Optional.ofNullable(this.systemArguments.getArgument(name));
     }
 
     /**

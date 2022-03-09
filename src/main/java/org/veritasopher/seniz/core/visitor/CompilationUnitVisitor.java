@@ -7,6 +7,7 @@ import org.veritasopher.seniz.core.model.CompilationUnit;
 import org.veritasopher.seniz.core.model.SystemArgumentSet;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.VariableSet;
+import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.SystemArgument;
 import org.veritasopher.seniz.core.model.domain.PrimaryType;
 import org.veritasopher.seniz.exception.type.CompilationException;
@@ -115,7 +116,7 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
                 throw new CompilationException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported system argument type.");
             }
 
-            return new SystemArgument(name, primaryType, null);
+            return new SystemArgument(name, primaryType, new Evaluation(primaryType));
         }
 
     }

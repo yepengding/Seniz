@@ -1,11 +1,9 @@
 package org.veritasopher.seniz.generator.java.util;
 
-import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.State;
 import org.veritasopher.seniz.core.model.domain.PrimaryType;
 import org.veritasopher.seniz.exception.type.GeneratorException;
-
-import java.util.stream.Collectors;
+import org.veritasopher.seniz.generator.java.dict.SourceFile;
 
 /**
  * Java Transform Tool
@@ -24,6 +22,24 @@ public class Transform {
     public static String toJavaType(PrimaryType type) {
         String javaType;
         switch (type) {
+            case BOOLEAN -> javaType = "boolean";
+            case INTEGER -> javaType = "int";
+            case FLOAT -> javaType = "float";
+            case STRING -> javaType = "String";
+            default -> throw new GeneratorException("", "Unknown type is found.");
+        }
+        return javaType;
+    }
+
+    /**
+     * Get corresponding Java type class by primary type
+     *
+     * @param type primary type
+     * @return Java type class
+     */
+    public static String toJavaTypeClass(PrimaryType type) {
+        String javaType;
+        switch (type) {
             case BOOLEAN -> javaType = "Boolean.class";
             case INTEGER -> javaType = "Integer.class";
             case FLOAT -> javaType = "Float.class";
@@ -34,27 +50,47 @@ public class Transform {
     }
 
     /**
-     * Get Java evaluation
-     * Because Seniz uses the same symbol for operands, no need to create a transformation table.
+     * Get corresponding argument name in Java
      *
-     * @param evaluation Seniz evaluation
-     * @return evaluated Java string
+     * @param name argument name
+     * @return argument name in Java
      */
-    public static String toJavaEvaluation(Evaluation evaluation) {
-        return evaluation.getInfixList().stream()
-                .map(t -> switch (t.getType()) {
-                    case OPERATOR -> t.getOperator().getValue();
-                    case OPERAND -> switch (t.getOperand().primaryType()) {
-                        case VARIABLE -> "varSet.get(%s)".formatted(t.getOperand().value().toString());
-                        case STRING -> "".equals(t.getOperand().value()) ?
-                                "\"\"" : t.getOperand().value().toString();
-                        default -> t.getOperand().value().toString();
-                    };
-                    case PARENTHESIS -> t.getParenthesis();
-                }).collect(Collectors.joining());
+    public static String toJavaArgumentName(String name) {
+        return name.toUpperCase();
     }
 
+    /**
+     * Get corresponding variable name in Java
+     *
+     * @param name variable name
+     * @return variable name in Java
+     */
+    public static String toJavaVariableName(String name) {
+        return name.toUpperCase();
+    }
+
+    /**
+     * Get corresponding state name in Java
+     *
+     * @param state a state
+     * @return state name
+     */
     public static String toJavaStateName(State state) {
         return "$%s".formatted(state.hashCode()).replace("-", "_");
     }
+
+    /**
+     * Generate import statement
+     *
+     * @param rootNamespace root namespace
+     * @param sourceFile    name of the import source file
+     * @param isStaticEnum  source file is an enum
+     * @return import statement
+     */
+    public static String toJavaImport(String rootNamespace, SourceFile sourceFile, boolean isStaticEnum) {
+        return isStaticEnum ?
+                "import static %s.%s.*;".formatted(sourceFile.getNamespace(rootNamespace), sourceFile.getName()) :
+                "import %s.%s;".formatted(sourceFile.getNamespace(rootNamespace), sourceFile.getName());
+    }
+
 }

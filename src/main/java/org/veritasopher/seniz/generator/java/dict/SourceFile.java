@@ -11,7 +11,7 @@ import java.nio.file.Path;
  */
 public enum SourceFile {
 
-    ACTION("Action.java") {
+    ACTION("Action") {
         @Override
         public Path getFilePath(Path rootPath) {
             return Path.of(rootPath.toAbsolutePath() + File.separator + "core" + File.separator + getFilename());
@@ -23,7 +23,7 @@ public enum SourceFile {
         }
     },
 
-    VARIABLE("Variable.java") {
+    ARGUMENT("Argument") {
         @Override
         public Path getFilePath(Path rootPath) {
             return Path.of(rootPath.toAbsolutePath() + File.separator + "core" + File.separator + getFilename());
@@ -35,7 +35,7 @@ public enum SourceFile {
         }
     },
 
-    STATE("State.java") {
+    VARIABLE("Variable") {
         @Override
         public Path getFilePath(Path rootPath) {
             return Path.of(rootPath.toAbsolutePath() + File.separator + "core" + File.separator + getFilename());
@@ -44,17 +44,77 @@ public enum SourceFile {
         @Override
         public String getNamespace(String rootNamespace) {
             return "%s.core".formatted(rootNamespace);
+        }
+    },
+
+    STATE("State") {
+        @Override
+        public Path getFilePath(Path rootPath) {
+            return Path.of(rootPath.toAbsolutePath() + File.separator + "core" + File.separator + getFilename());
+        }
+
+        @Override
+        public String getNamespace(String rootNamespace) {
+            return "%s.core".formatted(rootNamespace);
+        }
+    },
+
+    ACTION_EXECUTOR("ActionExecutor") {
+        @Override
+        public Path getFilePath(Path rootPath) {
+            return Path.of(rootPath.toAbsolutePath() + File.separator + "base" + File.separator + getFilename());
+        }
+
+        @Override
+        public String getNamespace(String rootNamespace) {
+            return "%s.base".formatted(rootNamespace);
+        }
+    },
+
+    STATE_BEHAVIOR("StateBehavior") {
+        @Override
+        public Path getFilePath(Path rootPath) {
+            return Path.of(rootPath.toAbsolutePath() + File.separator + "base" + File.separator + getFilename());
+        }
+
+        @Override
+        public String getNamespace(String rootNamespace) {
+            return "%s.base".formatted(rootNamespace);
+        }
+    },
+
+    ACTION_EFFECT("ActionEffect") {
+        @Override
+        public Path getFilePath(Path rootPath) {
+            return Path.of(rootPath.toAbsolutePath() + File.separator + getFilename());
+        }
+
+        @Override
+        public String getNamespace(String rootNamespace) {
+            return "%s".formatted(rootNamespace);
+        }
+    },
+
+    SYSTEM_EXECUTOR("SystemExecutor") {
+        @Override
+        public Path getFilePath(Path rootPath) {
+            return Path.of(rootPath.toAbsolutePath() + File.separator + getFilename());
+        }
+
+        @Override
+        public String getNamespace(String rootNamespace) {
+            return "%s".formatted(rootNamespace);
         }
     };
 
-    private final String filename;
+    private final String name;
 
-    SourceFile(String filename) {
-        this.filename = filename;
+    SourceFile(String name) {
+        this.name = name;
     }
 
-    public String getFilename() {
-        return filename;
+    public String getName() {
+        return name;
     }
 
     /**
@@ -72,5 +132,9 @@ public enum SourceFile {
      * @return namespace
      */
     public abstract String getNamespace(String rootNamespace);
+
+    public String getFilename() {
+        return getName() + ".java";
+    }
 
 }

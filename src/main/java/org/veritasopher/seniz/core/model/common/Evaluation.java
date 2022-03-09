@@ -2,6 +2,7 @@ package org.veritasopher.seniz.core.model.common;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.veritasopher.seniz.core.model.domain.PrimaryType;
 import org.veritasopher.seniz.exception.type.ExpressionException;
 
 import java.util.ArrayList;
@@ -25,6 +26,22 @@ public class Evaluation {
 
     public Evaluation() {
         this.pn = new Stack<>();
+    }
+
+    /**
+     * Construct evaluation with default value of a given type
+     *
+     * @param type primary type
+     */
+    public Evaluation(PrimaryType type) {
+        this.pn = new Stack<>();
+        switch (type) {
+            case BOOLEAN -> this.pn.push(new Term(new Value(PrimaryType.BOOLEAN, false)));
+            case INTEGER -> this.pn.push(new Term(new Value(PrimaryType.INTEGER, 0)));
+            case FLOAT -> this.pn.push(new Term(new Value(PrimaryType.FLOAT, 0.0)));
+            case STRING -> this.pn.push(new Term(new Value(PrimaryType.STRING, "")));
+            default -> throw new ExpressionException("", "No default value for type (%s).".formatted(type.toString()));
+        }
     }
 
     /**

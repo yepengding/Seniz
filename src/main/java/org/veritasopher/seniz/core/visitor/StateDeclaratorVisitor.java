@@ -46,12 +46,9 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<StateDeclarat
         @Override
         public StateVariable visitStateExpression(SenizParser.StateExpressionContext ctx) {
             String name = ctx.varIdentifier().IDENTIFIER().getText();
-            StateVariable var = transitionSystem.getStateVariable(name);
-
-            // Check if variable is defined
-            if (var == null) {
+            StateVariable var = transitionSystem.getStateVariable(name).orElseThrow(() -> {
                 throw new StateVariableException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined variable (" + name + ").");
-            }
+            });
 
             // Get evaluation of the variable
             Evaluation evaluation = new Evaluation();

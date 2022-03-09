@@ -3,8 +3,8 @@ package org.veritasopher.seniz.core.visitor;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
-import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.model.SystemArgumentSet;
+import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.Term;
 import org.veritasopher.seniz.core.model.common.Value;
@@ -38,11 +38,14 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
             evaluation.addTerm(new Term(ctx.primary().literal().accept(literalVisitor)));
         } else if (ctx.primary().variableIdentifier() != null) {
             String name = ctx.primary().variableIdentifier().IDENTIFIER().stream().map(ParseTree::getText).collect(Collectors.joining("."));
-            // Check whether variable is defined as system variable or state variable
-            if (!systemArgumentSet.hasArgument(name) && !stateVariableSet.hasVariable(name)) {
-                throw new ExpressionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined variable.");
+            // Check whether variable is defined as system argument or state variable
+            if (systemArgumentSet.hasArgument(name)) {
+                evaluation.addTerm(new Term(new Value(PrimaryType.ARGUMENT, name)));
+            } else if (stateVariableSet.hasVariable(name)) {
+                evaluation.addTerm(new Term(new Value(PrimaryType.VARIABLE, name)));
+            } else {
+                throw new ExpressionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined state variable or system argument.");
             }
-            evaluation.addTerm(new Term(new Value(PrimaryType.VARIABLE, name)));
         } else {
             throw new ExpressionException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Illegal primary expression.");
         }

@@ -1,7 +1,7 @@
 package org.veritasopher.seniz.core.model.domain;
 
 public enum PrimaryType {
-    NULL, BOOLEAN, INTEGER, FLOAT, STRING, VARIABLE;
+    NULL, BOOLEAN, INTEGER, FLOAT, STRING, VARIABLE, ARGUMENT;
 
     /**
      * Get type by type name
@@ -10,13 +10,13 @@ public enum PrimaryType {
      * @return corresponding Type
      */
     public static PrimaryType getType(String typeName) {
-        switch (typeName) {
-            case "bool": return BOOLEAN;
-            case "int": return INTEGER;
-            case "float": return FLOAT;
-            case "string": return STRING;
-        }
-        return NULL;
+        return switch (typeName) {
+            case "bool" -> BOOLEAN;
+            case "int" -> INTEGER;
+            case "float" -> FLOAT;
+            case "string" -> STRING;
+            default -> NULL;
+        };
     }
 
 }
