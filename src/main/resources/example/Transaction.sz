@@ -34,7 +34,7 @@ main system Transaction() over TransactionVar {
     }
 
     prop beforeCancel {
-        paid = true & consensus = false
+        paid = true and consensus = false
     }
 
     prop paidGas {

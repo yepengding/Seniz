@@ -424,18 +424,6 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGuardDeclaration(SenizParser.GuardDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitGuardDeclaration(SenizParser.GuardDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterActionDeclaration(SenizParser.ActionDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -532,13 +520,25 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPropRelationalExpression(SenizParser.PropRelationalExpressionContext ctx) { }
+	@Override public void enterPropExpression(SenizParser.PropExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPropRelationalExpression(SenizParser.PropRelationalExpressionContext ctx) { }
+	@Override public void exitPropExpression(SenizParser.PropExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParenthesesPropExpression(SenizParser.ParenthesesPropExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParenthesesPropExpression(SenizParser.ParenthesesPropExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -551,18 +551,6 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPropPrimaryExpression(SenizParser.PropPrimaryExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPropNotExpression(SenizParser.PropNotExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPropNotExpression(SenizParser.PropNotExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

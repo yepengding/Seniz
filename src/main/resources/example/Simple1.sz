@@ -1,0 +1,21 @@
+// Basic types and expressions
+main system Simple1(i::int, j::bool) over Vars {
+
+
+    init s0 -> a0() {v0: i + 1} -> a1() {v2: true} -> a2() s0
+
+    s0 = {
+        v0: (1 + i) * 2 - 3,
+        v1: 1.1,
+        v2: (i > 1) & (i /= 2) | !(i <= 3) & !j,
+        v3: "hello"
+    }
+
+}
+
+varset Vars {
+    v0 :: int,
+    v1 :: float,
+    v2 :: bool,
+    v3 :: string
+}

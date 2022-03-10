@@ -90,6 +90,9 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
         // Set source state
         transition.setSrcState(srcState.hashCode());
 
+        // Set guard
+        transition.setGuard(rule.getGuard());
+
         // Set action
         transition.setAction(rule.getAction());
 

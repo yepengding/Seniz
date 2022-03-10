@@ -18,8 +18,8 @@ import java.util.Set;
 public class JavaGenerationTest {
 
     @Test
-    public void testTestSys() {
-        String path = PathUtil.getFilePathInResource("example/TestSys.sz");
+    public void testSimple0() {
+        String path = PathUtil.getFilePathInResource("example/Simple0.sz");
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 
@@ -27,7 +27,7 @@ public class JavaGenerationTest {
         GlobalEnvironment env = masterController.compile(sourceFilePaths);
         JavaGenerator javaGenerator = new JavaGenerator(env, env.getMainTS());
 
-        javaGenerator.generateToDir("org.veritasopher.senizjava", "testDir");
+        javaGenerator.generateToDir("org.veritasopher.seniz.generation", "src/test/java/org/veritasopher/seniz/generation");
     }
 
 }

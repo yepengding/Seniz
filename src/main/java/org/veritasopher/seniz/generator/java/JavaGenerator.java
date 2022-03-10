@@ -219,7 +219,11 @@ public class JavaGenerator extends BaseGenerator {
                         new GeneratorException(ts.getIdentifier(), "Unknown action is found."));
                 State dstState = ts.getState(transition.getDstState()).orElseThrow(() ->
                         new GeneratorException(ts.getIdentifier(), "Unknown state is found."));
-                transitionSetting = "exec.%s(); return %s;".formatted(action.getName(), toJavaStateName(dstState));
+                if (!action.isEpsilon()) {
+                    transitionSetting = "exec.%s(); return %s;".formatted(action.getName(), toJavaStateName(dstState));
+                } else {
+                    transitionSetting = "return %s;".formatted(toJavaStateName(dstState));
+                }
             } else {
                 // Ending state
                 transitionSetting = "return null;";

@@ -1,12 +1,29 @@
-main system Simple2(i::int, j::bool) over Vars {
+// A little complicated system
+main system Simple2(v::int) over Vars {
 
-    init s0 -> a0() {v0: i + 1} -> a1() {v2: true} -> a2() s0
+    init s0 -> s1
+    s1 -> a0() s2
+    s1 -> a1() {v0: 077, v1: 2.2} -> a2() s0
+    s2 -> a3() {v0: 0} -> a4() {v1: 1.1} -> a5() {v2: true} -> a6() {v3: "hello"}
 
     s0 = {
-        v0: (1 + i) * 2 - 3,
+        v0: 0,
         v1: 1.1,
-        v2: (i > 1) & (i /= 2) | !(i <= 3) & !j,
+        v2: true,
         v3: "hello"
+    }
+
+    // Don't care v3
+    s1 = {
+        v0: 0xA,
+        v1: 10.01,
+        v2: false
+    }
+
+    s2 = {
+        v0: -100,
+        v1: -0.1,
+        v3: "world"
     }
 
 }

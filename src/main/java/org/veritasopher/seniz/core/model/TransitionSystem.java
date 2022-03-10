@@ -3,10 +3,12 @@ package org.veritasopher.seniz.core.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.veritasopher.seniz.core.model.common.*;
+import org.veritasopher.seniz.core.model.domain.PrimaryType;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.veritasopher.seniz.core.tool.Naming.getGlobalPropositionName;
 import static org.veritasopher.seniz.core.tool.Naming.getGlobalStateName;
 
 /**
@@ -25,7 +27,7 @@ public class TransitionSystem {
     @Setter
     private VariableSet stateVariables;
 
-    // System argument set
+    // TODO Destruct system argument set to system argument map
     private final SystemArgumentSet systemArguments;
 
     // State map <HashCode, State>
@@ -53,6 +55,12 @@ public class TransitionSystem {
     // Transition rule base <Source State Declarator HashCode, Set<TransitionRule HashCode>>
     private final Map<Integer, Set<Integer>> transitionRuleBase;
 
+    // Proposition map <Name, Proposition>
+    private final Map<String, Proposition> propositions;
+
+    // Tautology (always true)
+    private final Proposition tautology;
+
     // True if is control system
     private final boolean isControl;
 
@@ -71,11 +79,18 @@ public class TransitionSystem {
         this.stateDeclarators = new HashMap<>();
         this.transitionRules = new HashMap<>();
         this.transitionRuleBase = new HashMap<>();
+        this.propositions = new HashMap<>();
+
         this.isControl = isControl;
 
         // Add epsilon action
         this.epsilonAction = new Action(true, "");
         this.actions.put(epsilonAction.hashCode(), epsilonAction);
+
+        // Add tautology
+        Evaluation alwaysTrue = new Evaluation();
+        alwaysTrue.addTerm(new Term(new Value(PrimaryType.BOOLEAN, true)));
+        this.tautology = new Proposition(true, "", alwaysTrue);
     }
 
     /**
@@ -120,11 +135,11 @@ public class TransitionSystem {
     /**
      * Look up if system argument exists.
      *
-     * @param systemArgument a system argument
+     * @param name a system argument name
      * @return true if system argument exists. Otherwise, false.
      */
-    public boolean hasSystemArgument(SystemArgument systemArgument) {
-        return this.systemArguments.hasArgument(systemArgument.getName());
+    public boolean hasSystemArgument(String name) {
+        return this.systemArguments.hasArgument(name);
     }
 
     /**
@@ -218,11 +233,10 @@ public class TransitionSystem {
     /**
      * Add a state declarator
      *
-     * @param name            state declarator name
      * @param stateDeclarator state declarator
      */
-    public void addStateDeclarator(String name, StateDeclarator stateDeclarator) {
-        this.stateDeclarators.put(getGlobalStateName(identifier, name), stateDeclarator);
+    public void addStateDeclarator(StateDeclarator stateDeclarator) {
+        this.stateDeclarators.put(getGlobalStateName(identifier, stateDeclarator.getName()), stateDeclarator);
     }
 
     /**
@@ -327,6 +341,15 @@ public class TransitionSystem {
      */
     public boolean hasTransitionRule(TransitionRule transitionRule) {
         return this.transitionRules.containsKey(transitionRule.hashCode());
+    }
+
+    /**
+     * Add a proposition
+     *
+     * @param proposition proposition
+     */
+    public void addProposition(Proposition proposition) {
+        this.propositions.put(getGlobalPropositionName(identifier, proposition.getName()), proposition);
     }
 
 }

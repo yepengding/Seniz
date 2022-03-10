@@ -19,7 +19,9 @@ public class Transition {
 
     private int srcState;
 
-    private Integer action;
+    private int guard;
+
+    private int action;
 
     private int dstState;
 

@@ -364,16 +364,6 @@ public interface SenizParserListener extends ParseTreeListener {
 	 */
 	void exitGuardIdentifier(SenizParser.GuardIdentifierContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SenizParser#guardDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterGuardDeclaration(SenizParser.GuardDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SenizParser#guardDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitGuardDeclaration(SenizParser.GuardDeclarationContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link SenizParser#actionDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -456,17 +446,29 @@ public interface SenizParserListener extends ParseTreeListener {
 	 */
 	void exitPropConditionalExpression(SenizParser.PropConditionalExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code propRelationalExpression}
+	 * Enter a parse tree produced by the {@code propExpression}
 	 * labeled alternative in {@link SenizParser#propositionExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterPropRelationalExpression(SenizParser.PropRelationalExpressionContext ctx);
+	void enterPropExpression(SenizParser.PropExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code propRelationalExpression}
+	 * Exit a parse tree produced by the {@code propExpression}
 	 * labeled alternative in {@link SenizParser#propositionExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitPropRelationalExpression(SenizParser.PropRelationalExpressionContext ctx);
+	void exitPropExpression(SenizParser.PropExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code parenthesesPropExpression}
+	 * labeled alternative in {@link SenizParser#propositionExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterParenthesesPropExpression(SenizParser.ParenthesesPropExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code parenthesesPropExpression}
+	 * labeled alternative in {@link SenizParser#propositionExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitParenthesesPropExpression(SenizParser.ParenthesesPropExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code propPrimaryExpression}
 	 * labeled alternative in {@link SenizParser#propositionExpression}.
@@ -479,18 +481,6 @@ public interface SenizParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPropPrimaryExpression(SenizParser.PropPrimaryExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code propNotExpression}
-	 * labeled alternative in {@link SenizParser#propositionExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterPropNotExpression(SenizParser.PropNotExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code propNotExpression}
-	 * labeled alternative in {@link SenizParser#propositionExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitPropNotExpression(SenizParser.PropNotExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SenizParser#propositionPrimary}.
 	 * @param ctx the parse tree

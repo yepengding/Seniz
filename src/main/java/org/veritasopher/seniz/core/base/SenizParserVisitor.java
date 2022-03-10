@@ -223,12 +223,6 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitGuardIdentifier(SenizParser.GuardIdentifierContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#guardDeclaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGuardDeclaration(SenizParser.GuardDeclarationContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SenizParser#actionDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -278,12 +272,19 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPropConditionalExpression(SenizParser.PropConditionalExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code propRelationalExpression}
+	 * Visit a parse tree produced by the {@code propExpression}
 	 * labeled alternative in {@link SenizParser#propositionExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPropRelationalExpression(SenizParser.PropRelationalExpressionContext ctx);
+	T visitPropExpression(SenizParser.PropExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code parenthesesPropExpression}
+	 * labeled alternative in {@link SenizParser#propositionExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParenthesesPropExpression(SenizParser.ParenthesesPropExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code propPrimaryExpression}
 	 * labeled alternative in {@link SenizParser#propositionExpression}.
@@ -291,13 +292,6 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPropPrimaryExpression(SenizParser.PropPrimaryExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code propNotExpression}
-	 * labeled alternative in {@link SenizParser#propositionExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPropNotExpression(SenizParser.PropNotExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#propositionPrimary}.
 	 * @param ctx the parse tree

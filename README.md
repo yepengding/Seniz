@@ -1,6 +1,12 @@
 # Seniz
 
-Seniz is a domain-specific language designed for formal specification in Formalism-Driven Development (FDD).
+Seniz is a framework for Formalism-Driven Development (FDD).
+
+## Usage
+
+### Environment
+
+- Java 17
 
 ## Compile
 
@@ -15,7 +21,7 @@ mvn clean compile assembly:single
 
 ## Reference
 
-> Ding, Y., & Sato, H. (2020). Formalism-Driven Development of Decentralized Systems. arXiv preprint arXiv:2012.04185.
+> Ding, Y., & Sato, H. (2022). Formalism-Driven Development of Decentralized Systems. arXiv preprint arXiv:2012.04185.
 > [arXiv](https://arxiv.org/abs/2012.04185)
 
 ---

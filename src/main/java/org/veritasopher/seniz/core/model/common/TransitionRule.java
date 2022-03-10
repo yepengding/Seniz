@@ -19,7 +19,9 @@ public class TransitionRule {
 
     private int srcStateDeclarator;
 
-    private Integer action;
+    private int guard;
+
+    private int action;
 
     private int dstStateDeclarator;
 

@@ -42,7 +42,7 @@ system Philosopher(id::int, n::int) {
     }
     
     prop WaitingRight {
-        WaitingRight
+        waitingRight
     }
     
     prop WaitingLeft {
@@ -50,7 +50,7 @@ system Philosopher(id::int, n::int) {
     }
     
     prop Waiting {
-        waitingLeft | waitingRight
+        waitingLeft or waitingRight
     }
 
 }

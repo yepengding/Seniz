@@ -1,0 +1,27 @@
+// Simple system
+main system Simple0(v::int) over Vars {
+
+    init s0 -> a0() s1
+    s1 -> a1() {v1: true} -> s2
+    s2 (v0 = 3) -> s0
+
+    s0 = {
+        v0: 0,
+        v1: false
+    }
+
+    s1 = {
+        v0: 1,
+        v1: false
+    }
+
+    s2 = {
+        v0: v
+    }
+
+}
+
+varset Vars {
+    v0 :: int,
+    v1 :: bool
+}

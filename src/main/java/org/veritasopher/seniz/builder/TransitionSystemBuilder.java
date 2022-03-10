@@ -2,8 +2,9 @@ package org.veritasopher.seniz.builder;
 
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.model.TransitionSystem;
+import org.veritasopher.seniz.core.model.VariableSet;
+import org.veritasopher.seniz.core.visitor.PropositionVisitor;
 import org.veritasopher.seniz.core.visitor.StateNamingVisitor;
 import org.veritasopher.seniz.core.visitor.TransitionRuleVisitor;
 import org.veritasopher.seniz.core.visitor.TransitionVisitor;
@@ -21,7 +22,7 @@ public class TransitionSystemBuilder {
      * Build transition system
      *
      * @param transitionSystem identified transition system
-     * @param stateVariableSet      variable set
+     * @param stateVariableSet variable set
      * @param tree             parse tree
      * @return built transition system
      */
@@ -39,6 +40,10 @@ public class TransitionSystemBuilder {
 
         StateNamingVisitor.ImplicitNamingVisitor implicitNamingVisitor = stateNamingVisitor.new ImplicitNamingVisitor();
         implicitNamingVisitor.visit(tree);
+
+        // Collect all propositions
+        PropositionVisitor propositionVisitor = new PropositionVisitor(transitionSystem);
+        propositionVisitor.visit(tree);
 
         // Construct transition rule base
         TransitionRuleVisitor transitionRuleVisitor = new TransitionRuleVisitor(transitionSystem);

@@ -4,14 +4,14 @@ import lombok.Setter;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.TransitionSystem;
-import org.veritasopher.seniz.core.model.common.Action;
-import org.veritasopher.seniz.core.model.common.StateDeclarator;
-import org.veritasopher.seniz.core.model.common.TransitionRule;
+import org.veritasopher.seniz.core.model.common.*;
 import org.veritasopher.seniz.exception.type.TransitionException;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import static org.veritasopher.seniz.core.tool.Naming.getNameForUnnamedProposition;
 
 /**
  * Transition Rule Visitor
@@ -44,7 +44,6 @@ public class TransitionRuleVisitor extends SenizParserBaseVisitor<TransitionSyst
         // Ensure the first is not a stuttering state declarator
         StateDeclarator stateDeclarator = ctx.stateIdentifier().accept(stateIdentifierVisitor).orElseThrow(() -> {
             throw new TransitionException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Transition statement cannot start with a stuttering state declarator.");
-
         });
 
         TransitionRuleVisitor.TransitionDeclarationVisitor transitionDeclarationVisitor = new TransitionRuleVisitor.TransitionDeclarationVisitor(transitionSystem);
@@ -84,16 +83,31 @@ public class TransitionRuleVisitor extends SenizParserBaseVisitor<TransitionSyst
             // Set source state declarator
             transitionRule.setSrcStateDeclarator(srcStateDeclaratorId);
 
+            // Set guard (transition condition)
+            Proposition guard;
+            if (ctx.guardIdentifier() != null) {
+                // Add new guard
+                Evaluation evaluation = new Evaluation();
+                ctx.guardIdentifier().propositionExpression().accept(new PropositionExpressionVisitor(transitionSystem, evaluation));
+                guard = new Proposition(evaluation);
+                guard.setName(getNameForUnnamedProposition(guard));
+                transitionSystem.addProposition(guard);
+            } else {
+                // Set tautology
+                guard = transitionSystem.getTautology();
+            }
+            transitionRule.setGuard(guard.hashCode());
+
             // Set action
             Action action;
             if (ctx.actionDeclaration() != null) {
                 // Add new action
                 action = ctx.actionDeclaration().accept(actionDeclarationVisitor);
+                transitionSystem.addAction(action);
             } else {
-                // Add epsilon action
+                // Set epsilon action
                 action = transitionSystem.getEpsilonAction();
             }
-            transitionSystem.addAction(action);
             transitionRule.setAction(action.hashCode());
 
             // Set destination state declarator

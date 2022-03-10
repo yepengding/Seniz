@@ -75,6 +75,8 @@ GE:                 '>=';
 NEQ:                '/=';
 AND:                '&';
 OR:                 '|';
+LAND:               'and';
+LOR:                'or';
 ADD:                '+';
 SUB:                '-';
 MUL:                '*';

@@ -14,7 +14,7 @@ public enum Operator {
     ADD("+", 2), SUB("-", 2), MUL("*", 2), DIV("/", 2),
     NOT("!", 1), EQ("==", 2), NEQ("!=", 2), GT(">", 2),
     LT("<", 2), GE(">=", 2), LE("<=", 2), AND("&&", 2),
-    OR("||", 2), MOD("%", 2), EXP("^", 2);
+    OR("||", 2), MOD("%", 2), EXP("^", 2), ACCESS(".", 2);
 
     // Operator symbol
     @Getter
@@ -44,8 +44,8 @@ public enum Operator {
             case SenizLexer.LT -> LT;
             case SenizLexer.GE -> GE;
             case SenizLexer.LE -> LE;
-            case SenizLexer.AND -> AND;
-            case SenizLexer.OR -> OR;
+            case SenizLexer.AND, SenizLexer.LAND -> AND;
+            case SenizLexer.OR, SenizLexer.LOR -> OR;
             default -> null;
         };
     }

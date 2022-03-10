@@ -52,7 +52,7 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<StateDeclarat
 
             // Get evaluation of the variable
             Evaluation evaluation = new Evaluation();
-            ExpressionVisitor expressionVisitor = new ExpressionVisitor(evaluation, transitionSystem.getSystemArguments(), transitionSystem.getStateVariables());
+            ExpressionVisitor expressionVisitor = new ExpressionVisitor(evaluation, transitionSystem);
             ctx.expression().accept(expressionVisitor);
 
             return var.withEvaluation(evaluation);

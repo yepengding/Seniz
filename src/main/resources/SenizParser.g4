@@ -127,12 +127,7 @@ transitionDeclaration
 
 // Guard
 guardIdentifier
-    : LPAREN guardDeclaration RPAREN
-    ;
-
-guardDeclaration
-    : propositionIdentifer
-    | propositionExpression
+    : LPAREN propositionExpression RPAREN
     ;
 
 // Action
@@ -172,16 +167,14 @@ propositionBody
     ;
 
 propositionExpression
-    : propositionPrimary #propPrimaryExpression
-    | prefix=BANG propositionExpression #propNotExpression
-    | propositionExpression bop=(EQ|NEQ|LE|GE|GT|LT) propositionExpression #propRelationalExpression
-    | propositionExpression bop=(AND|OR|TO) propositionExpression #propConditionalExpression
+    : LPAREN inner=propositionExpression RPAREN #parenthesesPropExpression
+    | propositionPrimary #propPrimaryExpression
+    | expression #propExpression
+    | propositionExpression bop=(LAND|LOR|TO) propositionExpression #propConditionalExpression
     ;
 
 propositionPrimary
-    : literal
-    | variableIdentifier
-    | IDENTIFIER (DOT IDENTIFIER)*
+    : (systemIdentifier DOT)? propositionIdentifer
     ;
 
 propositionIdentifer

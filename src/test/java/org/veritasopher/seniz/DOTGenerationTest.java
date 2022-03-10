@@ -31,8 +31,32 @@ import static org.veritasopher.seniz.util.PathUtil.getFilePathInResource;
 public class DOTGenerationTest {
 
     @Test
-    public void testTestSys() {
-        String path = getFilePathInResource("example/TestSys.sz");
+    public void testSimple0() {
+        String path = getFilePathInResource("example/Simple0.sz");
+        Set<String> sourceFilePaths = new HashSet<>();
+        sourceFilePaths.add(path);
+
+        MasterController masterController = new MasterController();
+        GlobalEnvironment env = masterController.compile(sourceFilePaths);
+        DOTGenerator dotGenerator = new DOTGenerator(env, env.getMainTS());
+        dotGenerator.generateToConsole();
+    }
+
+    @Test
+    public void testSimple1() {
+        String path = getFilePathInResource("example/Simple1.sz");
+        Set<String> sourceFilePaths = new HashSet<>();
+        sourceFilePaths.add(path);
+
+        MasterController masterController = new MasterController();
+        GlobalEnvironment env = masterController.compile(sourceFilePaths);
+        DOTGenerator dotGenerator = new DOTGenerator(env, env.getMainTS());
+        dotGenerator.generateToConsole();
+    }
+
+    @Test
+    public void testSimple2() {
+        String path = getFilePathInResource("example/Simple2.sz");
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 

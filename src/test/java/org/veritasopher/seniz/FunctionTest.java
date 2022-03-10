@@ -149,7 +149,7 @@ public class FunctionTest {
 
     @Test
     public void testSingleFileCompile() {
-        String path = getFilePathInResource("example/TestSys.sz");
+        String path = getFilePathInResource("example/Simple0.sz");
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 

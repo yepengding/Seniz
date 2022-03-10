@@ -4,6 +4,7 @@ import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.common.StateDeclarator;
+import org.veritasopher.seniz.exception.Assert;
 import org.veritasopher.seniz.exception.type.StateException;
 
 import java.util.Optional;
@@ -17,7 +18,7 @@ import static org.veritasopher.seniz.core.tool.Naming.satisfyStateDeclaratorNami
  * @author Yepeng Ding
  * @date 3/5/2022
  */
-public class StateNamingVisitor extends SenizParserBaseVisitor<TransitionSystem> {
+public class StateNamingVisitor extends SenizParserBaseVisitor<Void> {
 
     private final TransitionSystem transitionSystem;
 
@@ -45,19 +46,18 @@ public class StateNamingVisitor extends SenizParserBaseVisitor<TransitionSystem>
         public TransitionSystem visitStateNaming(SenizParser.StateNamingContext ctx) {
             String name = ctx.stateNameIdentifier().IDENTIFIER().getText();
 
-            if (!satisfyStateDeclaratorNamingRule(name)) {
-                throw new StateException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Invalid state declarator name (" + name + ").");
-            }
+            // Check naming rule
+            Assert.isTrue(satisfyStateDeclaratorNamingRule(name),
+                    new StateException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Invalid state declarator name (" + name + ")."));
+
+            // Check uniqueness
+            Assert.isTrue(!transitionSystem.hasStateDeclarator(name),
+                    new StateException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied state name (" + name + ")."));
 
             StateDeclarator stateDeclarator = ctx.stateBody().stateDeclarator().accept(stateDeclaratorVisitor);
             stateDeclarator.setName(name);
 
-            // Check the uniqueness of state declaration
-            if (transitionSystem.hasStateDeclarator(name)) {
-                throw new StateException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied state name (" + name + ").");
-            }
-
-            transitionSystem.addStateDeclarator(name, stateDeclarator);
+            transitionSystem.addStateDeclarator(stateDeclarator);
             return super.visitStateNaming(ctx);
         }
 
@@ -92,7 +92,7 @@ public class StateNamingVisitor extends SenizParserBaseVisitor<TransitionSystem>
                 StateDeclarator stateDeclarator = ctx.stateBody().stateDeclarator().accept(stateDeclaratorVisitor);
                 String name = getNameForUnnamedStateDeclarator(stateDeclarator);
                 stateDeclarator.setName(name);
-                transitionSystem.addStateDeclarator(name, stateDeclarator);
+                transitionSystem.addStateDeclarator(stateDeclarator);
             } else {
                 throw new StateException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported state type.");
             }
