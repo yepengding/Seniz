@@ -189,7 +189,7 @@ public class Template {
                 import java.util.Map;
                 public interface StateBehavior {
                     void init(Map<Variable, Object> variableSet);
-                    State next(ActionExecutor executor);
+                    State next(ActionExecutor executor, Map<Variable, Object> variableSet);
                 }
                 """.formatted(
                 namespace,
@@ -265,7 +265,7 @@ public class Template {
                         State state = State.%s;
                         while (state != null) {
                             state.init(variableSet);
-                            state = state.next(actionEffect);
+                            state = state.next(actionEffect, variableSet);
                         }
                     }
                 }

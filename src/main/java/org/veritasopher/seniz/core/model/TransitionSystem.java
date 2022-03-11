@@ -8,7 +8,6 @@ import org.veritasopher.seniz.core.model.domain.PrimaryType;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.veritasopher.seniz.core.tool.Naming.getGlobalPropositionName;
 import static org.veritasopher.seniz.core.tool.Naming.getGlobalStateName;
 
 /**
@@ -55,8 +54,8 @@ public class TransitionSystem {
     // Transition rule base <Source State Declarator HashCode, Set<TransitionRule HashCode>>
     private final Map<Integer, Set<Integer>> transitionRuleBase;
 
-    // Proposition map <Name, Proposition>
-    private final Map<String, Proposition> propositions;
+    // Proposition map <HashCode, Proposition>
+    private final Map<Integer, Proposition> propositions;
 
     // Tautology (always true)
     private final Proposition tautology;
@@ -91,6 +90,7 @@ public class TransitionSystem {
         Evaluation alwaysTrue = new Evaluation();
         alwaysTrue.addTerm(new Term(new Value(PrimaryType.BOOLEAN, true)));
         this.tautology = new Proposition(true, "", alwaysTrue);
+        this.propositions.put(tautology.hashCode(), tautology);
     }
 
     /**
@@ -349,7 +349,17 @@ public class TransitionSystem {
      * @param proposition proposition
      */
     public void addProposition(Proposition proposition) {
-        this.propositions.put(getGlobalPropositionName(identifier, proposition.getName()), proposition);
+        this.propositions.put(proposition.hashCode(), proposition);
+    }
+
+    /**
+     * Get a proposition by hash code
+     *
+     * @param hashCode proposition hash code
+     * @return either a proposition or null
+     */
+    public Optional<Proposition> getProposition(int hashCode) {
+        return Optional.ofNullable(this.propositions.get(hashCode));
     }
 
 }

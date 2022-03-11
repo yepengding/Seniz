@@ -5,7 +5,7 @@ import org.junit.Test;
 public class TestGeneratedProgram {
 
     @Test
-    public void testTestSys() {
+    public void testSimple0() {
 
     }
 

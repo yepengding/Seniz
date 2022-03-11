@@ -124,7 +124,7 @@ public class JavaGenerator extends BaseGenerator {
                             %s
                             }
                             @Override
-                            public State next(ActionExecutor exec) {
+                            public State next(ActionExecutor exec, Map<Variable, Object> varSet) {
                             %s
                             }
                         }
@@ -211,19 +211,41 @@ public class JavaGenerator extends BaseGenerator {
             String transitionSetting;
             if (transitions.size() > 1) {
                 // Multiple transitions
-                transitionSetting = "return null;";
+                // TODO check condition overlapping (currently only preventing multiple tautologies)
+                String defaultNextStatement = null;
+                Set<Transition> tautologyTransitions = transitions.stream()
+                        .filter(t -> ts.getProposition(t.getGuard()).orElseThrow(() -> {
+                            throw new GeneratorException(ts.getIdentifier(), "Unknown guard is found");
+                        }).isTautology())
+                        .collect(Collectors.toSet());
+                if (tautologyTransitions.size() > 1) {
+                    // Multiple tautologies
+                    throw new GeneratorException(ts.getIdentifier(), "Multiple tautologies for a state transition are found.");
+                }
+
+                transitionSetting = transitions.stream().map(t ->
+                        "if (%s) {%s}".formatted(
+                                getJavaEvaluation(ts.getProposition(t.getGuard()).orElseThrow(() -> {
+                                    throw new GeneratorException(ts.getIdentifier(), "Unknown guard is found");
+                                }).getEvaluation()),
+                                generateActionStatement(t))
+                ).collect(Collectors.joining(System.lineSeparator()));
+                transitionSetting = transitionSetting + System.lineSeparator() + "return null;";
             } else if (transitions.size() == 1) {
                 // One transition
                 Transition transition = transitions.iterator().next();
-                Action action = ts.getAction(transition.getAction()).orElseThrow(() ->
-                        new GeneratorException(ts.getIdentifier(), "Unknown action is found."));
-                State dstState = ts.getState(transition.getDstState()).orElseThrow(() ->
-                        new GeneratorException(ts.getIdentifier(), "Unknown state is found."));
-                if (!action.isEpsilon()) {
-                    transitionSetting = "exec.%s(); return %s;".formatted(action.getName(), toJavaStateName(dstState));
-                } else {
-                    transitionSetting = "return %s;".formatted(toJavaStateName(dstState));
+                transitionSetting = generateActionStatement(transition);
+
+                Proposition guard = ts.getProposition(transition.getGuard()).orElseThrow(() -> {
+                    throw new GeneratorException(ts.getIdentifier(), "Unknown guard is found");
+                });
+
+                // If not tautology, add transition condition.
+                if (!guard.isTautology()) {
+                    transitionSetting = "if (%s) {%s} else {return null;} "
+                            .formatted(getJavaEvaluation(guard.getEvaluation()), transitionSetting);
                 }
+
             } else {
                 // Ending state
                 transitionSetting = "return null;";
@@ -232,6 +254,26 @@ public class JavaGenerator extends BaseGenerator {
         });
 
         return transitionSettingMap;
+    }
+
+    /**
+     * Generate Action Statement
+     *
+     * @param transition transition
+     * @return action statement
+     */
+    private String generateActionStatement(Transition transition) {
+        String actionStatement;
+        Action action = ts.getAction(transition.getAction()).orElseThrow(() ->
+                new GeneratorException(ts.getIdentifier(), "Unknown action is found."));
+        State dstState = ts.getState(transition.getDstState()).orElseThrow(() ->
+                new GeneratorException(ts.getIdentifier(), "Unknown state is found."));
+        if (!action.isEpsilon()) {
+            actionStatement = "exec.%s(); return %s;".formatted(action.getName(), toJavaStateName(dstState));
+        } else {
+            actionStatement = "return %s;".formatted(toJavaStateName(dstState));
+        }
+        return actionStatement;
     }
 
     /**
