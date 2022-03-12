@@ -22,12 +22,15 @@ public class TransitionSystem {
     // System identifier
     private final String identifier;
 
+    // Dependent variable set name
+    @Setter
+    private String dependentVariableSetName;
+
     // State variable set
     @Setter
     private VariableSet stateVariables;
 
-    // TODO Destruct system argument set to system argument map
-    private final SystemArgumentSet systemArguments;
+    private final Map<String, SystemArgument> arguments;
 
     // State map <HashCode, State>
     private final Map<Integer, State> states;
@@ -60,18 +63,10 @@ public class TransitionSystem {
     // Tautology (always true)
     private final Proposition tautology;
 
-    // True if is control system
-    private final boolean isControl;
-
-    // List of system identifiers in control system
-    @Setter
-    @Getter
-    private List<String> controlSystemIds;
-
-    public TransitionSystem(String identifier, boolean isControl) {
+    public TransitionSystem(String identifier) {
         this.identifier = identifier;
         this.stateVariables = new VariableSet();
-        this.systemArguments = new SystemArgumentSet();
+        this.arguments = new HashMap<>();
         this.states = new HashMap<>();
         this.actions = new HashMap<>();
         this.transitions = new HashMap<>();
@@ -79,8 +74,6 @@ public class TransitionSystem {
         this.transitionRules = new HashMap<>();
         this.transitionRuleBase = new HashMap<>();
         this.propositions = new HashMap<>();
-
-        this.isControl = isControl;
 
         // Add epsilon action
         this.epsilonAction = new Action(true, "");
@@ -104,16 +97,6 @@ public class TransitionSystem {
     }
 
     /**
-     * Get a system argument by name
-     *
-     * @param name system argument name
-     * @return either a system argument or null
-     */
-    public Optional<SystemArgument> getSystemArgument(String name) {
-        return Optional.ofNullable(this.systemArguments.getArgument(name));
-    }
-
-    /**
      * Look up if state variable exists.
      *
      * @param name state variable name
@@ -133,13 +116,50 @@ public class TransitionSystem {
     }
 
     /**
+     * Add a system argument
+     *
+     * @param systemArgument system argument
+     */
+    public void addSystemArgument(SystemArgument systemArgument) {
+        this.arguments.put(systemArgument.getName(), systemArgument);
+    }
+
+    /**
+     * Get a system argument by name
+     *
+     * @param name system argument name
+     * @return either a system argument or null
+     */
+    public Optional<SystemArgument> getSystemArgument(String name) {
+        return Optional.ofNullable(this.arguments.get(name));
+    }
+
+    /**
+     * Get system argument set
+     *
+     * @return system argument set
+     */
+    public Set<SystemArgument> getSystemArgumentSet() {
+        return new HashSet<>(this.arguments.values());
+    }
+
+    /**
+     * Get system argument name set
+     *
+     * @return system argument name set
+     */
+    public Set<String> getSystemArgumentNameSet() {
+        return this.arguments.keySet();
+    }
+
+    /**
      * Look up if system argument exists.
      *
      * @param name a system argument name
      * @return true if system argument exists. Otherwise, false.
      */
     public boolean hasSystemArgument(String name) {
-        return this.systemArguments.hasArgument(name);
+        return this.arguments.containsKey(name);
     }
 
     /**

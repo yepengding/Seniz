@@ -13,10 +13,10 @@ public class CompilationUnit {
 
     private String identifier;
 
-    private String variableSetIdentifier;
-
     private TransitionSystem transitionSystem;
 
-    private VariableSet stateVariableSet;
+    private ControlSystem controlSystem;
+
+    private VariableSet variableSet;
 
 }

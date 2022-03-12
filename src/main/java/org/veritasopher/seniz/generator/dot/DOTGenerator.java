@@ -1,21 +1,21 @@
 package org.veritasopher.seniz.generator.dot;
 
+import org.veritasopher.seniz.core.model.ControlSystem;
 import org.veritasopher.seniz.core.model.GlobalEnvironment;
 import org.veritasopher.seniz.core.model.TransitionSystem;
-import org.veritasopher.seniz.core.model.common.Action;
+import org.veritasopher.seniz.core.model.common.ControlStatement;
 import org.veritasopher.seniz.core.model.common.State;
-import org.veritasopher.seniz.core.model.common.Transition;
-import org.veritasopher.seniz.exception.Assert;
 import org.veritasopher.seniz.exception.type.GeneratorException;
 import org.veritasopher.seniz.generator.base.BaseGenerator;
-import org.veritasopher.seniz.generator.dot.dict.Prefix;
 import org.veritasopher.seniz.generator.dot.util.Transform;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static org.veritasopher.seniz.generator.dot.util.Transform.toDotActionName;
+import static org.veritasopher.seniz.generator.dot.util.Transform.toDotStateName;
 
 /**
  * DOT Generator
@@ -25,8 +25,12 @@ import java.util.stream.Collectors;
  */
 public class DOTGenerator extends BaseGenerator {
 
-    public DOTGenerator(GlobalEnvironment globalEnvironment, TransitionSystem transitionSystem) {
-        super(globalEnvironment, transitionSystem);
+    public DOTGenerator(GlobalEnvironment globalEnvironment) {
+        super(globalEnvironment);
+    }
+
+    public DOTGenerator(GlobalEnvironment globalEnvironment, String systemIdentifier) {
+        super(globalEnvironment, systemIdentifier);
     }
 
     /**
@@ -37,24 +41,26 @@ public class DOTGenerator extends BaseGenerator {
     }
 
     /**
-     * Generate DOT program and return as string
+     * Generate DOT program for a transition system or a control system
+     *
+     * @return DOT program
      */
     public String generateAsString() {
-        if (ts.isControl()) {
-            // Control system
-            return buildControlSystem();
+        if (env.getTransitionSystem(systemIdentifier).isPresent()) {
+            return generateTS(env.getTransitionSystem(systemIdentifier).get());
+        } else if (env.getControlSystem(systemIdentifier).isPresent()) {
+            return generateCS(env.getControlSystem(systemIdentifier).get());
         } else {
-            // Plain system
-            return build();
+            throw new GeneratorException(systemIdentifier, "Unknown system is found.");
         }
     }
 
     /**
-     * Build plain transition system
+     * Build transition system
      *
      * @return DOT program describing plain transition system
      */
-    private String build() {
+    private String generateTS(TransitionSystem ts) {
         return String.format("digraph %s { %s%s }", ts.getIdentifier(), System.lineSeparator(), getSystemBody(ts));
     }
 
@@ -63,105 +69,103 @@ public class DOTGenerator extends BaseGenerator {
      *
      * @return DOT program describing control system
      */
-    private String buildControlSystem() {
-        // Collect all identifiers of plain TSs
-        Set<String> identifiers = new HashSet<>();
-        collectIdentifiers(identifiers, ts);
+    private String generateCS(ControlSystem cs) {
+        ControlStatement controlStatement = cs.getControlStatement();
 
-        StringBuilder program = new StringBuilder();
+        // Generate subsystems
+        String subSystems = controlStatement.getSystemIdentifiers().stream().distinct()
+                .map(id -> """
+                        subgraph cluster%s {
+                        label=%s
+                        %s
+                        }
+                        """.formatted(id,
+                        id,
+                        getSystemBody(env.getTransitionSystem(id).orElseThrow(() -> {
+                            throw new GeneratorException(id, "Unknown system is found.");
+                        }))))
+                .collect(Collectors.joining());
 
-        // Generate header
-        program.append("digraph").append(' ').append(ts.getIdentifier()).append('{').append(System.lineSeparator());
-
-        for (String id : identifiers) {
-            // Generate subsystem header
-            program.append("subgraph").append(' ').append("cluster").append(id).append(" {").append(System.lineSeparator());
-
-            // Generate system label
-            program.append("label=").append(id).append(System.lineSeparator());
-
-            // Generate subsystem body
-            program.append(getSystemBody(env.getTransitionSystem(id)));
-
-            // Generate subsystem footer
-            program.append('}').append(System.lineSeparator());
-        }
-
-        // Generate footer
-        program.append('}');
-
-        return program.toString();
-    }
-
-    private void collectIdentifiers(Set<String> identifiers, TransitionSystem system) {
-        for (String id : system.getControlSystemIds()) {
-            system = env.getTransitionSystem(id);
-            if (system.isControl()) {
-                collectIdentifiers(identifiers, system);
-            } else {
-                identifiers.add(system.getIdentifier());
-            }
-        }
+        return """
+                digraph %s {
+                %s
+                }
+                """.formatted(
+                cs.getIdentifier(),
+                subSystems
+        );
     }
 
     /**
      * Get system body
      *
-     * @param ts plain transition system
-     * @return transitions and initial states
+     * @param ts transition system
+     * @return transitions, state names, and initial state
      */
     private String getSystemBody(TransitionSystem ts) {
-        StringBuilder systemBody = new StringBuilder();
         // Generate transitions
-        ts.getTransitions().forEach((hashCode, transition) -> {
-            systemBody.append(String.format("\"%d\"", transition.getSrcState()));
-            systemBody.append(" -> ");
-            systemBody.append(String.format("\"%d\"", transition.getDstState()));
-            systemBody.append(String.format("[label=\"%s\"]", getActionName(ts, transition)));
-            systemBody.append(System.lineSeparator());
-        });
+        String transitions = ts.getTransitions().values().stream()
+                .map(t -> """
+                        "%s" -> "%s" [label="%s"]
+                        """.formatted(
+                        toDotStateName(ts.getIdentifier(), ts.getState(t.getSrcState()).orElseThrow(() -> {
+                            throw new GeneratorException(ts.getIdentifier(), "Unknown state is found.");
+                        })),
+                        toDotStateName(ts.getIdentifier(), ts.getState(t.getDstState()).orElseThrow(() -> {
+                            throw new GeneratorException(ts.getIdentifier(), "Unknown state is found.");
+                        })),
+                        toDotActionName(ts.getAction(t.getAction()).orElseThrow(() -> {
+                            throw new GeneratorException(ts.getIdentifier(), "Unknown action is found.");
+                        }))
+                )).collect(Collectors.joining());
 
-        systemBody.append(System.lineSeparator());
-
-        // Append state labels
-        ts.getStates().forEach((hashCode, state) -> {
-            systemBody.append(String.format("\"%d\"", hashCode));
-            systemBody.append(String.format("[label=\"%s\"]", getStateName(ts, hashCode)));
-            systemBody.append(System.lineSeparator());
-        });
-
-        systemBody.append(System.lineSeparator());
+        // Generate names attached to states
+        String attachedNames = ts.getStates().values().stream()
+                .map(s -> """
+                                "%s" [label="%s"]
+                                """.formatted(
+                                toDotStateName(ts.getIdentifier(), s),
+                                getStateNames(ts, s)
+                        )
+                ).collect(Collectors.joining());
 
         // Highlight initial state
-        systemBody.append(String.format("\"%d\"", ts.getInitState().hashCode())).append("[color=blue]");
-        systemBody.append(System.lineSeparator());
+        String initialState = """
+                "%s"[color=blue]
+                """.formatted(toDotStateName(ts.getIdentifier(), ts.getInitState()));
 
-        return systemBody.toString();
+        return """
+                %s
+                %s
+                %s
+                """.formatted(
+                transitions,
+                attachedNames,
+                initialState
+        );
     }
 
     /**
-     * Get state name
+     * Get names for a given state
      *
-     * @param ts       transition system
-     * @param hashCode state hash code
+     * @param ts    transition system
+     * @param state state
      * @return state name
      */
-    private String getStateName(TransitionSystem ts, int hashCode) {
+    private String getStateNames(TransitionSystem ts, State state) {
         StringBuilder nameBuilder = new StringBuilder();
         Set<String> names = new HashSet<>();
-        Optional<State> state = ts.getState(hashCode);
-        Assert.isTrue(state.isPresent(), new GeneratorException(ts.getIdentifier(), "Unknown state is found."));
         ts.getStateDeclarators().forEach((n, s) -> {
             // If variables of a named state is the subset of the current state, then naming the current state with the same name
-            if (state.get().getVariables().containsAll(s.getVariables())) {
+            if (state.getVariables().containsAll(s.getVariables())) {
                 names.add(n);
             }
         });
 
         if (names.size() == 0) {
-            throw new GeneratorException(ts.getIdentifier(), String.format("Unlabeled state (%s)", hashCode));
+            throw new GeneratorException(ts.getIdentifier(), String.format("Unlabeled state (%s)", state.hashCode()));
         } else if (names.size() == 1) {
-            nameBuilder.append(Transform.toDotStateName(names.iterator().next()));
+            nameBuilder.append(toDotStateName(names.iterator().next()));
         } else {
             // Filter names (only includes explicit names if exists. Otherwise, includes all names)
             String delimiter = "\\n";
@@ -173,20 +177,6 @@ public class DOTGenerator extends BaseGenerator {
             }
         }
         return nameBuilder.toString();
-    }
-
-
-    /**
-     * Get action name
-     *
-     * @param ts         transition system
-     * @param transition transition
-     * @return action name
-     */
-    private String getActionName(TransitionSystem ts, Transition transition) {
-        Optional<Action> action = ts.getAction(transition.getAction());
-
-        return action.map(Action::getName).orElse(Prefix.ACTION + transition.hashCode());
     }
 
 }

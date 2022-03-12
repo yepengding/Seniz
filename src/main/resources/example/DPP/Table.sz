@@ -2,7 +2,8 @@ import Philosopher
 import Fork
 
 main control system Table() {
-    Philosopher(1, 2) as p1 ||| Fork(1, 2) as f1 ||| Philosopher(2, 2) as p2 ||| Fork(2, 2) as f2
+
+    async Philosopher(1, 2) as p1, Fork(1, 2) as f1, Philosopher(2, 2) as p2, Fork(2, 2) as f2
     
     prop AllWaiting {
         p1.Waiting and p2.Waiting

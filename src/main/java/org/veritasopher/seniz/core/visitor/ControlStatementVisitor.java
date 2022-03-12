@@ -2,21 +2,28 @@ package org.veritasopher.seniz.core.visitor;
 
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
+import org.veritasopher.seniz.core.model.common.ControlStatement;
+import org.veritasopher.seniz.core.model.domain.CompositionType;
 
-import java.util.List;
+public class ControlStatementVisitor extends SenizParserBaseVisitor<Void> {
 
-public class ControlStatementVisitor extends SenizParserBaseVisitor<List<String>> {
+    private final ControlStatement controlStatement;
 
-    private final List<String> identifiers;
-
-    public ControlStatementVisitor(List<String> identifiers) {
-        this.identifiers = identifiers;
+    public ControlStatementVisitor(ControlStatement controlStatement) {
+        this.controlStatement = controlStatement;
     }
 
-    // TODO Support interleaving only
     @Override
-    public List<String> visitControlStatement(SenizParser.ControlStatementContext ctx) {
-        ctx.subSystemIdentifier().forEach(i -> identifiers.add(i.systemIdentifier().IDENTIFIER().getText()));
-        return super.visitControlStatement(ctx);
+    public Void visitSyncControlStatement(SenizParser.SyncControlStatementContext ctx) {
+        controlStatement.setCompositionType(CompositionType.SYNC);
+        ctx.subSystemIdentifier().forEach(i -> controlStatement.addSystemIdentifier(i.systemIdentifier().IDENTIFIER().getText()));
+        return super.visitSyncControlStatement(ctx);
+    }
+
+    @Override
+    public Void visitAsyncControlStatement(SenizParser.AsyncControlStatementContext ctx) {
+        controlStatement.setCompositionType(CompositionType.ASYNC);
+        ctx.subSystemIdentifier().forEach(i -> controlStatement.addSystemIdentifier(i.systemIdentifier().IDENTIFIER().getText()));
+        return super.visitAsyncControlStatement(ctx);
     }
 }

@@ -108,25 +108,45 @@ public interface SenizParserListener extends ParseTreeListener {
 	 */
 	void exitSystemBodyDeclaration(SenizParser.SystemBodyDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SenizParser#controlSystemDeclaration}.
+	 * Enter a parse tree produced by {@link SenizParser#controlSystemBodyDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterControlSystemDeclaration(SenizParser.ControlSystemDeclarationContext ctx);
+	void enterControlSystemBodyDeclaration(SenizParser.ControlSystemBodyDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SenizParser#controlSystemDeclaration}.
+	 * Exit a parse tree produced by {@link SenizParser#controlSystemBodyDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitControlSystemDeclaration(SenizParser.ControlSystemDeclarationContext ctx);
+	void exitControlSystemBodyDeclaration(SenizParser.ControlSystemBodyDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SenizParser#formalismStatement}.
+	 * Enter a parse tree produced by {@link SenizParser#controlVarStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterFormalismStatement(SenizParser.FormalismStatementContext ctx);
+	void enterControlVarStatement(SenizParser.ControlVarStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SenizParser#formalismStatement}.
+	 * Exit a parse tree produced by {@link SenizParser#controlVarStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitFormalismStatement(SenizParser.FormalismStatementContext ctx);
+	void exitControlVarStatement(SenizParser.ControlVarStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#controlVarExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterControlVarExpression(SenizParser.ControlVarExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#controlVarExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitControlVarExpression(SenizParser.ControlVarExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#logicStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterLogicStatement(SenizParser.LogicStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#logicStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitLogicStatement(SenizParser.LogicStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SenizParser#controlStatement}.
 	 * @param ctx the parse tree
@@ -137,6 +157,26 @@ public interface SenizParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitControlStatement(SenizParser.ControlStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#syncControlStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterSyncControlStatement(SenizParser.SyncControlStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#syncControlStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitSyncControlStatement(SenizParser.SyncControlStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#asyncControlStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAsyncControlStatement(SenizParser.AsyncControlStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#asyncControlStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAsyncControlStatement(SenizParser.AsyncControlStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SenizParser#subSystemIdentifier}.
 	 * @param ctx the parse tree

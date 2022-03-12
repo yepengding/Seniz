@@ -1,7 +1,7 @@
 package org.veritasopher.seniz.builder;
 
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.veritasopher.seniz.core.model.SystemArgumentSet;
+import org.veritasopher.seniz.core.model.ControlSystem;
+import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.model.common.StateVariable;
 import org.veritasopher.seniz.exception.type.StateVariableException;
@@ -15,34 +15,33 @@ import org.veritasopher.seniz.exception.type.StateVariableException;
 public class VariableSetBuilder {
 
     /**
-     * Build variable set for TS with var set
+     * Build variable set for the given transition system
      *
-     * @param variableSet defined variable set
-     * @param tree        parse tree
+     * @param transitionSystem transition system
+     * @param variableSet      defined variable set
      * @return built variable set
      */
-    public VariableSet build(VariableSet variableSet, ParseTree tree) {
-        if (variableSet == null) {
-            variableSet = new VariableSet();
+    public VariableSet build(TransitionSystem transitionSystem, VariableSet variableSet) {
+        for (StateVariable var :
+                variableSet.getVariableSet()) {
+            if (transitionSystem.hasSystemArgument(var.getName())) {
+                throw new StateVariableException(variableSet.getIdentifier(), "Cannot use occupied system argument name (" + var.getName() + ").");
+            }
         }
-        // TODO may allow defining variable in system body
         return variableSet;
     }
 
     /**
-     * Build variable set for single TS
+     * Build variable set for the given control system
      *
-     * @param variableSet defined variable set
-     * @param tree             parse tree
+     * @param controlSystem control system
+     * @param variableSet   defined variable set
      * @return built variable set
      */
-    public VariableSet build(VariableSet variableSet, SystemArgumentSet systemArgumentSet, ParseTree tree) {
-        if (variableSet == null) {
-            return new VariableSet();
-        }
+    public VariableSet build(ControlSystem controlSystem, VariableSet variableSet) {
         for (StateVariable var :
                 variableSet.getVariableSet()) {
-            if (systemArgumentSet.hasArgument(var.getName())) {
+            if (controlSystem.hasSystemArgument(var.getName())) {
                 throw new StateVariableException(variableSet.getIdentifier(), "Cannot use occupied system argument name (" + var.getName() + ").");
             }
         }

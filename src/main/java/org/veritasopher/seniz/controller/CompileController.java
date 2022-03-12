@@ -6,7 +6,7 @@ import org.veritasopher.seniz.builder.TransitionSystemBuilder;
 import org.veritasopher.seniz.builder.VariableSetBuilder;
 import org.veritasopher.seniz.core.model.*;
 import org.veritasopher.seniz.core.visitor.CompilationUnitVisitor;
-import org.veritasopher.seniz.exception.type.CompilationException;
+import org.veritasopher.seniz.exception.Assert;
 import org.veritasopher.seniz.exception.type.StateVariableException;
 
 import java.util.Map;
@@ -38,78 +38,121 @@ public class CompileController {
         this.variableSetBuilder = new VariableSetBuilder();
     }
 
+    /**
+     * Compiler a parse tree
+     *
+     * @param parseTree parse tree
+     * @return a compilation unit
+     */
     public CompilationUnit compile(ParseTree parseTree) {
         CompilationUnit compilationUnit = new CompilationUnit();
+        // Instantiate a system or a variable set
         CompilationUnitVisitor compilationUnitVisitor = new CompilationUnitVisitor(compilationUnit);
         compilationUnitVisitor.visit(parseTree);
         PrecompileUnit precompileUnit = sourceFileMap.get(compilationUnit.getIdentifier()).getPrecompileUnit();
         switch (precompileUnit.getType()) {
-            case TS -> {
-                TransitionSystem ts = compileTS(compilationUnit, precompileUnit, parseTree);
-                env.addTransitionSystem(ts);
-            }
-            case VAR -> {
-                VariableSet varset = compileVar(compilationUnit);
-                env.addStateVariableSet(varset);
-            }
-            case TS_VAR -> {
-                TransitionSystem ts = compileTSVar(compilationUnit, precompileUnit, parseTree);
-                env.addTransitionSystem(ts);
-            }
-            case CTRL -> {
-                TransitionSystem cs = compileCtrl(compilationUnit, precompileUnit, parseTree);
-                env.addTransitionSystem(cs);
+            // Only a transition system
+            case TS -> compileTS(compilationUnit, parseTree);
+            // Only a variable set
+            case VAR -> compileVar(compilationUnit);
+            // A transition system and a state variable set
+            case TS_VAR -> compileTSVar(compilationUnit, parseTree);
+            // A control system
+            case CTRL -> compileCtrl(compilationUnit, parseTree);
+            // A control system and a state variable set
+            case CTRL_VAR -> {
+
             }
         }
 
         return compilationUnit;
     }
 
-    private TransitionSystem compileTS(CompilationUnit compilationUnit, PrecompileUnit precompileUnit, ParseTree parseTree) {
-        // Check defined variable set
-        String variableSetId = compilationUnit.getVariableSetIdentifier();
+    /**
+     * Compile a transition system
+     *
+     * @param compilationUnit transition system unit
+     * @param parseTree       parse tree
+     */
+    private void compileTS(CompilationUnit compilationUnit, ParseTree parseTree) {
+        TransitionSystem system = compilationUnit.getTransitionSystem();
 
-        VariableSet variableSet = env.getStateVariableSet(variableSetId);
+        // Get defined variable set
+        String variableSetName = system.getDependentVariableSetName();
+        VariableSet variableSet = env.getStateVariableSet(variableSetName).orElseThrow(() -> {
+            throw new StateVariableException(compilationUnit.getIdentifier(), "Variable set (" + variableSetName + ") is not defined");
+        });
 
-        // Variable set is defined
-        if (variableSetId != null && variableSet == null) {
-            throw new StateVariableException(compilationUnit.getIdentifier(), "Variable set (" + variableSetId + ") is not defined");
-        }
+        // Finalize state variable set
+        variableSet = variableSetBuilder.build(system, variableSet);
+
+        // Build transition system and add it to the global environment
+        env.addTransitionSystem(transitionSystemBuilder.build(system, variableSet, parseTree));
+    }
+
+    /**
+     * Compile a variable set
+     *
+     * @param compilationUnit compilation unit
+     */
+    private void compileVar(CompilationUnit compilationUnit) {
+        // Add the compiled variable set to the global environment
+        env.addStateVariableSet(compilationUnit.getVariableSet());
+    }
+
+    /**
+     * Compile a transition system with a variable set
+     *
+     * @param compilationUnit compilation unit containing a transition system and a variable set
+     * @param parseTree       parse tree
+     */
+    private void compileTSVar(CompilationUnit compilationUnit, ParseTree parseTree) {
+        TransitionSystem system = compilationUnit.getTransitionSystem();
+        VariableSet variableSet = compilationUnit.getVariableSet();
+
+        Assert.isTrue(env.getStateVariableSet(variableSet.getIdentifier()).isEmpty(),
+                new StateVariableException(compilationUnit.getIdentifier(), "Variable set (" + variableSet.getIdentifier() + ") has been defined."));
+        // Add the compiled variable set to the global environment
+        env.addStateVariableSet(variableSet);
+
+        // Get defined variable set
+        String variableSetName = system.getDependentVariableSetName();
+        variableSet = env.getStateVariableSet(variableSetName).orElseThrow(() -> {
+            throw new StateVariableException(compilationUnit.getIdentifier(), "Variable set (" + variableSetName + ") is not defined");
+        });
 
         // Build state variable set
-        variableSet = variableSetBuilder.build(variableSet, compilationUnit.getTransitionSystem().getSystemArguments(), parseTree);
+        variableSet = variableSetBuilder.build(system, variableSet);
 
-        // Build transition system
-        return transitionSystemBuilder.build(compilationUnit.getTransitionSystem(), variableSet, parseTree);
+        // Build transition system and add it to the global environment
+        env.addTransitionSystem(transitionSystemBuilder.build(system, variableSet, parseTree));
     }
 
-    private VariableSet compileVar(CompilationUnit compilationUnit) {
-        return compilationUnit.getStateVariableSet();
-    }
+    /**
+     * Compile a control system
+     *
+     * @param compilationUnit control system unit
+     * @param parseTree       parse tree
+     */
+    private void compileCtrl(CompilationUnit compilationUnit, ParseTree parseTree) {
+        ControlSystem system = compilationUnit.getControlSystem();
 
-    private TransitionSystem compileTSVar(CompilationUnit compilationUnit, PrecompileUnit precompileUnit, ParseTree parseTree) {
-        // Check defined variable set
-        String variableSetId = compilationUnit.getVariableSetIdentifier();
-        VariableSet variableSet = compilationUnit.getStateVariableSet();
-
-        // Variable set is defined
-        if (variableSetId != null) {
-            if (variableSet == null && !precompileUnit.getPredIdSet().contains(variableSetId)) {
-                throw new StateVariableException(compilationUnit.getIdentifier(), "Variable set (" + variableSetId + ") is not defined");
-            } else if (variableSet != null && variableSetId.equals(variableSet.getIdentifier()) && precompileUnit.getPredIdSet().contains(variableSetId)) {
-                throw new CompilationException(compilationUnit.getIdentifier(), "Find both imported state variable set and internal state variable set");
-            }
+        // Get defined variable set
+        String variableSetName = system.getDependentVariableSetName();
+        VariableSet variableSet;
+        if (variableSetName != null) {
+             variableSet = env.getStateVariableSet(variableSetName).orElseThrow(() -> {
+                throw new StateVariableException(compilationUnit.getIdentifier(), "Variable set (" + variableSetName + ") is not defined");
+            });
+        } else {
+            variableSet = new VariableSet();
         }
 
-        // Build state variable set
-        variableSet = variableSetBuilder.build(variableSet, parseTree);
+        // Finalize state variable set
+        variableSet = variableSetBuilder.build(system, variableSet);
 
-        // Build transition system
-        return transitionSystemBuilder.build(compilationUnit.getTransitionSystem(), variableSet, parseTree);
-    }
-
-    private TransitionSystem compileCtrl(CompilationUnit compilationUnit, PrecompileUnit precompileUnit, ParseTree parseTree) {
-        return controlSystemBuilder.build(compilationUnit.getTransitionSystem(), parseTree, env);
+        // Build control system and add it to the global environment
+        env.addControlSystem(controlSystemBuilder.build(system, variableSet, parseTree, env));
     }
 
 }

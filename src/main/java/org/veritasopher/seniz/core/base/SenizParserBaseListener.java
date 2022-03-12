@@ -136,25 +136,49 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterControlSystemDeclaration(SenizParser.ControlSystemDeclarationContext ctx) { }
+	@Override public void enterControlSystemBodyDeclaration(SenizParser.ControlSystemBodyDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitControlSystemDeclaration(SenizParser.ControlSystemDeclarationContext ctx) { }
+	@Override public void exitControlSystemBodyDeclaration(SenizParser.ControlSystemBodyDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFormalismStatement(SenizParser.FormalismStatementContext ctx) { }
+	@Override public void enterControlVarStatement(SenizParser.ControlVarStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFormalismStatement(SenizParser.FormalismStatementContext ctx) { }
+	@Override public void exitControlVarStatement(SenizParser.ControlVarStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterControlVarExpression(SenizParser.ControlVarExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitControlVarExpression(SenizParser.ControlVarExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLogicStatement(SenizParser.LogicStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLogicStatement(SenizParser.LogicStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -167,6 +191,30 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitControlStatement(SenizParser.ControlStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSyncControlStatement(SenizParser.SyncControlStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSyncControlStatement(SenizParser.SyncControlStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAsyncControlStatement(SenizParser.AsyncControlStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAsyncControlStatement(SenizParser.AsyncControlStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

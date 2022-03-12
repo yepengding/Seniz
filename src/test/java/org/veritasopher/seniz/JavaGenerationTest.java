@@ -25,7 +25,7 @@ public class JavaGenerationTest {
 
         MasterController masterController = new MasterController();
         GlobalEnvironment env = masterController.compile(sourceFilePaths);
-        JavaGenerator javaGenerator = new JavaGenerator(env, env.getMainTS());
+        JavaGenerator javaGenerator = new JavaGenerator(env);
 
         javaGenerator.generateToDir("org.veritasopher.seniz.generation", "src/test/java/org/veritasopher/seniz/generation");
     }

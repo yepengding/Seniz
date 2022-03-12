@@ -33,6 +33,18 @@ AS
     : 'as'
     ;
 
+SYNC
+    : 'sync'
+    ;
+
+ASYNC
+    : 'async'
+    ;
+
+ARGS
+    : 'args'
+    ;
+
 PROP
     : 'prop'
     ;

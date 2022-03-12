@@ -35,27 +35,46 @@ systemParameter
     ;
 
 systemBody
-    : LBRACE controlSystemDeclaration RBRACE
+    : LBRACE controlStatement controlSystemBodyDeclaration RBRACE
     | LBRACE systemBodyDeclaration* RBRACE
     ;
 
 systemBodyDeclaration
     : stateNaming
     | transitionStatement
-    | formalismStatement
+    | logicStatement
     ;
 
-controlSystemDeclaration
-    : controlStatement? formalismStatement*
+controlSystemBodyDeclaration
+    : controlVarStatement?
+    | logicStatement*
     ;
 
-formalismStatement
+controlVarStatement
+    : LBRACE controlVarExpression* RBRACE
+    ;
+
+
+controlVarExpression
+    : varIdentifier bop=VALUEOF expression
+    ;
+
+logicStatement
     : propositionStatement
     | ltlStatement
     ;
 
 controlStatement
-    : subSystemIdentifier (INTERLEAVE subSystemIdentifier)*
+    : syncControlStatement
+    | asyncControlStatement
+    ;
+
+syncControlStatement
+    : SYNC subSystemIdentifier (COMMA subSystemIdentifier)*
+    ;
+
+asyncControlStatement
+    : ASYNC subSystemIdentifier (COMMA subSystemIdentifier)*
     ;
 
 subSystemIdentifier

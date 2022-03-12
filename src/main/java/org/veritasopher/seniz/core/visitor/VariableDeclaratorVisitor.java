@@ -2,14 +2,13 @@ package org.veritasopher.seniz.core.visitor;
 
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
-import org.veritasopher.seniz.core.model.SystemArgumentSet;
 import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.StateVariable;
-import org.veritasopher.seniz.core.model.common.Term;
-import org.veritasopher.seniz.core.model.common.Value;
 import org.veritasopher.seniz.core.model.domain.PrimaryType;
 import org.veritasopher.seniz.exception.type.StateVariableException;
+
+import java.util.Set;
 
 /**
  * Variable Declarator Visitor
@@ -19,17 +18,20 @@ import org.veritasopher.seniz.exception.type.StateVariableException;
  */
 public class VariableDeclaratorVisitor extends SenizParserBaseVisitor<VariableSet> {
 
-    private final SystemArgumentSet systemVariableSet;
+    private final String identifier;
+    private final Set<String> systemVariableNameSet;
 
-    public VariableDeclaratorVisitor(SystemArgumentSet systemVariableSet) {
-        this.systemVariableSet = systemVariableSet;
+    public VariableDeclaratorVisitor(String identifier, Set<String> systemVariableNameSet) {
+        this.identifier = identifier;
+        this.systemVariableNameSet = systemVariableNameSet;
     }
 
     @Override
     public VariableSet visitVarSetDeclarator(SenizParser.VarSetDeclaratorContext ctx) {
         VariableSet variableSet = new VariableSet();
+        variableSet.setIdentifier(identifier);
 
-        VariableExpressionVisitor variableExpressionVisitor = new VariableExpressionVisitor(variableSet, systemVariableSet);
+        VariableExpressionVisitor variableExpressionVisitor = new VariableExpressionVisitor(variableSet, systemVariableNameSet);
         ctx.varExpression().forEach(expr -> variableSet.addVariable(expr.accept(variableExpressionVisitor)));
 
         return variableSet;
@@ -37,13 +39,13 @@ public class VariableDeclaratorVisitor extends SenizParserBaseVisitor<VariableSe
 
     private static class VariableExpressionVisitor extends SenizParserBaseVisitor<StateVariable> {
 
-        private final VariableSet stateVariableSet;
+        private final VariableSet variableSet;
 
-        private final SystemArgumentSet systemArgumentSet;
+        private final Set<String> systemVariableNameSet;
 
-        VariableExpressionVisitor(VariableSet stateVariableSet, SystemArgumentSet systemArgumentSet) {
-            this.stateVariableSet = stateVariableSet;
-            this.systemArgumentSet = systemArgumentSet;
+        VariableExpressionVisitor(VariableSet variableSet, Set<String> systemVariableNameSet) {
+            this.variableSet = variableSet;
+            this.systemVariableNameSet = systemVariableNameSet;
         }
 
         @Override
@@ -51,10 +53,10 @@ public class VariableDeclaratorVisitor extends SenizParserBaseVisitor<VariableSe
             String name = ctx.varIdentifier().IDENTIFIER().getText();
 
             // Check the name uniqueness
-            if (systemArgumentSet.hasArgument(name)) {
-                throw new StateVariableException(stateVariableSet.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied state variable name (" + name + ").");
-            } else if (systemArgumentSet.hasArgument(name)) {
-                throw new StateVariableException(stateVariableSet.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied system variable name (" + name + ").");
+            if (variableSet.hasVariable(name)) {
+                throw new StateVariableException(variableSet.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied state variable name (" + name + ").");
+            } else if (systemVariableNameSet.contains(name)) {
+                throw new StateVariableException(variableSet.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Cannot use occupied system variable name (" + name + ").");
             }
 
             // Get type by type name
@@ -65,7 +67,7 @@ public class VariableDeclaratorVisitor extends SenizParserBaseVisitor<VariableSe
 
             if (evaluation.getPNList().size() == 0) {
                 // No default value for weird type
-                throw new StateVariableException("", ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported variable type.");
+                throw new StateVariableException(variableSet.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Unsupported variable type.");
             }
             return new StateVariable(name, primaryType, evaluation);
         }

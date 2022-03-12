@@ -136,13 +136,7 @@ public class FunctionTest {
         File[] files = folder.listFiles(filter);
         assertNotNull(files);
         Set<String> sourceFilePaths = Arrays.stream(files).parallel().map(File::getAbsolutePath).collect(Collectors.toSet());
-        assertEquals(6, sourceFilePaths.size());
-
-        MasterController masterController = new MasterController();
-        GlobalEnvironment env = masterController.compile(sourceFilePaths);
-
-        DOTGenerator dotGenerator = new DOTGenerator(env, env.getMainTS());
-        dotGenerator.generateToConsole();
+        assertEquals(5, sourceFilePaths.size());
 
     }
 
@@ -155,7 +149,7 @@ public class FunctionTest {
 
         MasterController masterController = new MasterController();
         GlobalEnvironment env = masterController.compile(sourceFilePaths);
-        DOTGenerator dotGenerator = new DOTGenerator(env, env.getMainTS());
+        DOTGenerator dotGenerator = new DOTGenerator(env);
         dotGenerator.generateToConsole();
 
     }

@@ -2,6 +2,7 @@ package org.veritasopher.seniz.controller;
 
 import org.veritasopher.seniz.core.model.*;
 import org.veritasopher.seniz.core.visitor.PrecompileVisitor;
+import org.veritasopher.seniz.exception.Assert;
 import org.veritasopher.seniz.exception.type.CompilationException;
 import org.veritasopher.seniz.exception.type.PrecompileException;
 
@@ -68,21 +69,21 @@ public class MasterController {
 
         CompilationUnit compilationUnit;
         PrecompileUnit precompileUnit;
-        TransitionSystem mainTS = null;
+        String mainSystemIdentifier = null;
         for (String id :
                 sortedIdentifier) {
             compilationUnit = compileController.compile(sourceFileMap.get(id).getParseTree());
             precompileUnit = sourceFileMap.get(id).getPrecompileUnit();
             if (precompileUnit.isMain()) {
-                mainTS = compilationUnit.getTransitionSystem();
+                mainSystemIdentifier = compilationUnit.getIdentifier();
                 break;
             }
         }
-        if (mainTS == null) {
-            throw new CompilationException("", "Main transition system does not exist.");
-        }
 
-        env.setMainTS(mainTS);
+        Assert.notNull(mainSystemIdentifier,
+                new CompilationException("Main transition system does not exist."));
+
+        env.setMainSystemIdentifier(mainSystemIdentifier);
 
         return env;
     }

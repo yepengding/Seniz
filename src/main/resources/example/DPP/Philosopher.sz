@@ -1,4 +1,4 @@
-system Philosopher(id::int, n::int) {
+system Philosopher(id::int, n::int) over PhilosopherVars {
 
     init thinking -> pickLeft() waitingRight -> pickRight() eating
     thinking -> pickRight() waitingLeft -> pickLeft() eating

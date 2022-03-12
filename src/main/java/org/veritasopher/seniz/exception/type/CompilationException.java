@@ -4,6 +4,10 @@ import org.veritasopher.seniz.exception.BaseException;
 
 public class CompilationException extends BaseException {
 
+    public CompilationException(String message) {
+        super(message);
+    }
+
     public CompilationException(String source, String message) {
         super(source, message);
     }

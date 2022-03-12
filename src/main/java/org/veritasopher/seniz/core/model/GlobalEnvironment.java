@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Global Environment
@@ -17,15 +18,19 @@ public class GlobalEnvironment {
     // Transition System Map<Identifier, Transition System>
     private final Map<String, TransitionSystem> transitionSystems;
 
-    // State Variable Map<Identifier, State Variable Set>
+    // Control System Map<Identifier, Control System>
+    private final Map<String, ControlSystem> controlSystems;
+
+    // State Variable Set Map<Identifier, State Variable Set>
     private final Map<String, VariableSet> stateVariableSets;
 
     @Getter
     @Setter
-    private TransitionSystem mainTS;
+    private String mainSystemIdentifier;
 
     public GlobalEnvironment() {
         this.transitionSystems = new HashMap<>();
+        this.controlSystems = new HashMap<>();
         this.stateVariableSets = new HashMap<>();
     }
 
@@ -43,10 +48,29 @@ public class GlobalEnvironment {
      * Get a transition system
      *
      * @param identifier transition system identifier
-     * @return transition system
+     * @return either a transition system or null
      */
-    public TransitionSystem getTransitionSystem(String identifier) {
-        return this.transitionSystems.get(identifier);
+    public Optional<TransitionSystem> getTransitionSystem(String identifier) {
+        return Optional.ofNullable(this.transitionSystems.get(identifier));
+    }
+
+    /**
+     * Add a control system to global environment
+     *
+     * @param cs control system
+     */
+    public void addControlSystem(ControlSystem cs) {
+        this.controlSystems.put(cs.getIdentifier(), cs);
+    }
+
+    /**
+     * Get a control system
+     *
+     * @param identifier control system identifier
+     * @return either a control system or null
+     */
+    public Optional<ControlSystem> getControlSystem(String identifier) {
+        return Optional.ofNullable(this.controlSystems.get(identifier));
     }
 
     /**
@@ -62,9 +86,9 @@ public class GlobalEnvironment {
      * Get a state variable set
      *
      * @param identifier state variable set identifier
-     * @return state variable set
+     * @return either a state variable set or null
      */
-    public VariableSet getStateVariableSet(String identifier) {
-        return this.stateVariableSets.get(identifier);
+    public Optional<VariableSet> getStateVariableSet(String identifier) {
+        return Optional.ofNullable(this.stateVariableSets.get(identifier));
     }
 }

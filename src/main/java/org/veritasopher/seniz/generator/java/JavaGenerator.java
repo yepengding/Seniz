@@ -1,5 +1,6 @@
 package org.veritasopher.seniz.generator.java;
 
+import org.veritasopher.seniz.core.model.ControlSystem;
 import org.veritasopher.seniz.core.model.GlobalEnvironment;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.common.*;
@@ -25,8 +26,12 @@ import static org.veritasopher.seniz.generator.java.util.Transform.*;
  */
 public class JavaGenerator extends BaseGenerator {
 
-    public JavaGenerator(GlobalEnvironment globalEnvironment, TransitionSystem transitionSystem) {
-        super(globalEnvironment, transitionSystem);
+    public JavaGenerator(GlobalEnvironment globalEnvironment) {
+        super(globalEnvironment);
+    }
+
+    public JavaGenerator(GlobalEnvironment globalEnvironment, String systemIdentifier) {
+        super(globalEnvironment, systemIdentifier);
     }
 
     /**
@@ -35,30 +40,45 @@ public class JavaGenerator extends BaseGenerator {
      * @param outDir output directory
      */
     public void generateToDir(String namespace, String outDir) {
-        Path root = Path.of(outDir + File.separator + ts.getIdentifier().toLowerCase());
-        String rootNamespace = "%s.%s".formatted(namespace, ts.getIdentifier().toLowerCase());
+        if (env.getTransitionSystem(systemIdentifier).isPresent()) {
+            generateTSToDir(env.getTransitionSystem(systemIdentifier).get(), namespace, outDir);
+        } else if (env.getControlSystem(systemIdentifier).isPresent()) {
+            generateCSToDir(env.getControlSystem(systemIdentifier).get(), namespace, outDir);
+        } else {
+            throw new GeneratorException(systemIdentifier, "Unknown system is found.");
+        }
+    }
 
-        generateArgument(rootNamespace, root);
-        generateVariable(rootNamespace, root);
-        generateAction(rootNamespace, root);
-        generateState(rootNamespace, root);
-        generateFramework(rootNamespace, root);
+    private void generateTSToDir(TransitionSystem ts, String namespace, String outDir) {
+        Path root = Path.of(outDir + File.separator + systemIdentifier.toLowerCase());
+        String rootNamespace = "%s.%s".formatted(namespace, systemIdentifier.toLowerCase());
+
+        generateArgument(ts, rootNamespace, root);
+        generateVariable(ts, rootNamespace, root);
+        generateAction(ts, rootNamespace, root);
+        generateState(ts, rootNamespace, root);
+        generateFramework(ts, rootNamespace, root);
+    }
+
+    private void generateCSToDir(ControlSystem cs, String namespace, String outDir) {
+
     }
 
 
     /**
      * Generate system argument file
      *
+     * @param ts            transition system
      * @param rootNamespace root namespace
      * @param root          root path
      */
-    private void generateArgument(String rootNamespace, Path root) {
-        String arguments = ts.getSystemArguments().getArgumentSet().stream()
-                .map(a -> "%s(\"%s\", %s, %s)"
-                        .formatted(toJavaArgumentName(a.getName()),
-                                a.getName(),
-                                toJavaTypeClass(a.getPrimaryType()),
-                                getJavaEvaluation(a.getEvaluation())))
+    private void generateArgument(TransitionSystem ts, String rootNamespace, Path root) {
+        String arguments = ts.getSystemArgumentSet().stream()
+                .map(arg -> "%s(\"%s\", %s, %s)"
+                        .formatted(toJavaArgumentName(arg.getName()),
+                                arg.getName(),
+                                toJavaTypeClass(arg.getPrimaryType()),
+                                toJavaEvaluation(ts, arg.getEvaluation())))
                 .collect(Collectors.joining("," + System.lineSeparator()));
 
         String argumentProgram = generateArgumentFromTemplate(ARGUMENT.getNamespace(rootNamespace), arguments);
@@ -69,10 +89,11 @@ public class JavaGenerator extends BaseGenerator {
     /**
      * Generate state variable file
      *
+     * @param ts            transition system
      * @param rootNamespace root namespace
      * @param root          root path
      */
-    private void generateVariable(String rootNamespace, Path root) {
+    private void generateVariable(TransitionSystem ts, String rootNamespace, Path root) {
         String variables = ts.getStateVariables().getVariableSet().stream()
                 .map(v -> "%s(\"%s\", %s)"
                         .formatted(toJavaVariableName(v.getName()),
@@ -89,10 +110,11 @@ public class JavaGenerator extends BaseGenerator {
     /**
      * Generate action file
      *
+     * @param ts            transition system
      * @param rootNamespace root namespace
      * @param root          root path
      */
-    private void generateAction(String rootNamespace, Path root) {
+    private void generateAction(TransitionSystem ts, String rootNamespace, Path root) {
         String actions = ts.getActionSet().stream()
                 .filter(action -> !action.isEpsilon())
                 .map(a -> "void %s();".formatted(a.getName()))
@@ -106,15 +128,16 @@ public class JavaGenerator extends BaseGenerator {
     /**
      * Generate state file
      *
+     * @param ts            transition system
      * @param rootNamespace root namespace
      * @param root          root path
      */
-    private void generateState(String rootNamespace, Path root) {
+    private void generateState(TransitionSystem ts, String rootNamespace, Path root) {
         // Generate variable settings for each state
-        Map<Integer, String> variableSettingMap = generateVariableSettingMap();
+        Map<Integer, String> variableSettingMap = generateVariableSettingMap(ts);
 
         // Generate transition settings for each state
-        Map<Integer, String> transitionSettingMap = generateTransitionSettingMap();
+        Map<Integer, String> transitionSettingMap = generateTransitionSettingMap(ts);
 
         String stateProgramBody = ts.getStates().values().stream()
                 .map(state -> """
@@ -148,9 +171,10 @@ public class JavaGenerator extends BaseGenerator {
     /**
      * Generate variable setting map
      *
+     * @param ts transition system
      * @return Map(State HashCode, State Variable Setting)
      */
-    private Map<Integer, String> generateVariableSettingMap() {
+    private Map<Integer, String> generateVariableSettingMap(TransitionSystem ts) {
         // Map<State HashCode, Variable Setting>
         Map<Integer, String> variableSettingMap = new HashMap<>();
 
@@ -159,13 +183,13 @@ public class JavaGenerator extends BaseGenerator {
 
         // Generate the initial state variable setting
         String initStateVariableSetting = initState.getVariables().stream()
-                .map(v -> "varSet.put(%s, %s);".formatted(toJavaVariableName(v.getName()), getJavaEvaluation(v.getEvaluation())))
+                .map(v -> "varSet.put(%s, %s);".formatted(toJavaVariableName(v.getName()), toJavaEvaluation(ts, v.getEvaluation())))
                 .collect(Collectors.joining(System.lineSeparator()));
 
         variableSettingMap.put(initState.hashCode(), initStateVariableSetting);
 
         // Generate variable settings for all destination states derived from the initial state
-        generateVariableSettingForDstStates(initState, variableSettingMap);
+        generateVariableSettingForDstStates(ts, initState, variableSettingMap);
         return variableSettingMap;
     }
 
@@ -173,10 +197,11 @@ public class JavaGenerator extends BaseGenerator {
     /**
      * Generate variable settings for all destination states derived from a given source state.
      *
+     * @param ts                 transition system
      * @param srcState           source state
      * @param variableSettingMap variable setting map
      */
-    private void generateVariableSettingForDstStates(State srcState, Map<Integer, String> variableSettingMap) {
+    private void generateVariableSettingForDstStates(TransitionSystem ts, State srcState, Map<Integer, String> variableSettingMap) {
         Set<Transition> transitions = ts.getTransitionsBySrcStateHashCode(srcState.hashCode());
 
         transitions.stream()
@@ -189,20 +214,21 @@ public class JavaGenerator extends BaseGenerator {
                             .filter(stateVariable -> !srcState.getVariables().contains(stateVariable))
                             .collect(Collectors.toSet());
                     String variableSetting = changedVariables.stream()
-                            .map(v -> "varSet.put(%s, %s);".formatted(toJavaVariableName(v.getName()), getJavaEvaluation(v.getEvaluation())))
+                            .map(v -> "varSet.put(%s, %s);".formatted(toJavaVariableName(v.getName()), toJavaEvaluation(ts, v.getEvaluation())))
                             .collect(Collectors.joining(System.lineSeparator()));
                     variableSettingMap.put(dstState.hashCode(), variableSetting);
                     // Recursively generate variable settings for all destination states derived from this destination state.
-                    generateVariableSettingForDstStates(dstState, variableSettingMap);
+                    generateVariableSettingForDstStates(ts, dstState, variableSettingMap);
                 });
     }
 
     /**
      * Generate transition setting map
      *
+     * @param ts transition system
      * @return Map(State HashCode, State Transition Setting)
      */
-    private Map<Integer, String> generateTransitionSettingMap() {
+    private Map<Integer, String> generateTransitionSettingMap(TransitionSystem ts) {
         // Map<State HashCode, Transition>
         Map<Integer, String> transitionSettingMap = new HashMap<>();
 
@@ -212,7 +238,6 @@ public class JavaGenerator extends BaseGenerator {
             if (transitions.size() > 1) {
                 // Multiple transitions
                 // TODO check condition overlapping (currently only preventing multiple tautologies)
-                String defaultNextStatement = null;
                 Set<Transition> tautologyTransitions = transitions.stream()
                         .filter(t -> ts.getProposition(t.getGuard()).orElseThrow(() -> {
                             throw new GeneratorException(ts.getIdentifier(), "Unknown guard is found");
@@ -225,16 +250,16 @@ public class JavaGenerator extends BaseGenerator {
 
                 transitionSetting = transitions.stream().map(t ->
                         "if (%s) {%s}".formatted(
-                                getJavaEvaluation(ts.getProposition(t.getGuard()).orElseThrow(() -> {
+                                toJavaEvaluation(ts, ts.getProposition(t.getGuard()).orElseThrow(() -> {
                                     throw new GeneratorException(ts.getIdentifier(), "Unknown guard is found");
                                 }).getEvaluation()),
-                                generateActionStatement(t))
+                                generateActionStatement(ts, t))
                 ).collect(Collectors.joining(System.lineSeparator()));
                 transitionSetting = transitionSetting + System.lineSeparator() + "return null;";
             } else if (transitions.size() == 1) {
                 // One transition
                 Transition transition = transitions.iterator().next();
-                transitionSetting = generateActionStatement(transition);
+                transitionSetting = generateActionStatement(ts, transition);
 
                 Proposition guard = ts.getProposition(transition.getGuard()).orElseThrow(() -> {
                     throw new GeneratorException(ts.getIdentifier(), "Unknown guard is found");
@@ -243,7 +268,7 @@ public class JavaGenerator extends BaseGenerator {
                 // If not tautology, add transition condition.
                 if (!guard.isTautology()) {
                     transitionSetting = "if (%s) {%s} else {return null;} "
-                            .formatted(getJavaEvaluation(guard.getEvaluation()), transitionSetting);
+                            .formatted(toJavaEvaluation(ts, guard.getEvaluation()), transitionSetting);
                 }
 
             } else {
@@ -259,10 +284,11 @@ public class JavaGenerator extends BaseGenerator {
     /**
      * Generate Action Statement
      *
+     * @param ts         transition system
      * @param transition transition
      * @return action statement
      */
-    private String generateActionStatement(Transition transition) {
+    private String generateActionStatement(TransitionSystem ts, Transition transition) {
         String actionStatement;
         Action action = ts.getAction(transition.getAction()).orElseThrow(() ->
                 new GeneratorException(ts.getIdentifier(), "Unknown action is found."));
@@ -279,10 +305,11 @@ public class JavaGenerator extends BaseGenerator {
     /**
      * Generate framework files
      *
+     * @param ts            transition system
      * @param rootNamespace root namespace
      * @param root          root path
      */
-    private void generateFramework(String rootNamespace, Path root) {
+    private void generateFramework(TransitionSystem ts, String rootNamespace, Path root) {
         String program;
         // Generate ActionExecutor file
         program = generateActionExecutorFromTemplate(
@@ -331,33 +358,5 @@ public class JavaGenerator extends BaseGenerator {
         writeToFile(program, SYSTEM_EXECUTOR.getFilePath(root));
     }
 
-    /**
-     * Get Java evaluation
-     * Because Seniz uses the same symbol for operands, no need to create a transformation table.
-     *
-     * @param evaluation Seniz evaluation
-     * @return evaluated Java string
-     */
-    private String getJavaEvaluation(Evaluation evaluation) {
-        return evaluation.getInfixList().stream()
-                .map(t -> switch (t.getType()) {
-                    case OPERATOR -> t.getOperator().getValue();
-                    case OPERAND -> switch (t.getOperand().primaryType()) {
-                        case VARIABLE -> "(%s) varSet.get(%s)".formatted(
-                                toJavaType(
-                                        ts.getStateVariable(t.getOperand().value().toString()).orElseThrow(() -> {
-                                            throw new GeneratorException(ts.getIdentifier(), "Unknown state variable is found");
-                                        }).getPrimaryType()),
-                                toJavaVariableName(t.getOperand().value().toString()));
-                        case ARGUMENT -> getJavaEvaluation(ts.getSystemArgument(t.getOperand().value().toString()).orElseThrow(() -> {
-                            throw new GeneratorException(ts.getIdentifier(), "Unknown system argument is found");
-                        }).getEvaluation());
-                        case STRING -> "".equals(t.getOperand().value()) ?
-                                "\"\"" : t.getOperand().value().toString();
-                        default -> t.getOperand().value().toString();
-                    };
-                    case PARENTHESIS -> t.getParenthesis();
-                }).collect(Collectors.joining());
-    }
 
 }

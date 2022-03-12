@@ -7,6 +7,10 @@ package org.veritasopher.seniz.exception;
  * @date 12/2/2020
  */
 public class BaseException extends RuntimeException {
+    public BaseException(String message) {
+        super(message);
+    }
+
     public BaseException(String source, String message) {
         super(source + ": " + message);
     }

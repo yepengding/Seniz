@@ -27,10 +27,7 @@ public class TransitionSystemBuilder {
      * @return built transition system
      */
     public TransitionSystem build(TransitionSystem transitionSystem, VariableSet stateVariableSet, ParseTree tree) {
-        // Collect defined state variables
-        if (stateVariableSet == null) {
-            stateVariableSet = new VariableSet();
-        }
+        // Set state variable set
         transitionSystem.setStateVariables(stateVariableSet);
 
         // Collect state naming (name -> state declarator)

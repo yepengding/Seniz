@@ -1,7 +1,6 @@
 package org.veritasopher.seniz.generator.base;
 
 import org.veritasopher.seniz.core.model.GlobalEnvironment;
-import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.exception.type.GeneratorException;
 
 import java.io.IOException;
@@ -17,11 +16,27 @@ import java.nio.file.Path;
 public abstract class BaseGenerator {
 
     protected final GlobalEnvironment env;
-    protected final TransitionSystem ts;
+    protected final String systemIdentifier;
 
-    public BaseGenerator(GlobalEnvironment globalEnvironment, TransitionSystem transitionSystem) {
+    /**
+     * Constructor with main system identifier
+     *
+     * @param globalEnvironment global environment
+     */
+    public BaseGenerator(GlobalEnvironment globalEnvironment) {
         this.env = globalEnvironment;
-        this.ts = transitionSystem;
+        this.systemIdentifier = env.getMainSystemIdentifier();
+    }
+
+    /**
+     * Constructor with assigned system identifier
+     *
+     * @param globalEnvironment global environment
+     * @param systemIdentifier  system identifier
+     */
+    public BaseGenerator(GlobalEnvironment globalEnvironment, String systemIdentifier) {
+        this.env = globalEnvironment;
+        this.systemIdentifier = systemIdentifier;
     }
 
     /**
@@ -34,7 +49,7 @@ public abstract class BaseGenerator {
             Files.createDirectories(path);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new GeneratorException(ts.getIdentifier(), String.format("Cannot create path (%s).", path));
+            throw new GeneratorException(systemIdentifier, String.format("Cannot create path (%s).", path));
         }
     }
 

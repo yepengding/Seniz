@@ -1,8 +1,8 @@
 import Sys1
-import Sys3
+import Sys2
 
 main control system MainSys(i::int, j::string) {
 
-    Sys1(1, "sys 1") ||| Sys3(3, "sys 3")
+    async Sys1(1, "sys 1"), Sys2(2, "sys 3")
 
 }

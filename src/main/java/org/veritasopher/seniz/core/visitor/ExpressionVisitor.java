@@ -3,7 +3,6 @@ package org.veritasopher.seniz.core.visitor;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
-import org.veritasopher.seniz.core.model.SystemArgumentSet;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.model.common.Evaluation;
@@ -29,15 +28,12 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
 
     private final TransitionSystem transitionSystem;
 
-    private final SystemArgumentSet systemArgumentSet;
-
     private final VariableSet stateVariableSet;
 
     public ExpressionVisitor(Evaluation evaluation, TransitionSystem transitionSystem) {
         this.literalVisitor = new LiteralVisitor();
         this.evaluation = evaluation;
         this.transitionSystem = transitionSystem;
-        this.systemArgumentSet = transitionSystem.getSystemArguments();
         this.stateVariableSet = transitionSystem.getStateVariables();
     }
 
@@ -49,7 +45,7 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
         } else if (ctx.primary().variableIdentifier() != null) {
             String name = ctx.primary().variableIdentifier().IDENTIFIER().stream().map(ParseTree::getText).collect(Collectors.joining("."));
             // Check whether variable is defined as system argument or state variable
-            if (systemArgumentSet.hasArgument(name)) {
+            if (transitionSystem.hasSystemArgument(name)) {
                 evaluation.addTerm(new Term(new Value(PrimaryType.ARGUMENT, name)));
             } else if (stateVariableSet.hasVariable(name)) {
                 evaluation.addTerm(new Term(new Value(PrimaryType.VARIABLE, name)));

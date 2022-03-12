@@ -71,23 +71,47 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSystemBodyDeclaration(SenizParser.SystemBodyDeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#controlSystemDeclaration}.
+	 * Visit a parse tree produced by {@link SenizParser#controlSystemBodyDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitControlSystemDeclaration(SenizParser.ControlSystemDeclarationContext ctx);
+	T visitControlSystemBodyDeclaration(SenizParser.ControlSystemBodyDeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#formalismStatement}.
+	 * Visit a parse tree produced by {@link SenizParser#controlVarStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFormalismStatement(SenizParser.FormalismStatementContext ctx);
+	T visitControlVarStatement(SenizParser.ControlVarStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#controlVarExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitControlVarExpression(SenizParser.ControlVarExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#logicStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLogicStatement(SenizParser.LogicStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#controlStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitControlStatement(SenizParser.ControlStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#syncControlStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSyncControlStatement(SenizParser.SyncControlStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#asyncControlStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAsyncControlStatement(SenizParser.AsyncControlStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#subSystemIdentifier}.
 	 * @param ctx the parse tree

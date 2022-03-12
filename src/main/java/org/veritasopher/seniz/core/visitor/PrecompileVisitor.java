@@ -79,7 +79,12 @@ public class PrecompileVisitor extends SenizParserBaseVisitor<PrecompileUnit> {
 
             // Set whether is control system
             if (ctx.systemModifiers().controlModifier() != null) {
-                precompileUnit.setType(UnitType.CTRL);
+                if (precompileUnit.getType() == UnitType.TS_VAR) {
+                    precompileUnit.setType(UnitType.CTRL_VAR);
+                } else {
+                    precompileUnit.setType(UnitType.CTRL);
+                }
+
             }
         }
 

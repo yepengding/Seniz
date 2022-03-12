@@ -8,7 +8,9 @@ public enum UnitType {
     CTRL,
     // State variable set
     VAR,
-    // Transition system and State variable set
+    // Transition system and state variable set
     TS_VAR,
+    // Control system and state variable set
+    CTRL_VAR
 
 }
