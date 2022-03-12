@@ -4,6 +4,10 @@ package org.veritasopher.seniz.exception.type;
 import org.veritasopher.seniz.exception.BaseException;
 
 public class GeneratorException extends BaseException {
+    public GeneratorException(String message) {
+        super(message);
+    }
+
     public GeneratorException(String source, String message) {
         super(source, message);
     }

@@ -4,6 +4,10 @@ import org.veritasopher.seniz.exception.BaseException;
 
 public class PrecompileException extends BaseException {
 
+    public PrecompileException(String message) {
+        super(message);
+    }
+
     public PrecompileException(String source, String message) {
         super(source, message);
     }

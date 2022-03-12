@@ -14,8 +14,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static org.veritasopher.seniz.generator.dot.util.Transform.toDotActionName;
-import static org.veritasopher.seniz.generator.dot.util.Transform.toDotStateName;
+import static org.veritasopher.seniz.generator.dot.util.Transform.*;
 
 /**
  * DOT Generator
@@ -88,10 +87,12 @@ public class DOTGenerator extends BaseGenerator {
 
         return """
                 digraph %s {
+                label="%s"
                 %s
                 }
                 """.formatted(
                 cs.getIdentifier(),
+                toDotControlStatement(controlStatement),
                 subSystems
         );
     }

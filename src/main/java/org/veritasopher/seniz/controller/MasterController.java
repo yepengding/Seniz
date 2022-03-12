@@ -106,9 +106,9 @@ public class MasterController {
         // Check legacy of the main system
         long mainCount = precompileUnits.stream().filter(PrecompileUnit::isMain).count();
         if (mainCount == 0) {
-            throw new PrecompileException("", "Missing main system.");
+            throw new PrecompileException("Missing main system.");
         } else if (mainCount > 1) {
-            throw new PrecompileException("", "Multiple main systems exist.");
+            throw new PrecompileException("Multiple main systems exist.");
         }
 
         return precompileUnits;

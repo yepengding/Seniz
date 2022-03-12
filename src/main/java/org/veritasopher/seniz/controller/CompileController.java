@@ -60,9 +60,7 @@ public class CompileController {
             // A control system
             case CTRL -> compileCtrl(compilationUnit, parseTree);
             // A control system and a state variable set
-            case CTRL_VAR -> {
-
-            }
+            case CTRL_VAR -> compileCtrlVar(compilationUnit, parseTree);
         }
 
         return compilationUnit;
@@ -96,8 +94,7 @@ public class CompileController {
      * @param compilationUnit compilation unit
      */
     private void compileVar(CompilationUnit compilationUnit) {
-        // Add the compiled variable set to the global environment
-        env.addStateVariableSet(compilationUnit.getVariableSet());
+        compileVarSetToEnv(compilationUnit.getVariableSet());
     }
 
     /**
@@ -110,10 +107,7 @@ public class CompileController {
         TransitionSystem system = compilationUnit.getTransitionSystem();
         VariableSet variableSet = compilationUnit.getVariableSet();
 
-        Assert.isTrue(env.getStateVariableSet(variableSet.getIdentifier()).isEmpty(),
-                new StateVariableException(compilationUnit.getIdentifier(), "Variable set (" + variableSet.getIdentifier() + ") has been defined."));
-        // Add the compiled variable set to the global environment
-        env.addStateVariableSet(variableSet);
+        compileVarSetToEnv(variableSet);
 
         // Get defined variable set
         String variableSetName = system.getDependentVariableSetName();
@@ -135,14 +129,41 @@ public class CompileController {
      * @param parseTree       parse tree
      */
     private void compileCtrl(CompilationUnit compilationUnit, ParseTree parseTree) {
-        ControlSystem system = compilationUnit.getControlSystem();
+        compileControlSystemToEnv(compilationUnit.getControlSystem(), parseTree);
+    }
 
+    /**
+     * Compile a control system with a variable set
+     *
+     * @param compilationUnit compilation unit containing a control system and a variable set
+     * @param parseTree       parse tree
+     */
+    private void compileCtrlVar(CompilationUnit compilationUnit, ParseTree parseTree) {
+        VariableSet variableSet = compilationUnit.getVariableSet();
+        compileVarSetToEnv(variableSet);
+
+        compileControlSystemToEnv(compilationUnit.getControlSystem(), parseTree);
+    }
+
+    /**
+     * Add a variable set to the global environment
+     *
+     * @param variableSet variable set
+     */
+    private void compileVarSetToEnv(VariableSet variableSet) {
+        Assert.isTrue(env.getStateVariableSet(variableSet.getIdentifier()).isEmpty(),
+                new StateVariableException(variableSet.getIdentifier(), "Variable set (" + variableSet.getIdentifier() + ") has been defined."));
+        // Add the compiled variable set to the global environment
+        env.addStateVariableSet(variableSet);
+    }
+
+    private void compileControlSystemToEnv(ControlSystem system, ParseTree parseTree) {
         // Get defined variable set
-        String variableSetName = system.getDependentVariableSetName();
         VariableSet variableSet;
+        String variableSetName = system.getDependentVariableSetName();
         if (variableSetName != null) {
-             variableSet = env.getStateVariableSet(variableSetName).orElseThrow(() -> {
-                throw new StateVariableException(compilationUnit.getIdentifier(), "Variable set (" + variableSetName + ") is not defined");
+            variableSet = env.getStateVariableSet(variableSetName).orElseThrow(() -> {
+                throw new StateVariableException(system.getIdentifier(), "Variable set (" + variableSetName + ") is not defined");
             });
         } else {
             variableSet = new VariableSet();

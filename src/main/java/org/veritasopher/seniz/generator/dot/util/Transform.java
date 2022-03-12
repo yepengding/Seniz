@@ -1,7 +1,10 @@
 package org.veritasopher.seniz.generator.dot.util;
 
 import org.veritasopher.seniz.core.model.common.Action;
+import org.veritasopher.seniz.core.model.common.ControlStatement;
 import org.veritasopher.seniz.core.model.common.State;
+import org.veritasopher.seniz.core.model.domain.CompositionType;
+import org.veritasopher.seniz.exception.type.GeneratorException;
 
 /**
  * DOT Transform Tool
@@ -42,6 +45,16 @@ public class Transform {
             return "epsilon";
         } else {
             return action.getName();
+        }
+    }
+
+    public static String toDotControlStatement(ControlStatement controlStatement) {
+        if (controlStatement.getCompositionType() == CompositionType.ASYNC) {
+            return String.join(" ||| ", controlStatement.getSystemIdentifiers());
+        } else if (controlStatement.getCompositionType() == CompositionType.SYNC) {
+            return String.join(" || ", controlStatement.getSystemIdentifiers());
+        } else {
+            throw new GeneratorException("Unsupported control statement.");
         }
     }
 
