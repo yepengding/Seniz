@@ -94,14 +94,7 @@ public class SenizParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitControlStateStatement(SenizParser.ControlStateStatementContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitControlStateExpression(SenizParser.ControlStateExpressionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitGlobalStateBody(SenizParser.GlobalStateBodyContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -255,21 +248,21 @@ public class SenizParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitControlStateNaming(SenizParser.ControlStateNamingContext ctx) { return visitChildren(ctx); }
+	@Override public T visitGlobalStateNaming(SenizParser.GlobalStateNamingContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitControlStateNameIdentifier(SenizParser.ControlStateNameIdentifierContext ctx) { return visitChildren(ctx); }
+	@Override public T visitGlobalStateNameIdentifier(SenizParser.GlobalStateNameIdentifierContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitControlStateIdentifier(SenizParser.ControlStateIdentifierContext ctx) { return visitChildren(ctx); }
+	@Override public T visitGlobalStateIdentifier(SenizParser.GlobalStateIdentifierContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -514,7 +507,7 @@ public class SenizParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitVarSetIdentifer(SenizParser.VarSetIdentiferContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVarSetIdentifier(SenizParser.VarSetIdentifierContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

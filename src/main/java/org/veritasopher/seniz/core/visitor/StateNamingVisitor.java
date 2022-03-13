@@ -26,7 +26,7 @@ public class StateNamingVisitor extends SenizParserBaseVisitor<Void> {
 
     public StateNamingVisitor(TransitionSystem transitionSystem) {
         this.transitionSystem = transitionSystem;
-        this.stateDeclaratorVisitor = new StateDeclaratorVisitor(transitionSystem);
+        this.stateDeclaratorVisitor = new StateDeclaratorVisitor(transitionSystem, false);
     }
 
     /**
@@ -40,7 +40,6 @@ public class StateNamingVisitor extends SenizParserBaseVisitor<Void> {
          * Visit state declarator with explicit naming declarations
          *
          * @param ctx StateNamingContext
-         * @return TransitionSystem
          */
         @Override
         public Void visitStateNaming(SenizParser.StateNamingContext ctx) {

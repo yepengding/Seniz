@@ -73,19 +73,7 @@ public class CompileController {
      * @param parseTree       parse tree
      */
     private void compileTS(CompilationUnit compilationUnit, ParseTree parseTree) {
-        TransitionSystem system = compilationUnit.getTransitionSystem();
-
-        // Get defined variable set
-        String variableSetName = system.getDependentVariableSetName();
-        VariableSet variableSet = env.getStateVariableSet(variableSetName).orElseThrow(() -> {
-            throw new StateVariableException(compilationUnit.getIdentifier(), "Variable set (" + variableSetName + ") is not defined");
-        });
-
-        // Finalize state variable set
-        variableSet = variableSetBuilder.build(system, variableSet);
-
-        // Build transition system and add it to the global environment
-        env.addTransitionSystem(transitionSystemBuilder.build(system, variableSet, parseTree));
+        compileTransitionSystemToEnv(compilationUnit.getTransitionSystem(), parseTree);
     }
 
     /**
@@ -104,22 +92,10 @@ public class CompileController {
      * @param parseTree       parse tree
      */
     private void compileTSVar(CompilationUnit compilationUnit, ParseTree parseTree) {
-        TransitionSystem system = compilationUnit.getTransitionSystem();
         VariableSet variableSet = compilationUnit.getVariableSet();
-
         compileVarSetToEnv(variableSet);
 
-        // Get defined variable set
-        String variableSetName = system.getDependentVariableSetName();
-        variableSet = env.getStateVariableSet(variableSetName).orElseThrow(() -> {
-            throw new StateVariableException(compilationUnit.getIdentifier(), "Variable set (" + variableSetName + ") is not defined");
-        });
-
-        // Build state variable set
-        variableSet = variableSetBuilder.build(system, variableSet);
-
-        // Build transition system and add it to the global environment
-        env.addTransitionSystem(transitionSystemBuilder.build(system, variableSet, parseTree));
+        compileTransitionSystemToEnv(compilationUnit.getTransitionSystem(), parseTree);
     }
 
     /**
@@ -157,6 +133,32 @@ public class CompileController {
         env.addStateVariableSet(variableSet);
     }
 
+    private void compileTransitionSystemToEnv(TransitionSystem system, ParseTree parseTree) {
+        // Get defined variable set
+        String variableSetName = system.getDependentVariableSetName();
+        VariableSet variableSet = env.getStateVariableSet(variableSetName).orElseThrow(() -> {
+            throw new StateVariableException(system.getIdentifier(), "Variable set (" + variableSetName + ") is not defined");
+        });
+
+        // Get defined global variable set
+        VariableSet globalVariableSet;
+        String globalVariableSetName = system.getGlobalVariableSetName();
+        if (globalVariableSetName != null) {
+            globalVariableSet = env.getStateVariableSet(globalVariableSetName).orElseThrow(() -> {
+                throw new StateVariableException(system.getIdentifier(), "Variable set (" + globalVariableSetName + ") is not defined");
+            });
+        } else {
+            globalVariableSet = new VariableSet();
+        }
+
+        // Build state variable set
+        variableSet = variableSetBuilder.build(system, variableSet);
+        globalVariableSet = variableSetBuilder.build(system, globalVariableSet);
+
+        // Build transition system and add it to the global environment
+        env.addTransitionSystem(transitionSystemBuilder.build(system, variableSet, globalVariableSet, parseTree));
+    }
+
     private void compileControlSystemToEnv(ControlSystem system, ParseTree parseTree) {
         // Get defined variable set
         VariableSet variableSet;
@@ -172,8 +174,21 @@ public class CompileController {
         // Finalize state variable set
         variableSet = variableSetBuilder.build(system, variableSet);
 
+        // Get defined global variable set
+        VariableSet globalVariableSet;
+        String globalVariableSetName = system.getGlobalVariableSetName();
+        if (globalVariableSetName != null) {
+            globalVariableSet = env.getStateVariableSet(globalVariableSetName).orElseThrow(() -> {
+                throw new StateVariableException(system.getIdentifier(), "Variable set (" + globalVariableSetName + ") is not defined");
+            });
+        } else {
+            globalVariableSet = new VariableSet();
+        }
+
+        globalVariableSet = variableSetBuilder.build(system, globalVariableSet);
+
         // Build control system and add it to the global environment
-        env.addControlSystem(controlSystemBuilder.build(system, variableSet, parseTree, env));
+        env.addControlSystem(controlSystemBuilder.build(system, variableSet, globalVariableSet, parseTree, env));
     }
 
 }

@@ -50,7 +50,6 @@ public class PrecompileVisitor extends SenizParserBaseVisitor<PrecompileUnit> {
         if (ctx.systemDeclaration() != null && ctx.varSetDeclaration() != null) {
             precompileUnit.setType(UnitType.TS_VAR);
             this.visitSystemHeader(ctx.systemDeclaration().systemHeader());
-            this.visitVarSetHeader(ctx.varSetDeclaration().varSetHeader());
         } else if (ctx.systemDeclaration() != null) {
             precompileUnit.setType(UnitType.TS);
             this.visitSystemHeader(ctx.systemDeclaration().systemHeader());
@@ -93,7 +92,7 @@ public class PrecompileVisitor extends SenizParserBaseVisitor<PrecompileUnit> {
 
     @Override
     public PrecompileUnit visitVarSetHeader(SenizParser.VarSetHeaderContext ctx) {
-        String id = ctx.varSetIdentifer().IDENTIFIER().getText();
+        String id = ctx.varSetIdentifier().IDENTIFIER().getText();
         // Identifier must be the same with the file name
         if (precompileUnit.getType() == UnitType.VAR && !identifier.equals(id)) {
             throw new PrecompileException(identifier, ctx.start.getLine(), ctx.start.getCharPositionInLine(), "State variable set identifier (" + id + ") is different from file name.");

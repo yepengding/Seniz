@@ -10,7 +10,6 @@ import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.SystemArgument;
 import org.veritasopher.seniz.core.model.domain.PrimaryType;
-import org.veritasopher.seniz.core.tool.Naming;
 import org.veritasopher.seniz.exception.Assert;
 import org.veritasopher.seniz.exception.type.CompilationException;
 import org.veritasopher.seniz.exception.type.FormalParameterException;
@@ -46,10 +45,14 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
         String identifier = headerContext.systemIdentifier().IDENTIFIER().getText();
         compilationUnit.setIdentifier(identifier);
 
-        String dependentVariableSetName = null;
-        // Set dependent variable set name
-        if (headerContext.systemParameter() != null && headerContext.systemParameter().varSetIdentifer() != null) {
-            dependentVariableSetName = headerContext.systemParameter().varSetIdentifer().IDENTIFIER().getText();
+        // Set dependent and global variable set name
+        String dependentVariableSetName = null, globalVariableSetName = null;
+
+        if (headerContext.systemParameter() != null) {
+            dependentVariableSetName = headerContext.systemParameter().varSetIdentifier(0).IDENTIFIER().getText();
+            if (headerContext.systemParameter().WITH() != null) {
+                globalVariableSetName = headerContext.systemParameter().varSetIdentifier(1).IDENTIFIER().getText();
+            }
         }
 
         if (headerContext.systemModifiers().controlModifier() == null) {
@@ -64,9 +67,9 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
                 formalParameterListContext.formalParameter().forEach(p -> ts.addSystemArgument(p.accept(formalParameterVisitor)));
             }
 
-            // Set dependent variable set name
+            // Set dependent and global variable set name
             ts.setDependentVariableSetName(dependentVariableSetName);
-
+            ts.setGlobalVariableSetName(globalVariableSetName);
         } else {
             // Control system
             ControlSystem cs = new ControlSystem(identifier);
@@ -79,16 +82,23 @@ public class CompilationUnitVisitor extends SenizParserBaseVisitor<CompilationUn
                 formalParameterListContext.formalParameter().forEach(p -> cs.addSystemArgument(p.accept(formalParameterVisitor)));
             }
 
-            // Set dependent variable set name
+            // Set dependent and global variable set name
             cs.setDependentVariableSetName(dependentVariableSetName);
+            cs.setGlobalVariableSetName(globalVariableSetName);
         }
 
         return super.visitSystemDeclaration(ctx);
     }
 
+    /**
+     * Visit variable set declaration
+     *
+     * @param ctx VarSetDeclarationContext
+     * @return CompilationUnit
+     */
     @Override
     public CompilationUnit visitVarSetDeclaration(SenizParser.VarSetDeclarationContext ctx) {
-        String identifier = ctx.varSetHeader().varSetIdentifer().IDENTIFIER().getText();
+        String identifier = ctx.varSetHeader().varSetIdentifier().IDENTIFIER().getText();
 
         // If a source file only contains a state variable set, then set compilation unit identifier as variable set identifier
         // This can be ensured by the visiting order (system declaration goes first)

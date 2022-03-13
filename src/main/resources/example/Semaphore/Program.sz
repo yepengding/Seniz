@@ -1,8 +1,10 @@
-system Program () over Vars {
+import SharedVars
+
+system Program () over Vars with SharedVars {
 
     init plain -> wait
     wait [y > 0] -> @{y:y-1} critical
-    critical -> @{y:y+1} plain
+    critical -> @increaseY plain
 
     plain = {
         loc: 1
@@ -16,9 +18,12 @@ system Program () over Vars {
         loc: 3
     }
 
+    @increaseY = {
+        y: y + 1
+    }
+
 }
 
 varset Vars {
-    loc :: int,
-    y :: int
+    loc :: int
 }

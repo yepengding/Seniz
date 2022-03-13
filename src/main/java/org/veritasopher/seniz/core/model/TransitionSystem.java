@@ -26,10 +26,19 @@ public class TransitionSystem {
     @Setter
     private String dependentVariableSetName;
 
+    // Global (Shared) variable set name
+    @Setter
+    private String globalVariableSetName;
+
     // State variable set
     @Setter
     private VariableSet stateVariables;
 
+    // State variable set
+    @Setter
+    private VariableSet globalStateVariables;
+
+    // System argument map <Name, System argument>
     private final Map<String, SystemArgument> arguments;
 
     // State map <HashCode, State>
@@ -51,6 +60,9 @@ public class TransitionSystem {
     // StateDeclarator naming map <Name, StateDeclarator>
     private final Map<String, StateDeclarator> stateDeclarators;
 
+    // GlobalStateDeclarator naming map <Name, StateDeclarator>
+    private final Map<String, StateDeclarator> globalStateDeclarators;
+
     // TransitionRule map <HashCode, TransitionRule>
     private final Map<Integer, TransitionRule> transitionRules;
 
@@ -66,11 +78,13 @@ public class TransitionSystem {
     public TransitionSystem(String identifier) {
         this.identifier = identifier;
         this.stateVariables = new VariableSet();
+        this.globalStateVariables = new VariableSet();
         this.arguments = new HashMap<>();
         this.states = new HashMap<>();
         this.actions = new HashMap<>();
         this.transitions = new HashMap<>();
         this.stateDeclarators = new HashMap<>();
+        this.globalStateDeclarators = new HashMap<>();
         this.transitionRules = new HashMap<>();
         this.transitionRuleBase = new HashMap<>();
         this.propositions = new HashMap<>();
@@ -94,16 +108,6 @@ public class TransitionSystem {
      */
     public Optional<StateVariable> getStateVariable(String name) {
         return Optional.ofNullable(this.stateVariables.getVariable(name));
-    }
-
-    /**
-     * Look up if state variable exists.
-     *
-     * @param name state variable name
-     * @return true if state variable exists. Otherwise false.
-     */
-    public boolean hasStateVariable(String name) {
-        return this.stateVariables.hasVariable(name);
     }
 
     /**
@@ -316,6 +320,47 @@ public class TransitionSystem {
      */
     public boolean hasStateDeclarator(String name) {
         return this.stateDeclarators.containsKey(getGlobalStateName(identifier, name));
+    }
+
+    /**
+     * Add a global state declarator
+     *
+     * @param globalStateDeclarator global state declarator
+     */
+    public void addGlobalStateDeclarator(StateDeclarator globalStateDeclarator) {
+        this.globalStateDeclarators.put(getGlobalStateName(identifier, globalStateDeclarator.getName()), globalStateDeclarator);
+    }
+
+    /**
+     * Get a global state declarator
+     *
+     * @param name global state declarator name
+     * @return either a global state declarator or null
+     */
+    public Optional<StateDeclarator> getGlobalStateDeclarator(String name) {
+        return Optional.ofNullable(this.globalStateDeclarators.get(getGlobalStateName(identifier, name)));
+    }
+
+    /**
+     * Get a global state variable
+     *
+     * @param name global state variable name
+     * @return either a global state variable or null
+     */
+    public Optional<StateVariable> getGlobalStateVariable(String name) {
+        return Optional.ofNullable(this.globalStateVariables.getVariable(name));
+    }
+
+    /**
+     * Get a global state declarator by id
+     *
+     * @param id state declarator id (HashCode of StateDeclaratorContext.)
+     * @return Either a state declarator or null
+     */
+    public Optional<StateDeclarator> getGlobalStateDeclarator(int id) {
+        return this.globalStateDeclarators.values().stream()
+                .filter(d -> id == d.getId())
+                .findAny();
     }
 
     /**

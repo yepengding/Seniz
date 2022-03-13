@@ -1,6 +1,7 @@
+import SharedVars
 import Program
 
-main control system Main() {
+main control system Main() over SharedVars {
 
     sync Program() as p1, Program() as p2
 

@@ -1,7 +1,7 @@
 package org.veritasopher.seniz.core.model.domain;
 
 public enum PrimaryType {
-    NULL, BOOLEAN, INTEGER, FLOAT, STRING, VARIABLE, ARGUMENT, SYSTEM, PROPOSITION;
+    NULL, BOOLEAN, INTEGER, FLOAT, STRING, VARIABLE, GLOBAL_VARIABLE, ARGUMENT, SYSTEM, PROPOSITION;
 
     /**
      * Get type by type name

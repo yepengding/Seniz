@@ -29,6 +29,10 @@ OVER
     : 'over'
     ;
 
+WITH
+    : 'with'
+    ;
+
 INIT
     : 'init'
     ;

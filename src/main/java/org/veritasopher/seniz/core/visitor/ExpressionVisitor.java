@@ -4,7 +4,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
 import org.veritasopher.seniz.core.model.TransitionSystem;
-import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.Term;
 import org.veritasopher.seniz.core.model.common.Value;
@@ -28,13 +27,11 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
 
     private final TransitionSystem transitionSystem;
 
-    private final VariableSet stateVariableSet;
 
     public ExpressionVisitor(Evaluation evaluation, TransitionSystem transitionSystem) {
         this.literalVisitor = new LiteralVisitor();
         this.evaluation = evaluation;
         this.transitionSystem = transitionSystem;
-        this.stateVariableSet = transitionSystem.getStateVariables();
     }
 
 
@@ -44,11 +41,13 @@ public class ExpressionVisitor extends SenizParserBaseVisitor<Evaluation> {
             evaluation.addTerm(new Term(ctx.primary().literal().accept(literalVisitor)));
         } else if (ctx.primary().variableIdentifier() != null) {
             String name = ctx.primary().variableIdentifier().IDENTIFIER().stream().map(ParseTree::getText).collect(Collectors.joining("."));
-            // Check whether variable is defined as system argument or state variable
+            // Check whether variable is defined as system argument, state variable, or global state variable
             if (transitionSystem.hasSystemArgument(name)) {
                 evaluation.addTerm(new Term(new Value(PrimaryType.ARGUMENT, name)));
-            } else if (stateVariableSet.hasVariable(name)) {
+            } else if (transitionSystem.getStateVariable(name).isPresent()) {
                 evaluation.addTerm(new Term(new Value(PrimaryType.VARIABLE, name)));
+            } else if (transitionSystem.getGlobalStateVariable(name).isPresent()) {
+                evaluation.addTerm(new Term(new Value(PrimaryType.GLOBAL_VARIABLE, name)));
             } else {
                 throw new ExpressionException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined state variable or system argument.");
             }

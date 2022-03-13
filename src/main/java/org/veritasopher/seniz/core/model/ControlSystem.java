@@ -26,9 +26,17 @@ public class ControlSystem {
     @Setter
     private String dependentVariableSetName;
 
+    // Global (Shared) variable set name
+    @Setter
+    private String globalVariableSetName;
+
     // State variable set
     @Setter
     private VariableSet stateVariables;
+
+    // Global (Shared) state variable set
+    @Setter
+    private VariableSet globalStateVariables;
 
     // Argument map <Name, System Argument>
     private final Map<String, SystemArgument> arguments;

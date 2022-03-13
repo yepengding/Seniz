@@ -118,25 +118,15 @@ public interface SenizParserListener extends ParseTreeListener {
 	 */
 	void exitControlSystemBodyDeclaration(SenizParser.ControlSystemBodyDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SenizParser#controlStateStatement}.
+	 * Enter a parse tree produced by {@link SenizParser#globalStateBody}.
 	 * @param ctx the parse tree
 	 */
-	void enterControlStateStatement(SenizParser.ControlStateStatementContext ctx);
+	void enterGlobalStateBody(SenizParser.GlobalStateBodyContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SenizParser#controlStateStatement}.
+	 * Exit a parse tree produced by {@link SenizParser#globalStateBody}.
 	 * @param ctx the parse tree
 	 */
-	void exitControlStateStatement(SenizParser.ControlStateStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SenizParser#controlStateExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterControlStateExpression(SenizParser.ControlStateExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SenizParser#controlStateExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitControlStateExpression(SenizParser.ControlStateExpressionContext ctx);
+	void exitGlobalStateBody(SenizParser.GlobalStateBodyContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SenizParser#logicStatement}.
 	 * @param ctx the parse tree
@@ -364,35 +354,35 @@ public interface SenizParserListener extends ParseTreeListener {
 	 */
 	void exitPrimary(SenizParser.PrimaryContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SenizParser#controlStateNaming}.
+	 * Enter a parse tree produced by {@link SenizParser#globalStateNaming}.
 	 * @param ctx the parse tree
 	 */
-	void enterControlStateNaming(SenizParser.ControlStateNamingContext ctx);
+	void enterGlobalStateNaming(SenizParser.GlobalStateNamingContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SenizParser#controlStateNaming}.
+	 * Exit a parse tree produced by {@link SenizParser#globalStateNaming}.
 	 * @param ctx the parse tree
 	 */
-	void exitControlStateNaming(SenizParser.ControlStateNamingContext ctx);
+	void exitGlobalStateNaming(SenizParser.GlobalStateNamingContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SenizParser#controlStateNameIdentifier}.
+	 * Enter a parse tree produced by {@link SenizParser#globalStateNameIdentifier}.
 	 * @param ctx the parse tree
 	 */
-	void enterControlStateNameIdentifier(SenizParser.ControlStateNameIdentifierContext ctx);
+	void enterGlobalStateNameIdentifier(SenizParser.GlobalStateNameIdentifierContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SenizParser#controlStateNameIdentifier}.
+	 * Exit a parse tree produced by {@link SenizParser#globalStateNameIdentifier}.
 	 * @param ctx the parse tree
 	 */
-	void exitControlStateNameIdentifier(SenizParser.ControlStateNameIdentifierContext ctx);
+	void exitGlobalStateNameIdentifier(SenizParser.GlobalStateNameIdentifierContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SenizParser#controlStateIdentifier}.
+	 * Enter a parse tree produced by {@link SenizParser#globalStateIdentifier}.
 	 * @param ctx the parse tree
 	 */
-	void enterControlStateIdentifier(SenizParser.ControlStateIdentifierContext ctx);
+	void enterGlobalStateIdentifier(SenizParser.GlobalStateIdentifierContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SenizParser#controlStateIdentifier}.
+	 * Exit a parse tree produced by {@link SenizParser#globalStateIdentifier}.
 	 * @param ctx the parse tree
 	 */
-	void exitControlStateIdentifier(SenizParser.ControlStateIdentifierContext ctx);
+	void exitGlobalStateIdentifier(SenizParser.GlobalStateIdentifierContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SenizParser#transitionStatement}.
 	 * @param ctx the parse tree
@@ -760,15 +750,15 @@ public interface SenizParserListener extends ParseTreeListener {
 	 */
 	void exitVarTypeDeclaration(SenizParser.VarTypeDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SenizParser#varSetIdentifer}.
+	 * Enter a parse tree produced by {@link SenizParser#varSetIdentifier}.
 	 * @param ctx the parse tree
 	 */
-	void enterVarSetIdentifer(SenizParser.VarSetIdentiferContext ctx);
+	void enterVarSetIdentifier(SenizParser.VarSetIdentifierContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SenizParser#varSetIdentifer}.
+	 * Exit a parse tree produced by {@link SenizParser#varSetIdentifier}.
 	 * @param ctx the parse tree
 	 */
-	void exitVarSetIdentifer(SenizParser.VarSetIdentiferContext ctx);
+	void exitVarSetIdentifier(SenizParser.VarSetIdentifierContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SenizParser#varIdentifier}.
 	 * @param ctx the parse tree

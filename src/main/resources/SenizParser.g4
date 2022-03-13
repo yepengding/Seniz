@@ -31,7 +31,7 @@ controlModifier
     ;
 
 systemParameter
-    : OVER varSetIdentifer (COMMA chanSetIdentifer)?
+    : OVER varSetIdentifier (COMMA chanSetIdentifer)? (WITH varSetIdentifier)?
     ;
 
 systemBody
@@ -41,24 +41,20 @@ systemBody
 
 systemBodyDeclaration
     : stateNaming
-    | controlStateNaming
+    | globalStateNaming
     | transitionStatement
     | logicStatement
     ;
 
 controlSystemBodyDeclaration
-    : controlStateStatement?
+    : (GLOBAL globalStateBody)?
     | logicStatement*
     ;
 
-controlStateStatement
-    : LBRACE controlStateExpression* RBRACE
+globalStateBody
+    : LBRACE stateDeclarator RBRACE
     ;
 
-
-controlStateExpression
-    : varIdentifier bop=VALUEOF expression
-    ;
 
 logicStatement
     : propositionStatement
@@ -130,18 +126,18 @@ primary
     | variableIdentifier
     ;
 
-// Control Var Naming
-controlStateNaming
-    : controlStateNameIdentifier bop=EQ controlStateStatement
+// Global State Naming
+globalStateNaming
+    : globalStateNameIdentifier bop=EQ globalStateBody
     ;
 
-controlStateNameIdentifier
+globalStateNameIdentifier
     : GLOBAL IDENTIFIER
     ;
 
-controlStateIdentifier
-    : controlStateNameIdentifier
-    | GLOBAL controlStateStatement
+globalStateIdentifier
+    : globalStateNameIdentifier
+    | GLOBAL globalStateBody
     ;
 
 // Transition
@@ -155,7 +151,7 @@ initIdentifier
     ;
 
 transitionDeclaration
-    : guardIdentifier? TO actionDeclaration? controlStateIdentifier? stateIdentifier
+    : guardIdentifier? TO actionDeclaration? globalStateIdentifier? stateIdentifier
     ;
 
 // Guard
@@ -248,7 +244,7 @@ varSetDeclaration
     ;
 
 varSetHeader
-    : VARSET varSetIdentifer
+    : VARSET varSetIdentifier
     ;
 
 varSetBody
@@ -263,7 +259,7 @@ varTypeDeclaration
     : varIdentifier bop=TYPEOF primitiveType
     ;
 
-varSetIdentifer
+varSetIdentifier
     : IDENTIFIER
     ;
 

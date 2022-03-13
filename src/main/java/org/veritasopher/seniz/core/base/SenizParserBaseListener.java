@@ -148,25 +148,13 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterControlStateStatement(SenizParser.ControlStateStatementContext ctx) { }
+	@Override public void enterGlobalStateBody(SenizParser.GlobalStateBodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitControlStateStatement(SenizParser.ControlStateStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterControlStateExpression(SenizParser.ControlStateExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitControlStateExpression(SenizParser.ControlStateExpressionContext ctx) { }
+	@Override public void exitGlobalStateBody(SenizParser.GlobalStateBodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -424,37 +412,37 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterControlStateNaming(SenizParser.ControlStateNamingContext ctx) { }
+	@Override public void enterGlobalStateNaming(SenizParser.GlobalStateNamingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitControlStateNaming(SenizParser.ControlStateNamingContext ctx) { }
+	@Override public void exitGlobalStateNaming(SenizParser.GlobalStateNamingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterControlStateNameIdentifier(SenizParser.ControlStateNameIdentifierContext ctx) { }
+	@Override public void enterGlobalStateNameIdentifier(SenizParser.GlobalStateNameIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitControlStateNameIdentifier(SenizParser.ControlStateNameIdentifierContext ctx) { }
+	@Override public void exitGlobalStateNameIdentifier(SenizParser.GlobalStateNameIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterControlStateIdentifier(SenizParser.ControlStateIdentifierContext ctx) { }
+	@Override public void enterGlobalStateIdentifier(SenizParser.GlobalStateIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitControlStateIdentifier(SenizParser.ControlStateIdentifierContext ctx) { }
+	@Override public void exitGlobalStateIdentifier(SenizParser.GlobalStateIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -868,13 +856,13 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarSetIdentifer(SenizParser.VarSetIdentiferContext ctx) { }
+	@Override public void enterVarSetIdentifier(SenizParser.VarSetIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVarSetIdentifer(SenizParser.VarSetIdentiferContext ctx) { }
+	@Override public void exitVarSetIdentifier(SenizParser.VarSetIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

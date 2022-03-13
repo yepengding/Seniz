@@ -77,17 +77,11 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitControlSystemBodyDeclaration(SenizParser.ControlSystemBodyDeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#controlStateStatement}.
+	 * Visit a parse tree produced by {@link SenizParser#globalStateBody}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitControlStateStatement(SenizParser.ControlStateStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SenizParser#controlStateExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitControlStateExpression(SenizParser.ControlStateExpressionContext ctx);
+	T visitGlobalStateBody(SenizParser.GlobalStateBodyContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#logicStatement}.
 	 * @param ctx the parse tree
@@ -223,23 +217,23 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrimary(SenizParser.PrimaryContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#controlStateNaming}.
+	 * Visit a parse tree produced by {@link SenizParser#globalStateNaming}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitControlStateNaming(SenizParser.ControlStateNamingContext ctx);
+	T visitGlobalStateNaming(SenizParser.GlobalStateNamingContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#controlStateNameIdentifier}.
+	 * Visit a parse tree produced by {@link SenizParser#globalStateNameIdentifier}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitControlStateNameIdentifier(SenizParser.ControlStateNameIdentifierContext ctx);
+	T visitGlobalStateNameIdentifier(SenizParser.GlobalStateNameIdentifierContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#controlStateIdentifier}.
+	 * Visit a parse tree produced by {@link SenizParser#globalStateIdentifier}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitControlStateIdentifier(SenizParser.ControlStateIdentifierContext ctx);
+	T visitGlobalStateIdentifier(SenizParser.GlobalStateIdentifierContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#transitionStatement}.
 	 * @param ctx the parse tree
@@ -458,11 +452,11 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarTypeDeclaration(SenizParser.VarTypeDeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#varSetIdentifer}.
+	 * Visit a parse tree produced by {@link SenizParser#varSetIdentifier}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitVarSetIdentifer(SenizParser.VarSetIdentiferContext ctx);
+	T visitVarSetIdentifier(SenizParser.VarSetIdentifierContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#varIdentifier}.
 	 * @param ctx the parse tree
