@@ -77,17 +77,17 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitControlSystemBodyDeclaration(SenizParser.ControlSystemBodyDeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#controlVarStatement}.
+	 * Visit a parse tree produced by {@link SenizParser#controlStateStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitControlVarStatement(SenizParser.ControlVarStatementContext ctx);
+	T visitControlStateStatement(SenizParser.ControlStateStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#controlVarExpression}.
+	 * Visit a parse tree produced by {@link SenizParser#controlStateExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitControlVarExpression(SenizParser.ControlVarExpressionContext ctx);
+	T visitControlStateExpression(SenizParser.ControlStateExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#logicStatement}.
 	 * @param ctx the parse tree
@@ -222,6 +222,24 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPrimary(SenizParser.PrimaryContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#controlStateNaming}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitControlStateNaming(SenizParser.ControlStateNamingContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#controlStateNameIdentifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitControlStateNameIdentifier(SenizParser.ControlStateNameIdentifierContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#controlStateIdentifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitControlStateIdentifier(SenizParser.ControlStateIdentifierContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#transitionStatement}.
 	 * @param ctx the parse tree

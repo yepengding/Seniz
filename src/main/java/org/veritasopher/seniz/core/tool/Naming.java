@@ -18,7 +18,7 @@ public class Naming {
      * @return true if satisfied
      */
     public static boolean satisfyStateDeclaratorNamingRule(String name) {
-        return name.length() > 0 && !name.startsWith("$") && !name.startsWith("@");
+        return name.length() > 0 && !name.startsWith("$") && !name.startsWith("@") && !name.startsWith("_");
     }
 
     /**
@@ -28,7 +28,7 @@ public class Naming {
      * @return true if satisfied
      */
     public static boolean satisfyActionNamingRule(String name) {
-        return name.length() > 0 && !name.startsWith("$") && !name.startsWith("@");
+        return name.length() > 0 && !name.startsWith("$") && !name.startsWith("@") && !name.startsWith("_");
     }
 
     /**
@@ -38,7 +38,7 @@ public class Naming {
      * @return true if satisfied
      */
     public static boolean satisfyPropositionNamingRule(String name) {
-        return name.length() > 0 && !name.startsWith("$") && !name.startsWith("@");
+        return name.length() > 0 && !name.startsWith("$") && !name.startsWith("@") && !name.startsWith("_");
     }
 
     /**

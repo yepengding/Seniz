@@ -34,7 +34,7 @@ public class StateNamingVisitor extends SenizParserBaseVisitor<Void> {
      * <p>
      * Named state declarators
      */
-    public class ExplicitNamingVisitor extends SenizParserBaseVisitor<TransitionSystem> {
+    public class ExplicitNamingVisitor extends SenizParserBaseVisitor<Void> {
 
         /**
          * Visit state declarator with explicit naming declarations
@@ -43,7 +43,7 @@ public class StateNamingVisitor extends SenizParserBaseVisitor<Void> {
          * @return TransitionSystem
          */
         @Override
-        public TransitionSystem visitStateNaming(SenizParser.StateNamingContext ctx) {
+        public Void visitStateNaming(SenizParser.StateNamingContext ctx) {
             String name = ctx.stateNameIdentifier().IDENTIFIER().getText();
 
             // Check naming rule
@@ -68,7 +68,7 @@ public class StateNamingVisitor extends SenizParserBaseVisitor<Void> {
      * <p>
      * Unnamed state declarators
      */
-    public class ImplicitNamingVisitor extends SenizParserBaseVisitor<TransitionSystem> {
+    public class ImplicitNamingVisitor extends SenizParserBaseVisitor<Void> {
 
         /**
          * Visit state declarator without naming declarations
@@ -77,7 +77,7 @@ public class StateNamingVisitor extends SenizParserBaseVisitor<Void> {
          * @return TransitionSystem
          */
         @Override
-        public TransitionSystem visitStateIdentifier(SenizParser.StateIdentifierContext ctx) {
+        public Void visitStateIdentifier(SenizParser.StateIdentifierContext ctx) {
             if (ctx.stateNameIdentifier() != null) {
                 String name = ctx.stateNameIdentifier().IDENTIFIER().getText();
                 Optional<StateDeclarator> s = transitionSystem.getStateDeclarator(name);

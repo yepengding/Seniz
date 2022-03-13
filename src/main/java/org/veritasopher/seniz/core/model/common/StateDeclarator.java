@@ -33,8 +33,4 @@ public class StateDeclarator {
      */
     private String name;
 
-    // TODO
-    private boolean isStuttering;
-    private String stutteringName;
-
 }

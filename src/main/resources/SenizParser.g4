@@ -41,21 +41,22 @@ systemBody
 
 systemBodyDeclaration
     : stateNaming
+    | controlStateNaming
     | transitionStatement
     | logicStatement
     ;
 
 controlSystemBodyDeclaration
-    : controlVarStatement?
+    : controlStateStatement?
     | logicStatement*
     ;
 
-controlVarStatement
-    : GLOBAL LBRACE controlVarExpression* RBRACE
+controlStateStatement
+    : LBRACE controlStateExpression* RBRACE
     ;
 
 
-controlVarExpression
+controlStateExpression
     : varIdentifier bop=VALUEOF expression
     ;
 
@@ -129,6 +130,19 @@ primary
     | variableIdentifier
     ;
 
+// Control Var Naming
+controlStateNaming
+    : controlStateNameIdentifier bop=EQ controlStateStatement
+    ;
+
+controlStateNameIdentifier
+    : GLOBAL IDENTIFIER
+    ;
+
+controlStateIdentifier
+    : controlStateNameIdentifier
+    | GLOBAL controlStateStatement
+    ;
 
 // Transition
 
@@ -141,7 +155,7 @@ initIdentifier
     ;
 
 transitionDeclaration
-    : guardIdentifier? TO actionDeclaration? controlVarStatement? stateIdentifier
+    : guardIdentifier? TO actionDeclaration? controlStateIdentifier? stateIdentifier
     ;
 
 // Guard

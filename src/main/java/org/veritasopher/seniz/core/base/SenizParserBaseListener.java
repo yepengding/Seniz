@@ -148,25 +148,25 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterControlVarStatement(SenizParser.ControlVarStatementContext ctx) { }
+	@Override public void enterControlStateStatement(SenizParser.ControlStateStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitControlVarStatement(SenizParser.ControlVarStatementContext ctx) { }
+	@Override public void exitControlStateStatement(SenizParser.ControlStateStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterControlVarExpression(SenizParser.ControlVarExpressionContext ctx) { }
+	@Override public void enterControlStateExpression(SenizParser.ControlStateExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitControlVarExpression(SenizParser.ControlVarExpressionContext ctx) { }
+	@Override public void exitControlStateExpression(SenizParser.ControlStateExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -419,6 +419,42 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrimary(SenizParser.PrimaryContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterControlStateNaming(SenizParser.ControlStateNamingContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitControlStateNaming(SenizParser.ControlStateNamingContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterControlStateNameIdentifier(SenizParser.ControlStateNameIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitControlStateNameIdentifier(SenizParser.ControlStateNameIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterControlStateIdentifier(SenizParser.ControlStateIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitControlStateIdentifier(SenizParser.ControlStateIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
