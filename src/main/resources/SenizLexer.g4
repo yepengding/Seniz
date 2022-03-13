@@ -21,6 +21,10 @@ VARSET
     : 'varset'
     ;
 
+CHANSET
+    : 'chanset'
+    ;
+
 OVER
     : 'over'
     ;
@@ -70,6 +74,14 @@ STRING
     : 'string'
     ;
 
+// Channel Types
+INTERNAL
+    : 'internal'
+    ;
+
+EXTERNAL
+    : 'external'
+    ;
 
 // Operators
 
@@ -95,8 +107,7 @@ MUL:                '*';
 DIV:                '/';
 CARET:              '^';
 MOD:                '%';
-PAR:                '||';
-INTERLEAVE:         '|||';
+GLOBAL:             '@';
 
 // Temporal Operator
 ALWAYS:             'G';

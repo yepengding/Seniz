@@ -3,7 +3,7 @@ parser grammar SenizParser;
 options { tokenVocab=SenizLexer; }
 
 compilationUnit
-    : importDeclaration* systemDeclaration? varSetDeclaration? EOF
+    : importDeclaration* systemDeclaration? varSetDeclaration? chanSetDeclaration? EOF
     ;
 
 importDeclaration
@@ -31,7 +31,7 @@ controlModifier
     ;
 
 systemParameter
-    : OVER varSetIdentifer
+    : OVER varSetIdentifer (COMMA chanSetIdentifer)?
     ;
 
 systemBody
@@ -51,7 +51,7 @@ controlSystemBodyDeclaration
     ;
 
 controlVarStatement
-    : LBRACE controlVarExpression* RBRACE
+    : GLOBAL LBRACE controlVarExpression* RBRACE
     ;
 
 
@@ -141,18 +141,18 @@ initIdentifier
     ;
 
 transitionDeclaration
-    : guardIdentifier? TO actionDeclaration? stateIdentifier
+    : guardIdentifier? TO actionDeclaration? controlVarStatement? stateIdentifier
     ;
 
 // Guard
 guardIdentifier
-    : LPAREN propositionExpression RPAREN
+    : LBRACK propositionExpression RBRACK
     ;
 
 // Action
 
 actionDeclaration
-    : IDENTIFIER LPAREN formalParameterList? RPAREN
+    : IDENTIFIER LPAREN chanExpression? RPAREN
     ;
 
 // Formal Parameter
@@ -242,10 +242,10 @@ varSetBody
     ;
 
 varSetDeclarator
-    : varExpression (COMMA varExpression)*
+    : varTypeDeclaration (COMMA varTypeDeclaration)*
     ;
 
-varExpression
+varTypeDeclaration
     : varIdentifier bop=TYPEOF primitiveType
     ;
 
@@ -254,6 +254,45 @@ varSetIdentifer
     ;
 
 varIdentifier
+    : IDENTIFIER
+    ;
+
+// Channel Set
+chanSetDeclaration
+    : chanSetHeader chanSetBody
+    ;
+
+chanSetHeader
+    : CHANSET chanSetIdentifer
+    ;
+
+chanSetBody
+    : LBRACE chanSetDeclarator RBRACE
+    ;
+
+chanSetDeclarator
+    : chanTypeDeclaration (COMMA chanTypeDeclaration)*
+    ;
+
+chanTypeDeclaration
+    : chanIdentifier bop=TYPEOF chanType
+    ;
+
+chanExpression
+    : chanIdentifier BANG variableIdentifier #sendingExpression
+    | chanIdentifier QUESTION variableIdentifier #receivingExpression
+    ;
+
+chanType
+    : INTERNAL
+    | EXTERNAL
+    ;
+
+chanSetIdentifer
+    : IDENTIFIER
+    ;
+
+chanIdentifier
     : IDENTIFIER
     ;
 

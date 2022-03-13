@@ -720,15 +720,15 @@ public interface SenizParserListener extends ParseTreeListener {
 	 */
 	void exitVarSetDeclarator(SenizParser.VarSetDeclaratorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SenizParser#varExpression}.
+	 * Enter a parse tree produced by {@link SenizParser#varTypeDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterVarExpression(SenizParser.VarExpressionContext ctx);
+	void enterVarTypeDeclaration(SenizParser.VarTypeDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SenizParser#varExpression}.
+	 * Exit a parse tree produced by {@link SenizParser#varTypeDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitVarExpression(SenizParser.VarExpressionContext ctx);
+	void exitVarTypeDeclaration(SenizParser.VarTypeDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SenizParser#varSetIdentifer}.
 	 * @param ctx the parse tree
@@ -749,6 +749,110 @@ public interface SenizParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVarIdentifier(SenizParser.VarIdentifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#chanSetDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterChanSetDeclaration(SenizParser.ChanSetDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#chanSetDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitChanSetDeclaration(SenizParser.ChanSetDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#chanSetHeader}.
+	 * @param ctx the parse tree
+	 */
+	void enterChanSetHeader(SenizParser.ChanSetHeaderContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#chanSetHeader}.
+	 * @param ctx the parse tree
+	 */
+	void exitChanSetHeader(SenizParser.ChanSetHeaderContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#chanSetBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterChanSetBody(SenizParser.ChanSetBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#chanSetBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitChanSetBody(SenizParser.ChanSetBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#chanSetDeclarator}.
+	 * @param ctx the parse tree
+	 */
+	void enterChanSetDeclarator(SenizParser.ChanSetDeclaratorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#chanSetDeclarator}.
+	 * @param ctx the parse tree
+	 */
+	void exitChanSetDeclarator(SenizParser.ChanSetDeclaratorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#chanTypeDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterChanTypeDeclaration(SenizParser.ChanTypeDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#chanTypeDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitChanTypeDeclaration(SenizParser.ChanTypeDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code sendingExpression}
+	 * labeled alternative in {@link SenizParser#chanExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterSendingExpression(SenizParser.SendingExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code sendingExpression}
+	 * labeled alternative in {@link SenizParser#chanExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitSendingExpression(SenizParser.SendingExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code receivingExpression}
+	 * labeled alternative in {@link SenizParser#chanExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterReceivingExpression(SenizParser.ReceivingExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code receivingExpression}
+	 * labeled alternative in {@link SenizParser#chanExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitReceivingExpression(SenizParser.ReceivingExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#chanType}.
+	 * @param ctx the parse tree
+	 */
+	void enterChanType(SenizParser.ChanTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#chanType}.
+	 * @param ctx the parse tree
+	 */
+	void exitChanType(SenizParser.ChanTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#chanSetIdentifer}.
+	 * @param ctx the parse tree
+	 */
+	void enterChanSetIdentifer(SenizParser.ChanSetIdentiferContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#chanSetIdentifer}.
+	 * @param ctx the parse tree
+	 */
+	void exitChanSetIdentifer(SenizParser.ChanSetIdentiferContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#chanIdentifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterChanIdentifier(SenizParser.ChanIdentifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#chanIdentifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitChanIdentifier(SenizParser.ChanIdentifierContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SenizParser#primitiveType}.
 	 * @param ctx the parse tree

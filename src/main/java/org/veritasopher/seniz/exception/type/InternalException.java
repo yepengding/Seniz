@@ -4,6 +4,10 @@ import org.veritasopher.seniz.exception.BaseException;
 
 public class InternalException extends BaseException {
 
+    public InternalException(String message) {
+        super(message);
+    }
+
     public InternalException(String source, String message) {
         super(source, message);
     }

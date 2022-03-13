@@ -434,11 +434,11 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarSetDeclarator(SenizParser.VarSetDeclaratorContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#varExpression}.
+	 * Visit a parse tree produced by {@link SenizParser#varTypeDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitVarExpression(SenizParser.VarExpressionContext ctx);
+	T visitVarTypeDeclaration(SenizParser.VarTypeDeclarationContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#varSetIdentifer}.
 	 * @param ctx the parse tree
@@ -451,6 +451,68 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitVarIdentifier(SenizParser.VarIdentifierContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#chanSetDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitChanSetDeclaration(SenizParser.ChanSetDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#chanSetHeader}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitChanSetHeader(SenizParser.ChanSetHeaderContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#chanSetBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitChanSetBody(SenizParser.ChanSetBodyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#chanSetDeclarator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitChanSetDeclarator(SenizParser.ChanSetDeclaratorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#chanTypeDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitChanTypeDeclaration(SenizParser.ChanTypeDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code sendingExpression}
+	 * labeled alternative in {@link SenizParser#chanExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSendingExpression(SenizParser.SendingExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code receivingExpression}
+	 * labeled alternative in {@link SenizParser#chanExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReceivingExpression(SenizParser.ReceivingExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#chanType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitChanType(SenizParser.ChanTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#chanSetIdentifer}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitChanSetIdentifer(SenizParser.ChanSetIdentiferContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#chanIdentifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitChanIdentifier(SenizParser.ChanIdentifierContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#primitiveType}.
 	 * @param ctx the parse tree

@@ -1,0 +1,7 @@
+import Program
+
+main control system Main() {
+
+    sync Program() as p1, Program() as p2
+
+}

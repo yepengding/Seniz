@@ -31,25 +31,25 @@ public class VariableDeclaratorVisitor extends SenizParserBaseVisitor<VariableSe
         VariableSet variableSet = new VariableSet();
         variableSet.setIdentifier(identifier);
 
-        VariableExpressionVisitor variableExpressionVisitor = new VariableExpressionVisitor(variableSet, systemVariableNameSet);
-        ctx.varExpression().forEach(expr -> variableSet.addVariable(expr.accept(variableExpressionVisitor)));
+        VariableTypeDeclarationVisitor variableExpressionVisitor = new VariableTypeDeclarationVisitor(variableSet, systemVariableNameSet);
+        ctx.varTypeDeclaration().forEach(expr -> variableSet.addVariable(expr.accept(variableExpressionVisitor)));
 
         return variableSet;
     }
 
-    private static class VariableExpressionVisitor extends SenizParserBaseVisitor<StateVariable> {
+    private static class VariableTypeDeclarationVisitor extends SenizParserBaseVisitor<StateVariable> {
 
         private final VariableSet variableSet;
 
         private final Set<String> systemVariableNameSet;
 
-        VariableExpressionVisitor(VariableSet variableSet, Set<String> systemVariableNameSet) {
+        VariableTypeDeclarationVisitor(VariableSet variableSet, Set<String> systemVariableNameSet) {
             this.variableSet = variableSet;
             this.systemVariableNameSet = systemVariableNameSet;
         }
 
         @Override
-        public StateVariable visitVarExpression(SenizParser.VarExpressionContext ctx) {
+        public StateVariable visitVarTypeDeclaration(SenizParser.VarTypeDeclarationContext ctx) {
             String name = ctx.varIdentifier().IDENTIFIER().getText();
 
             // Check the name uniqueness

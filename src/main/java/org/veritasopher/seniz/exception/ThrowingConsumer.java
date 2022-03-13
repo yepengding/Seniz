@@ -1,4 +1,8 @@
-package org.veritasopher.seniz.util;
+package org.veritasopher.seniz.exception;
+
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.veritasopher.seniz.exception.type.InternalException;
+import org.veritasopher.seniz.exception.type.ParsingException;
 
 import java.util.function.Consumer;
 
@@ -19,8 +23,10 @@ public interface ThrowingConsumer<T, E extends Exception> {
         return i -> {
             try {
                 throwingConsumer.accept(i);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
+            } catch (ParseCancellationException e) {
+                throw new ParsingException(e.getMessage());
+            } catch (Exception e) {
+                throw new InternalException(e.getMessage());
             }
         };
     }

@@ -1,8 +1,8 @@
 main system Transaction() over TransactionVar {
 
     init { status: 0, paid: false } -> Channel() waiting -> PayGas() pending
-    pending (paid=true & consensus = true) -> Proceed() success -> Notify() notified
-    pending (beforeCancel) -> Cancel() dropped -> Notify() notified
+    pending [paid=true & consensus = true] -> Proceed() success -> Notify() notified
+    pending [beforeCancel] -> Cancel() dropped -> Notify() notified
 
     notified -> Channel() waiting
 

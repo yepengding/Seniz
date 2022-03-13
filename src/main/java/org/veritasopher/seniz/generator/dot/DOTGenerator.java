@@ -60,7 +60,16 @@ public class DOTGenerator extends BaseGenerator {
      * @return DOT program describing plain transition system
      */
     private String generateTS(TransitionSystem ts) {
-        return String.format("digraph %s { %s%s }", ts.getIdentifier(), System.lineSeparator(), getSystemBody(ts));
+        return """
+                digraph %s {
+                label="%s"
+                %s
+                }
+                """.formatted(
+                ts.getIdentifier(),
+                ts.getIdentifier(),
+                getSystemBody(ts)
+        );
     }
 
     /**

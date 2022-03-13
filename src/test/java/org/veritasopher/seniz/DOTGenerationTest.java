@@ -101,6 +101,23 @@ public class DOTGenerationTest {
     }
 
     @Test
+    public void testSemaphoreBySourceFiles() {
+        String path = getFilePathInResource("example/Semaphore");
+        File folder = new File(path);
+        FilenameFilter filter = (f, name) -> name.endsWith(Info.SUFFIX);
+        File[] files = folder.listFiles(filter);
+        assertNotNull(files);
+        Set<String> sourceFilePaths = Arrays.stream(files).parallel().map(File::getAbsolutePath).collect(Collectors.toSet());
+
+        MasterController masterController = new MasterController();
+        GlobalEnvironment env = masterController.compile(sourceFilePaths);
+
+        DOTGenerator dotGenerator = new DOTGenerator(env);
+        dotGenerator.generateToConsole();
+
+    }
+
+    @Test
     public void testDPPBySourceFiles() {
         String path = getFilePathInResource("example/DPP");
         File folder = new File(path);

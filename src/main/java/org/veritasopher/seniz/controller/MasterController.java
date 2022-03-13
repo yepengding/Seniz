@@ -1,15 +1,18 @@
 package org.veritasopher.seniz.controller;
 
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.veritasopher.seniz.core.model.*;
 import org.veritasopher.seniz.core.visitor.PrecompileVisitor;
 import org.veritasopher.seniz.exception.Assert;
 import org.veritasopher.seniz.exception.type.CompilationException;
+import org.veritasopher.seniz.exception.type.ParsingException;
 import org.veritasopher.seniz.exception.type.PrecompileException;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.veritasopher.seniz.util.ThrowingConsumer.throwingConsumerWrapper;
+import static org.veritasopher.seniz.exception.ThrowingConsumer.throwingConsumerWrapper;
 
 /**
  * Master Controller
@@ -35,8 +38,15 @@ public class MasterController {
      */
     public GlobalEnvironment compile(Set<String> sourceFilePaths) {
         List<SourceFile> sourceFiles = new ArrayList<>();
-        sourceFilePaths.forEach(throwingConsumerWrapper(path -> sourceFiles.add(new SourceFile(path))));
-
+        for (String path : sourceFilePaths) {
+            try {
+                sourceFiles.add(new SourceFile(path));
+            } catch (IOException e) {
+                throw new CompilationException(path, e.getMessage());
+            } catch (ParseCancellationException e) {
+                throw new ParsingException(path, e.getMessage());
+            }
+        }
         return compileSourceFiles(sourceFiles);
     }
 
