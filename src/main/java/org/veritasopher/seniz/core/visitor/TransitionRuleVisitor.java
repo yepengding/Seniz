@@ -21,7 +21,7 @@ import static org.veritasopher.seniz.core.tool.Naming.getNameForUnnamedPropositi
  * @author Yepeng Ding
  * @date 3/5/2022
  */
-public class TransitionRuleVisitor extends SenizParserBaseVisitor<TransitionSystem> {
+public class TransitionRuleVisitor extends SenizParserBaseVisitor<Void> {
 
     private final TransitionSystem transitionSystem;
 
@@ -33,13 +33,13 @@ public class TransitionRuleVisitor extends SenizParserBaseVisitor<TransitionSyst
     }
 
     /**
-     * Construct the transition set by visiting transition statements
+     * Construct the transition rule set by visiting transition statements
      *
      * @param ctx TransitionStatementContext
-     * @return transition system
+     * @return void
      */
     @Override
-    public TransitionSystem visitTransitionStatement(SenizParser.TransitionStatementContext ctx) {
+    public Void visitTransitionStatement(SenizParser.TransitionStatementContext ctx) {
 
         // Ensure the first is not a stuttering state declarator
         StateDeclarator stateDeclarator = ctx.stateIdentifier().accept(stateIdentifierVisitor).orElseThrow(() -> {
@@ -64,6 +64,8 @@ public class TransitionRuleVisitor extends SenizParserBaseVisitor<TransitionSyst
 
         private final StateIdentifierVisitor stateIdentifierVisitor;
 
+        private final GlobalStateIdentifierVisitor globalStateIdentifierVisitor;
+
         private final ActionDeclarationVisitor actionDeclarationVisitor;
 
         @Setter
@@ -73,6 +75,7 @@ public class TransitionRuleVisitor extends SenizParserBaseVisitor<TransitionSyst
             this.transitionSystem = transitionSystem;
             this.stutteringStateDeclarators = new HashMap<>();
             this.stateIdentifierVisitor = new StateIdentifierVisitor(transitionSystem);
+            this.globalStateIdentifierVisitor = new GlobalStateIdentifierVisitor(transitionSystem);
             this.actionDeclarationVisitor = new ActionDeclarationVisitor();
         }
 
@@ -109,6 +112,12 @@ public class TransitionRuleVisitor extends SenizParserBaseVisitor<TransitionSyst
                 action = transitionSystem.getEpsilonAction();
             }
             transitionRule.setAction(action.hashCode());
+
+            // Set global state declarator
+            if (ctx.globalStateIdentifier() != null) {
+                StateDeclarator globalStateDeclarator = ctx.globalStateIdentifier().accept(globalStateIdentifierVisitor);
+                transitionRule.setGlobalState(globalStateDeclarator.getId());
+            }
 
             // Set destination state declarator
             Optional<StateDeclarator> dstStateDeclarator =

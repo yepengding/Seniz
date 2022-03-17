@@ -1,10 +1,10 @@
-main system Transaction() over TransactionVar {
+main system TransactionClient() over TXClientVar, TXClientChan {
 
-    init { status: 0, paid: false } -> Channel() waiting -> PayGas() pending
+    init { status: 0, paid: false } -> Channel(c?tx) waiting -> PayGas() pending
     pending [paid=true & consensus = true] -> Proceed() success -> Notify() notified
     pending [beforeCancel] -> Cancel() dropped -> Notify() notified
 
-    notified -> Channel() waiting
+    notified -> Channel(c?tx) waiting
 
     waiting = {
         status: 0,
@@ -50,8 +50,12 @@ main system Transaction() over TransactionVar {
     }
 }
 
-varset TransactionVar {
+varset TXClientVar {
     status :: int,
     paid :: bool,
     consensus :: bool
+}
+
+chanset TXClientChan {
+    c :: external
 }

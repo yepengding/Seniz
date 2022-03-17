@@ -1,0 +1,12 @@
+import SharedVars
+import Program
+
+main control system Semaphore() over SharedVars {
+
+    async Program() as p1, Program() as p2
+
+    ltl mutexHolds {
+        G (!p1.isInCritical and !p2.isInCritical)
+    }
+
+}

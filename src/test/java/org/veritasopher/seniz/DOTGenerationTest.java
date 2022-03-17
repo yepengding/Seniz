@@ -74,7 +74,7 @@ public class DOTGenerationTest {
 
     @Test
     public void testTransaction() {
-        String path = getFilePathInResource("example/Transaction.sz");
+        String path = getFilePathInResource("example/TransactionClient.sz");
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 

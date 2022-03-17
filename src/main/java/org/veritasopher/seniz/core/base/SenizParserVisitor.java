@@ -119,6 +119,12 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSystemIdentifier(SenizParser.SystemIdentifierContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SenizParser#systemAlias}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSystemAlias(SenizParser.SystemAliasContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SenizParser#stateNaming}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

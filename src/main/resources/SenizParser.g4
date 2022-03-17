@@ -75,10 +75,14 @@ asyncControlStatement
     ;
 
 subSystemIdentifier
-    : systemIdentifier LPAREN parameterList? RPAREN (AS IDENTIFIER)?
+    : systemIdentifier LPAREN parameterList? RPAREN (AS systemAlias)?
     ;
 
 systemIdentifier
+    : IDENTIFIER
+    ;
+
+systemAlias
     : IDENTIFIER
     ;
 
@@ -222,8 +226,8 @@ ltlBody
 ltlExpression
     : ltlPrimary #ltlPrimaryExpression
     | prefix=BANG ltlExpression #ltlNotExpression
-    | ltlExpression bop=AND ltlExpression #ltlConditionalAndExpression
-    | ltlExpression bop=OR ltlExpression #ltlConditionalOrExpression
+    | ltlExpression bop=LAND ltlExpression #ltlConditionalAndExpression
+    | ltlExpression bop=LOR ltlExpression #ltlConditionalOrExpression
     | ltlExpression bop=TO ltlExpression #ltlConditionalImplyExpression
     | ltlExpression bop=UNTIL ltlExpression #untilExpression
     | prefix=ALWAYS ltlExpression #alwaysExpression
@@ -234,6 +238,7 @@ ltlExpression
 ltlPrimary
     : LPAREN ltlExpression RPAREN
     | propositionIdentifer
+    | systemAlias DOT propositionIdentifer
     ;
 
 

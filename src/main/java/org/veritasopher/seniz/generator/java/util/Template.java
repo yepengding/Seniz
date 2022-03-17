@@ -162,6 +162,10 @@ public class Template {
                         }
                         return Optional.empty();
                     }
+                    
+                    public Object getVariable(Variable variable) {
+                        return variableSet.get(variable);
+                    }
                 }
                 """.formatted(namespace,
                 importAction,

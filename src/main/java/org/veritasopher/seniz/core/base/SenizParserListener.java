@@ -188,6 +188,16 @@ public interface SenizParserListener extends ParseTreeListener {
 	 */
 	void exitSystemIdentifier(SenizParser.SystemIdentifierContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SenizParser#systemAlias}.
+	 * @param ctx the parse tree
+	 */
+	void enterSystemAlias(SenizParser.SystemAliasContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#systemAlias}.
+	 * @param ctx the parse tree
+	 */
+	void exitSystemAlias(SenizParser.SystemAliasContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SenizParser#stateNaming}.
 	 * @param ctx the parse tree
 	 */

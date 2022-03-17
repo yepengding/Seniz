@@ -50,8 +50,8 @@ public class JavaGenerator extends BaseGenerator {
     }
 
     private void generateTSToDir(TransitionSystem ts, String namespace, String outDir) {
-        Path root = Path.of(outDir + File.separator + systemIdentifier.toLowerCase());
-        String rootNamespace = "%s.%s".formatted(namespace, systemIdentifier.toLowerCase());
+        Path root = Path.of(outDir + File.separator + ts.getIdentifier().toLowerCase());
+        String rootNamespace = "%s.%s".formatted(namespace, ts.getIdentifier().toLowerCase());
 
         generateArgument(ts, rootNamespace, root);
         generateVariable(ts, rootNamespace, root);
@@ -61,6 +61,15 @@ public class JavaGenerator extends BaseGenerator {
     }
 
     private void generateCSToDir(ControlSystem cs, String namespace, String outDir) {
+        Path root = Path.of(outDir + File.separator + cs.getIdentifier().toLowerCase());
+        String rootNamespace = "%s.%s".formatted(namespace, cs.getIdentifier().toLowerCase());
+
+        cs.getControlStatement().getSystemIdentifiers().forEach(
+                id -> generateTSToDir(env.getTransitionSystem(id).orElseThrow(() ->
+                                new GeneratorException("Undefined transition system.")),
+                        rootNamespace,
+                        root.toString())
+        );
 
     }
 
@@ -248,14 +257,23 @@ public class JavaGenerator extends BaseGenerator {
                     throw new GeneratorException(ts.getIdentifier(), "Multiple tautologies for a state transition are found.");
                 }
 
-                transitionSetting = transitions.stream().map(t ->
-                        "if (%s) {%s}".formatted(
-                                toJavaEvaluation(ts, ts.getProposition(t.getGuard()).orElseThrow(() -> {
-                                    throw new GeneratorException(ts.getIdentifier(), "Unknown guard is found");
-                                }).getEvaluation()),
-                                generateActionStatement(ts, t))
-                ).collect(Collectors.joining(System.lineSeparator()));
-                transitionSetting = transitionSetting + System.lineSeparator() + "return null;";
+                transitionSetting = transitions.stream()
+                        .filter(t -> !ts.getProposition(t.getGuard()).orElseThrow(() -> {
+                            throw new GeneratorException(ts.getIdentifier(), "Unknown guard is found");
+                        }).isTautology())
+                        .map(t ->
+                                "if (%s) {%s}".formatted(
+                                        toJavaEvaluation(ts, ts.getProposition(t.getGuard()).orElseThrow(() -> {
+                                            throw new GeneratorException(ts.getIdentifier(), "Unknown guard is found");
+                                        }).getEvaluation()),
+                                        generateActionStatement(ts, t))
+                        ).collect(Collectors.joining(System.lineSeparator()));
+
+                String defaultAction = "return null;";
+                if (tautologyTransitions.size() == 1) {
+                    defaultAction = generateActionStatement(ts, tautologyTransitions.iterator().next());
+                }
+                transitionSetting = transitionSetting + System.lineSeparator() + defaultAction;
             } else if (transitions.size() == 1) {
                 // One transition
                 Transition transition = transitions.iterator().next();

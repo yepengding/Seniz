@@ -1,10 +1,10 @@
 import SharedVars
 
-system Program () over Vars with SharedVars {
+system Program() over Vars with SharedVars {
 
     init plain -> wait
-    wait [y > 0] -> @{y:y-1} critical
-    critical -> @increaseY plain
+    wait -> wait [s > 0] -> @decreaseS critical
+    critical -> @increaseS plain
 
     plain = {
         loc: 1
@@ -18,8 +18,16 @@ system Program () over Vars with SharedVars {
         loc: 3
     }
 
-    @increaseY = {
-        y: y + 1
+    @increaseS = {
+        s: s + 1
+    }
+
+    @decreaseS = {
+        s: s - 1
+    }
+
+    prop isInCritical {
+        loc = 3
     }
 
 }

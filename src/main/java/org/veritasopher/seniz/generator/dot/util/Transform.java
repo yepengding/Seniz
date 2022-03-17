@@ -42,7 +42,7 @@ public class Transform {
      */
     public static String toDotActionName(Action action) {
         if (action.isEpsilon()) {
-            return "epsilon";
+            return "&epsilon;";
         } else {
             return action.getName();
         }
