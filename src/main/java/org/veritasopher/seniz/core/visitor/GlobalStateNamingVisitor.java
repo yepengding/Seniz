@@ -7,7 +7,7 @@ import org.veritasopher.seniz.core.model.common.StateDeclarator;
 import org.veritasopher.seniz.exception.Assert;
 import org.veritasopher.seniz.exception.type.GlobalStateException;
 
-import static org.veritasopher.seniz.core.tool.Naming.getNameForUnnamedStateDeclarator;
+import static org.veritasopher.seniz.core.tool.Naming.getNameForAnonymousStateDeclarator;
 import static org.veritasopher.seniz.core.tool.Naming.satisfyStateDeclaratorNamingRule;
 
 /**
@@ -83,7 +83,7 @@ public class GlobalStateNamingVisitor extends SenizParserBaseVisitor<Void> {
             } else if (ctx.globalStateBody() != null) {
                 // Unnamed state declarator
                 StateDeclarator stateDeclarator = ctx.globalStateBody().stateDeclarator().accept(stateDeclaratorVisitor);
-                String name = getNameForUnnamedStateDeclarator(stateDeclarator);
+                String name = getNameForAnonymousStateDeclarator(stateDeclarator);
                 stateDeclarator.setName(name);
                 transitionSystem.addGlobalStateDeclarator(stateDeclarator);
             } else {

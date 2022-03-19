@@ -1,0 +1,46 @@
+import Lock
+
+system Worker() over Vars with Lock {
+
+    init processing -> readyToWrite
+    readyToWrite -> readyToWrite [s > 0] -> @decreaseS acquiredLock
+    acquiredLock -> writeBlock() @increaseS releasedLock
+    releasedLock -> processing
+
+    processing = {
+        loc: 1
+    }
+
+    readyToWrite = {
+        loc: 2
+    }
+
+    acquiredLock = {
+        loc: 3
+    }
+
+    releasedLock = {
+        loc: 4
+    }
+
+    @increaseS = {
+        s: s + 1
+    }
+
+    @decreaseS = {
+        s: s - 1
+    }
+
+    prop isReady {
+        loc = 2
+    }
+
+    prop hasLock {
+        loc = 3
+    }
+
+}
+
+varset Vars {
+    loc :: int
+}

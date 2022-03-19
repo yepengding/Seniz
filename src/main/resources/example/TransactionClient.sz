@@ -1,10 +1,10 @@
 main system TransactionClient() over TXClientVar, TXClientChan {
 
-    init { status: 0, paid: false } -> Channel(c?tx) waiting -> PayGas() pending
+    init { status: 0, paid: false, consensus: false } -> receiveTx(c?tx) waiting -> PayGas() pending
     pending [paid=true & consensus = true] -> Proceed() success -> Notify() notified
-    pending [beforeCancel] -> Cancel() dropped -> Notify() notified
+    pending [paymentFailed] -> Cancel() dropped -> Notify() notified
 
-    notified -> Channel(c?tx) waiting
+    notified -> NotifyTx(c?tx) waiting
 
     waiting = {
         status: 0,
@@ -33,7 +33,7 @@ main system TransactionClient() over TXClientVar, TXClientChan {
         status: 4
     }
 
-    prop beforeCancel {
+    prop paymentFailed {
         paid = true and consensus = false
     }
 
@@ -53,7 +53,8 @@ main system TransactionClient() over TXClientVar, TXClientChan {
 varset TXClientVar {
     status :: int,
     paid :: bool,
-    consensus :: bool
+    consensus :: bool,
+    tx :: string
 }
 
 chanset TXClientChan {

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.veritasopher.seniz.core.tool.Naming.getNameForUnnamedProposition;
+import static org.veritasopher.seniz.core.tool.Naming.getNameForAnonymousProposition;
 
 /**
  * Transition Rule Visitor
@@ -93,7 +93,7 @@ public class TransitionRuleVisitor extends SenizParserBaseVisitor<Void> {
                 Evaluation evaluation = new Evaluation();
                 ctx.guardIdentifier().propositionExpression().accept(new PropositionExpressionVisitor(transitionSystem, evaluation));
                 guard = new Proposition(evaluation);
-                guard.setName(getNameForUnnamedProposition(guard));
+                guard.setName(getNameForAnonymousProposition(guard));
                 transitionSystem.addProposition(guard);
             } else {
                 // Set tautology

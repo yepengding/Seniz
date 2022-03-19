@@ -1,0 +1,3 @@
+varset Lock {
+    s :: int
+}

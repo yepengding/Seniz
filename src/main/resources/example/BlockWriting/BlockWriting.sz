@@ -1,0 +1,20 @@
+import Lock
+import Worker
+
+main control system BlockWriting() over Lock {
+
+    async Worker() as w1, Worker() as w2
+
+    ltl mutexHolds {
+        G (!w1.hasLock and !w2.hasLock)
+    }
+
+    ltl unconditionalFairnessHolds {
+        G F (w1.hasLock) and G F (w2.hasLock)
+    }
+
+    ltl strongFairnessHolds {
+        G F (w1.isReady -> G F (w1.hasLock)) and G F(w2.isReady -> G F(w2.hasLock))
+    }
+
+}

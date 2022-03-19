@@ -42,22 +42,22 @@ public class Naming {
     }
 
     /**
-     * Generate a name for an unnamed state declarator
+     * Generate a name for an anonymous state declarator
      *
-     * @param unnamedStateDeclarator unnamed State Declarator
+     * @param stateDeclarator anonymous State Declarator
      * @return name
      */
-    public static String getNameForUnnamedStateDeclarator(StateDeclarator unnamedStateDeclarator) {
-        return "$" + unnamedStateDeclarator.hashCode();
+    public static String getNameForAnonymousStateDeclarator(StateDeclarator stateDeclarator) {
+        return "$" + stateDeclarator.hashCode();
     }
 
     /**
-     * Generate a name for an unnamed proposition
+     * Generate a name for an anonymous proposition
      *
-     * @param proposition unnamed proposition
+     * @param proposition anonymous proposition
      * @return name
      */
-    public static String getNameForUnnamedProposition(Proposition proposition) {
+    public static String getNameForAnonymousProposition(Proposition proposition) {
         return "$" + proposition.hashCode();
     }
 

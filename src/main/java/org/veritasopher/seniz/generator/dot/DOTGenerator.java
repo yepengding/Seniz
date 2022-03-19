@@ -84,7 +84,7 @@ public class DOTGenerator extends BaseGenerator {
         String subSystems = controlStatement.getSystemIdentifiers().stream().distinct()
                 .map(id -> """
                         subgraph cluster%s {
-                        label=%s
+                        label="%s"
                         %s
                         }
                         """.formatted(id,

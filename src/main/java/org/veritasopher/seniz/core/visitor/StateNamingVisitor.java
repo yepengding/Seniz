@@ -9,8 +9,7 @@ import org.veritasopher.seniz.exception.type.StateException;
 
 import java.util.Optional;
 
-import static org.veritasopher.seniz.core.tool.Naming.getNameForUnnamedStateDeclarator;
-import static org.veritasopher.seniz.core.tool.Naming.satisfyStateDeclaratorNamingRule;
+import static org.veritasopher.seniz.core.tool.Naming.*;
 
 /**
  * State Naming Visitor
@@ -89,7 +88,7 @@ public class StateNamingVisitor extends SenizParserBaseVisitor<Void> {
             } else if (ctx.stateBody() != null) {
                 // Unnamed state declarator
                 StateDeclarator stateDeclarator = ctx.stateBody().stateDeclarator().accept(stateDeclaratorVisitor);
-                String name = getNameForUnnamedStateDeclarator(stateDeclarator);
+                String name = getNameForAnonymousStateDeclarator(stateDeclarator);
                 stateDeclarator.setName(name);
                 transitionSystem.addStateDeclarator(stateDeclarator);
             } else {
