@@ -6,6 +6,7 @@ import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.common.*;
 import org.veritasopher.seniz.exception.type.GeneratorException;
 import org.veritasopher.seniz.generator.base.BaseGenerator;
+import org.veritasopher.seniz.util.FileUtil;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 import static org.veritasopher.seniz.generator.java.dict.SourceFile.*;
 import static org.veritasopher.seniz.generator.java.util.Template.*;
 import static org.veritasopher.seniz.generator.java.util.Transform.*;
+import static org.veritasopher.seniz.util.FileUtil.writeToFile;
 
 /**
  * Java Generator
@@ -54,6 +56,7 @@ public class JavaGenerator extends BaseGenerator {
         String rootNamespace = "%s.%s".formatted(namespace, ts.getIdentifier().toLowerCase());
 
         generateArgument(ts, rootNamespace, root);
+        generateGlobalVariable(ts, rootNamespace, root);
         generateVariable(ts, rootNamespace, root);
         generateAction(ts, rootNamespace, root);
         generateState(ts, rootNamespace, root);
@@ -115,6 +118,26 @@ public class JavaGenerator extends BaseGenerator {
         writeToFile(variableProgram, VARIABLE.getFilePath(root));
     }
 
+    /**
+     * Generate global variable file
+     *
+     * @param ts            transition system
+     * @param rootNamespace root namespace
+     * @param root          root path
+     */
+    private void generateGlobalVariable(TransitionSystem ts, String rootNamespace, Path root) {
+        String globalVariables = ts.getGlobalStateVariables().getVariableSet().stream()
+                .map(v -> "%s(\"%s\", %s)"
+                        .formatted(toJavaVariableName(v.getName()),
+                                v.getName(),
+                                toJavaTypeClass(v.getPrimaryType())))
+                .collect(Collectors.joining("," + System.lineSeparator()));
+
+        String globalVariableProgram = generateGlobalVariableFromTemplate(GLOBAL_VARIABLE.getNamespace(rootNamespace), globalVariables);
+
+        writeToFile(globalVariableProgram, GLOBAL_VARIABLE.getFilePath(root));
+    }
+
 
     /**
      * Generate action file
@@ -149,18 +172,8 @@ public class JavaGenerator extends BaseGenerator {
         Map<Integer, String> transitionSettingMap = generateTransitionSettingMap(ts);
 
         String stateProgramBody = ts.getStates().values().stream()
-                .map(state -> """
-                        %s() {
-                            @Override
-                            public void init(Map<Variable, Object> varSet) {
-                            %s
-                            }
-                            @Override
-                            public State next(ActionExecutor exec, Map<Variable, Object> varSet) {
-                            %s
-                            }
-                        }
-                        """.formatted(toJavaStateName(state),
+                .map(state -> FileUtil.readFromFileInResource("template/core/State_Body").formatted(
+                        toJavaStateName(state),
                         variableSettingMap.get(state.hashCode()),
                         transitionSettingMap.get(state.hashCode())))
                 .collect(Collectors.joining("," + System.lineSeparator()));
@@ -172,6 +185,7 @@ public class JavaGenerator extends BaseGenerator {
                 toJavaImport(rootNamespace, STATE_BEHAVIOR, false),
                 toJavaImport(rootNamespace, ARGUMENT, true),
                 toJavaImport(rootNamespace, VARIABLE, true),
+                toJavaImport(rootNamespace, GLOBAL_VARIABLE, true),
                 stateProgramBody);
 
         writeToFile(stateProgram, STATE.getFilePath(root));
@@ -342,7 +356,9 @@ public class JavaGenerator extends BaseGenerator {
         program = generateStateBehaviorFromTemplate(
                 STATE_BEHAVIOR.getNamespace(rootNamespace),
                 toJavaImport(rootNamespace, STATE, false),
-                toJavaImport(rootNamespace, VARIABLE, false)
+                toJavaImport(rootNamespace, ARGUMENT, false),
+                toJavaImport(rootNamespace, VARIABLE, false),
+                toJavaImport(rootNamespace, GLOBAL_VARIABLE, false)
         );
         writeToFile(program, STATE_BEHAVIOR.getFilePath(root));
 
@@ -370,10 +386,21 @@ public class JavaGenerator extends BaseGenerator {
         program = generateSystemExecutorFromTemplate(
                 SYSTEM_EXECUTOR.getNamespace(rootNamespace),
                 toJavaImport(rootNamespace, STATE, false),
-                toJavaImport(rootNamespace, VARIABLE, false),
+                toJavaImport(rootNamespace, ARGUMENT, false),
+                toJavaImport(rootNamespace, GLOBAL_VARIABLE, false),
+                toJavaImport(rootNamespace, SYSTEM_EXECUTOR_THREAD, false),
                 toJavaStateName(ts.getInitState())
         );
         writeToFile(program, SYSTEM_EXECUTOR.getFilePath(root));
+
+        // Generate SystemExecutorThread file
+        program = generateSystemExecutorThreadFromTemplate(
+                SYSTEM_EXECUTOR_THREAD.getNamespace(rootNamespace),
+                toJavaImport(rootNamespace, ACTION_EFFECT, false),
+                toJavaImport(rootNamespace, ARGUMENT, false),
+                toJavaImport(rootNamespace, VARIABLE, false)
+        );
+        writeToFile(program, SYSTEM_EXECUTOR_THREAD.getFilePath(root));
     }
 
 

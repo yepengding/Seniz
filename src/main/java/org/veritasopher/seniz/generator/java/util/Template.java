@@ -1,5 +1,7 @@
 package org.veritasopher.seniz.generator.java.util;
 
+import static org.veritasopher.seniz.util.FileUtil.readFromFileInResource;
+
 /**
  * Java Template
  *
@@ -19,24 +21,9 @@ public class Template {
             String namespace,
             String arguments
     ) {
-        return """
-                package %s;
-                import lombok.Getter;
-                @Getter
-                public enum Argument {
-                %s;
-
-                    private final String name;
-                    private final Class<?> type;
-                    private final Object value;
-
-                    Argument(final String name, final Class<?> type, Object value) {
-                        this.name = name;
-                        this.type = type;
-                        this.value = value;
-                    }
-                }
-                """.formatted(namespace, arguments);
+        return readFromFileInResource("template/core/Argument").formatted(
+                namespace,
+                arguments);
     }
 
     /**
@@ -50,20 +37,25 @@ public class Template {
             String namespace,
             String variables
     ) {
-        return """
-                package %s;
-                import lombok.Getter;
-                @Getter
-                public enum Variable {
-                %s;
-                    private final String name;
-                    private final Class<?> type;
-                    Variable(final String name, final Class<?> type) {
-                        this.name = name;
-                        this.type = type;
-                    }
-                }
-                """.formatted(namespace, variables);
+        return readFromFileInResource("template/core/Variable").formatted(
+                namespace,
+                variables);
+    }
+
+    /**
+     * Generate GlobalVariable
+     *
+     * @param namespace
+     * @param globalVariables
+     * @return GlobalVariable program
+     */
+    public static String generateGlobalVariableFromTemplate(
+            String namespace,
+            String globalVariables
+    ) {
+        return readFromFileInResource("template/core/GlobalVariable").formatted(
+                namespace,
+                globalVariables);
     }
 
     /**
@@ -77,13 +69,9 @@ public class Template {
             String namespace,
             String actions
     ) {
-        return """
-                package %s;
-                public interface Action {
-                %s
-                }
-                """
-                .formatted(namespace, actions);
+        return readFromFileInResource("template/core/Action").formatted(
+                namespace,
+                actions);
     }
 
     /**
@@ -99,24 +87,16 @@ public class Template {
             String importStateBehavior,
             String importArgument,
             String importVariable,
+            String importGlobalVariable,
             String stateProgramBody
     ) {
-        return """
-                package %s;
-                %s
-                %s
-                %s
-                %s
-                import java.util.Map;
-                public enum State implements StateBehavior {
-                %s
-                }
-                """.formatted(
+        return readFromFileInResource("template/core/State").formatted(
                 namespace,
                 importActionExecutor,
                 importStateBehavior,
                 importArgument,
                 importVariable,
+                importGlobalVariable,
                 stateProgramBody);
     }
 
@@ -134,40 +114,7 @@ public class Template {
             String importAction,
             String importArgument,
             String importVariable) {
-        return """
-                package %s;
-                %s
-                %s
-                %s
-                import lombok.Setter;
-                import java.util.Map;
-                import java.util.Optional;
-                public abstract class ActionExecutor implements Action {
-                                
-                    @Setter
-                    private Map<Variable, Object> variableSet;
-                                
-                    protected <T> Optional<T> getArgument(Argument argument, Class<T> type) {
-                        Object val = argument.getValue();
-                        if (val != null) {
-                            return Optional.of(type.cast(val));
-                        }
-                        return Optional.empty();
-                    }
-                                
-                    protected <T> Optional<T> getVariable(Variable variable, Class<T> type) {
-                        Object val = this.variableSet.get(variable);
-                        if (val != null) {
-                            return Optional.of(type.cast(val));
-                        }
-                        return Optional.empty();
-                    }
-                    
-                    public Object getVariable(Variable variable) {
-                        return variableSet.get(variable);
-                    }
-                }
-                """.formatted(namespace,
+        return readFromFileInResource("template/base/ActionExecutor").formatted(namespace,
                 importAction,
                 importArgument,
                 importVariable);
@@ -178,27 +125,24 @@ public class Template {
      *
      * @param namespace
      * @param importState
+     * @param importArgument
      * @param importVariable
-     * @return StateBehavior program
+     * @param importGlobalVariable
+     * @return
      */
     public static String generateStateBehaviorFromTemplate(
             String namespace,
             String importState,
-            String importVariable
+            String importArgument,
+            String importVariable,
+            String importGlobalVariable
     ) {
-        return """
-                package %s;
-                %s
-                %s
-                import java.util.Map;
-                public interface StateBehavior {
-                    void init(Map<Variable, Object> variableSet);
-                    State next(ActionExecutor executor, Map<Variable, Object> variableSet);
-                }
-                """.formatted(
+        return readFromFileInResource("template/base/StateBehavior").formatted(
                 namespace,
                 importState,
-                importVariable
+                importArgument,
+                importVariable,
+                importGlobalVariable
         );
     }
 
@@ -219,15 +163,7 @@ public class Template {
             String importVariable,
             String actionEffects
     ) {
-        return """
-                package %s;
-                %s
-                %s
-                %s
-                public class ActionEffect extends ActionExecutor {
-                %s
-                }
-                """.formatted(
+        return readFromFileInResource("template/ActionEffect").formatted(
                 namespace,
                 importActionExecutor,
                 importArgument,
@@ -241,43 +177,50 @@ public class Template {
      *
      * @param namespace
      * @param importState
-     * @param importVariable
+     * @param importArgument
+     * @param importGlobalVariable
+     * @param importSystemExecutorThread
      * @param initStateName
      * @return SystemExecutor program
      */
     public static String generateSystemExecutorFromTemplate(
             String namespace,
             String importState,
-            String importVariable,
+            String importArgument,
+            String importGlobalVariable,
+            String importSystemExecutorThread,
             String initStateName
     ) {
-        return """
-                package %s;
-                %s
-                %s
-                import java.util.HashMap;
-                import java.util.Map;
-                public class SystemExecutor {
-                    private final Map<Variable, Object> variableSet;
-                    private final ActionEffect actionEffect;
-                    public SystemExecutor() {
-                        this.variableSet = new HashMap<>();
-                        this.actionEffect = new ActionEffect();
-                        this.actionEffect.setVariableSet(variableSet);
-                    }
-                    public void run() {
-                        State state = State.%s;
-                        while (state != null) {
-                            state.init(variableSet);
-                            state = state.next(actionEffect, variableSet);
-                        }
-                    }
-                }
-                """.formatted(
+        return readFromFileInResource("template/SystemExecutor").formatted(
                 namespace,
                 importState,
-                importVariable,
+                importArgument,
+                importGlobalVariable,
+                importSystemExecutorThread,
                 initStateName
+        );
+    }
+
+    /**
+     * Generate SystemExecutorThread
+     *
+     * @param namespace
+     * @param importActionEffect
+     * @param importArgument
+     * @param importVariable
+     * @return SystemExecutorThread program
+     */
+    public static String generateSystemExecutorThreadFromTemplate(
+            String namespace,
+            String importActionEffect,
+            String importArgument,
+            String importVariable
+    ) {
+        return readFromFileInResource("template/sdk/SystemExecutorThread").formatted(
+                namespace,
+                importActionEffect,
+                importArgument,
+                importVariable
         );
     }
 }

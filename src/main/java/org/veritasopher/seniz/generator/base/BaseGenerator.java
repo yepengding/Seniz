@@ -53,19 +53,4 @@ public abstract class BaseGenerator {
         }
     }
 
-    protected void writeToFile(String content, Path pathToFile) {
-        try {
-            Files.createDirectories(pathToFile.getParent());
-
-            Files.writeString(pathToFile, content);
-
-            // Test writing
-            String fileContent = Files.readString(pathToFile);
-            System.out.println(fileContent);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

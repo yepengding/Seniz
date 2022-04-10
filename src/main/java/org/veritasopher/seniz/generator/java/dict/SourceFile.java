@@ -47,6 +47,18 @@ public enum SourceFile {
         }
     },
 
+    GLOBAL_VARIABLE("GlobalVariable") {
+        @Override
+        public Path getFilePath(Path rootPath) {
+            return Path.of(rootPath.toAbsolutePath() + File.separator + "core" + File.separator + getFilename());
+        }
+
+        @Override
+        public String getNamespace(String rootNamespace) {
+            return "%s.core".formatted(rootNamespace);
+        }
+    },
+
     STATE("State") {
         @Override
         public Path getFilePath(Path rootPath) {
@@ -104,6 +116,18 @@ public enum SourceFile {
         @Override
         public String getNamespace(String rootNamespace) {
             return "%s".formatted(rootNamespace);
+        }
+    },
+
+    SYSTEM_EXECUTOR_THREAD("SystemExecutorThread") {
+        @Override
+        public Path getFilePath(Path rootPath) {
+            return Path.of(rootPath.toAbsolutePath() + File.separator + "sdk" + File.separator + getFilename());
+        }
+
+        @Override
+        public String getNamespace(String rootNamespace) {
+            return "%s.sdk".formatted(rootNamespace);
         }
     };
 

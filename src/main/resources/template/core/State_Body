@@ -1,0 +1,15 @@
+%s() {
+    @Override
+    public void init(Map<Variable, Object> varSet,
+                     ConcurrentMap<Argument, Object> argSet,
+                     ConcurrentMap<GlobalVariable, Object> gVarSet) {
+    %s
+    }
+    @Override
+    public State next(ActionExecutor exec,
+                              Map<Variable, Object> varSet,
+                              ConcurrentMap<Argument, Object> argSet,
+                              ConcurrentMap<GlobalVariable, Object> gVarSet) {
+    %s
+    }
+}

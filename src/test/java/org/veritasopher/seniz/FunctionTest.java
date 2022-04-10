@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.veritasopher.seniz.util.PathUtil.getFilePathInResource;
+import static org.veritasopher.seniz.util.FileUtil.getFilePathInResource;
 
 /**
  * Function Test

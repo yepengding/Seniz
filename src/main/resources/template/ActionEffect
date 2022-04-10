@@ -1,0 +1,7 @@
+package %s;
+%s
+%s
+%s
+public class ActionEffect extends ActionExecutor {
+%s
+}

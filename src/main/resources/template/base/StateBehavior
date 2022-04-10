@@ -1,0 +1,11 @@
+package %s;
+%s
+%s
+%s
+%s
+import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
+public interface StateBehavior {
+    void init(Map<Variable, Object> variableSet, ConcurrentMap<Argument, Object> argumentSet, ConcurrentMap<GlobalVariable, Object> globalVariableSet);
+    State next(ActionExecutor executor, Map<Variable, Object> variableSet, ConcurrentMap<Argument, Object> argumentSet, ConcurrentMap<GlobalVariable, Object> globalVariableSet);
+}

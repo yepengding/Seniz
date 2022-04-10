@@ -1,0 +1,26 @@
+package %s;
+%s
+%s
+%s
+%s
+import java.util.concurrent.ConcurrentMap;
+public class SystemExecutor extends SystemExecutorThread<GlobalVariable> {
+
+    public SystemExecutor() {
+        super();
+    }
+
+    public SystemExecutor(String id, ConcurrentMap<Argument, Object> argSet, ConcurrentMap<GlobalVariable, Object> gVarSet) {
+        super(id, argSet, gVarSet);
+    }
+
+    @Override
+    public void run() {
+        State state = State.%s;
+        while (state != null) {
+            state.init(variableSet, argumentSet, globalVariableSet);
+            state = state.next(actionEffect, variableSet, argumentSet, globalVariableSet);
+        }
+    }
+
+}

@@ -5,7 +5,7 @@ import org.veritasopher.seniz.config.Info;
 import org.veritasopher.seniz.controller.MasterController;
 import org.veritasopher.seniz.core.model.GlobalEnvironment;
 import org.veritasopher.seniz.generator.java.JavaGenerator;
-import org.veritasopher.seniz.util.PathUtil;
+import org.veritasopher.seniz.util.FileUtil;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertNotNull;
-import static org.veritasopher.seniz.util.PathUtil.getFilePathInResource;
+import static org.veritasopher.seniz.util.FileUtil.getFilePathInResource;
 
 /**
  * Java Generation Test
@@ -27,7 +27,7 @@ public class JavaGenerationTest {
 
     @Test
     public void testSimple0() {
-        String path = PathUtil.getFilePathInResource("example/Simple0.sz");
+        String path = FileUtil.getFilePathInResource("example/Simple0.sz");
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 
