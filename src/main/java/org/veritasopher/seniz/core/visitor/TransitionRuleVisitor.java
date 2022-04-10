@@ -116,7 +116,9 @@ public class TransitionRuleVisitor extends SenizParserBaseVisitor<Void> {
             // Set global state declarator
             if (ctx.globalStateIdentifier() != null) {
                 StateDeclarator globalStateDeclarator = ctx.globalStateIdentifier().accept(globalStateIdentifierVisitor);
-                transitionRule.setGlobalState(globalStateDeclarator.getId());
+                transitionRule.setGlobalStateDeclarator(globalStateDeclarator.getId());
+            } else {
+                transitionRule.setGlobalStateDeclarator(transitionSystem.getEmptyStateDeclarator().getId());
             }
 
             // Set destination state declarator

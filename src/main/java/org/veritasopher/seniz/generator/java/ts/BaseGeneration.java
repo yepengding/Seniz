@@ -1,4 +1,4 @@
-package org.veritasopher.seniz.generator.java;
+package org.veritasopher.seniz.generator.java.ts;
 
 import lombok.AllArgsConstructor;
 import org.veritasopher.seniz.core.model.TransitionSystem;
@@ -19,6 +19,8 @@ import static org.veritasopher.seniz.util.FileUtil.writeToFile;
  */
 @AllArgsConstructor
 public class BaseGeneration {
+
+    private String globalNamespace;
 
     private String rootNamespace;
 
@@ -51,7 +53,7 @@ public class BaseGeneration {
                 toJavaImport(rootNamespace, STATE, false),
                 toJavaImport(rootNamespace, ARGUMENT, false),
                 toJavaImport(rootNamespace, VARIABLE, false),
-                toJavaImport(rootNamespace, GLOBAL_VARIABLE, false)
+                toJavaImport(globalNamespace, GLOBAL_VARIABLE, false)
         );
         writeToFile(program, STATE_BEHAVIOR.getFilePath(root));
     }

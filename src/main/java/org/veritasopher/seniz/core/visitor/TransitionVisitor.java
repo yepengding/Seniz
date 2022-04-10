@@ -94,7 +94,7 @@ public class TransitionVisitor extends SenizParserBaseVisitor<TransitionSystem> 
         transition.setGuard(rule.getGuard());
 
         // Set global state
-        transition.setGlobalState(rule.getGlobalState());
+        transition.setGlobalStateDeclarator(rule.getGlobalStateDeclarator());
 
         // Set action
         transition.setAction(rule.getAction());

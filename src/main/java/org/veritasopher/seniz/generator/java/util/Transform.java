@@ -72,6 +72,12 @@ public class Transform {
                                             throw new GeneratorException(ts.getIdentifier(), "Unknown state variable is found");
                                         }).getPrimaryType()),
                                 toJavaVariableName(t.getOperand().value().toString()));
+                        case GLOBAL_VARIABLE -> "(%s) gVarSet.get(%s)".formatted(
+                                toJavaType(
+                                        ts.getGlobalStateVariable(t.getOperand().value().toString()).orElseThrow(() -> {
+                                            throw new GeneratorException(ts.getIdentifier(), "Unknown global state variable is found");
+                                        }).getPrimaryType()),
+                                toJavaVariableName(t.getOperand().value().toString()));
                         case ARGUMENT -> toJavaEvaluation(ts, ts.getSystemArgument(t.getOperand().value().toString()).orElseThrow(() -> {
                             throw new GeneratorException(ts.getIdentifier(), "Unknown system argument is found");
                         }).getEvaluation());

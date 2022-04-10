@@ -77,8 +77,14 @@ public class Template {
     /**
      * Generate State
      *
-     * @param namespace        State namespace
-     * @param stateProgramBody state program body
+     * @param namespace
+     * @param importActionExecutor
+     * @param importStateBehavior
+     * @param importArgument
+     * @param importVariable
+     * @param importGlobalVariable
+     * @param importGlobalVariableStatic
+     * @param stateProgramBody
      * @return State program
      */
     public static String generateStateFromTemplate(
@@ -88,6 +94,7 @@ public class Template {
             String importArgument,
             String importVariable,
             String importGlobalVariable,
+            String importGlobalVariableStatic,
             String stateProgramBody
     ) {
         return readFromFileInResource("template/core/State").formatted(
@@ -97,6 +104,7 @@ public class Template {
                 importArgument,
                 importVariable,
                 importGlobalVariable,
+                importGlobalVariableStatic,
                 stateProgramBody);
     }
 

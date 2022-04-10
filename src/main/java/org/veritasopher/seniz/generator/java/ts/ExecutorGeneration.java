@@ -1,4 +1,4 @@
-package org.veritasopher.seniz.generator.java;
+package org.veritasopher.seniz.generator.java.ts;
 
 import lombok.AllArgsConstructor;
 import org.veritasopher.seniz.core.model.TransitionSystem;
@@ -22,6 +22,8 @@ import static org.veritasopher.seniz.util.FileUtil.writeToFile;
 public class ExecutorGeneration {
 
     private TransitionSystem ts;
+
+    private String globalNamespace;
 
     private String rootNamespace;
 
@@ -64,7 +66,7 @@ public class ExecutorGeneration {
                 SYSTEM_EXECUTOR.getNamespace(rootNamespace),
                 toJavaImport(rootNamespace, STATE, false),
                 toJavaImport(rootNamespace, ARGUMENT, false),
-                toJavaImport(rootNamespace, GLOBAL_VARIABLE, false),
+                toJavaImport(globalNamespace, GLOBAL_VARIABLE, false),
                 toJavaImport(rootNamespace, SYSTEM_EXECUTOR_THREAD, false),
                 toJavaStateName(ts.getInitState())
         );

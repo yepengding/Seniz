@@ -63,6 +63,9 @@ public class TransitionSystem {
     // GlobalStateDeclarator naming map <Name, StateDeclarator>
     private final Map<String, StateDeclarator> globalStateDeclarators;
 
+    // Empty StateDeclarator
+    private final StateDeclarator emptyStateDeclarator;
+
     // TransitionRule map <HashCode, TransitionRule>
     private final Map<Integer, TransitionRule> transitionRules;
 
@@ -91,7 +94,11 @@ public class TransitionSystem {
 
         // Add epsilon action
         this.epsilonAction = new Action(true, "");
-        this.actions.put(epsilonAction.hashCode(), epsilonAction);
+        this.addAction(epsilonAction);
+
+        // Add empty state declarator
+        this.emptyStateDeclarator = new StateDeclarator("".hashCode(), new HashSet<>(), "");
+        this.addGlobalStateDeclarator(emptyStateDeclarator);
 
         // Add tautology
         Evaluation alwaysTrue = new Evaluation();

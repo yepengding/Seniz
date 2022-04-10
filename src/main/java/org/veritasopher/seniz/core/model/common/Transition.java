@@ -23,7 +23,7 @@ public class Transition {
 
     private int action;
 
-    private int globalState;
+    private int globalStateDeclarator;
 
     private int dstState;
 

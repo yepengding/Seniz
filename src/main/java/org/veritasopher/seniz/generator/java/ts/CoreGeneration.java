@@ -1,4 +1,4 @@
-package org.veritasopher.seniz.generator.java;
+package org.veritasopher.seniz.generator.java.ts;
 
 import lombok.AllArgsConstructor;
 import org.veritasopher.seniz.core.model.TransitionSystem;
@@ -28,6 +28,8 @@ public class CoreGeneration {
 
     private TransitionSystem ts;
 
+    private String globalNamespace;
+
     private String rootNamespace;
 
     private Path root;
@@ -36,8 +38,11 @@ public class CoreGeneration {
         generateArgument();
         generateAction();
         generateVariable();
-        generateGlobalVariable();
         generateState();
+        if (globalNamespace.equals(rootNamespace)) {
+            // Only generate GlobalVariable file if no global system exists
+            generateGlobalVariable();
+        }
     }
 
     /**
@@ -127,7 +132,8 @@ public class CoreGeneration {
                 toJavaImport(rootNamespace, STATE_BEHAVIOR, false),
                 toJavaImport(rootNamespace, ARGUMENT, true),
                 toJavaImport(rootNamespace, VARIABLE, true),
-                toJavaImport(rootNamespace, GLOBAL_VARIABLE, true),
+                toJavaImport(globalNamespace, GLOBAL_VARIABLE, false),
+                toJavaImport(globalNamespace, GLOBAL_VARIABLE, true),
                 stateProgramBody);
 
         writeToFile(stateProgram, STATE.getFilePath(root));
@@ -219,22 +225,26 @@ public class CoreGeneration {
                             throw new GeneratorException(ts.getIdentifier(), "Unknown guard is found");
                         }).isTautology())
                         .map(t ->
-                                "if (%s) {%s}".formatted(
+                                "if (%s) {%s %s}".formatted(
                                         toJavaEvaluation(ts, ts.getProposition(t.getGuard()).orElseThrow(() -> {
                                             throw new GeneratorException(ts.getIdentifier(), "Unknown guard is found");
                                         }).getEvaluation()),
+                                        generateGlobalVariableStatement(ts, t),
                                         generateActionStatement(ts, t))
                         ).collect(Collectors.joining(System.lineSeparator()));
 
+                String defaultGlobalVariable = "";
                 String defaultAction = "return null;";
                 if (tautologyTransitions.size() == 1) {
-                    defaultAction = generateActionStatement(ts, tautologyTransitions.iterator().next());
+                    Transition transition = tautologyTransitions.iterator().next();
+                    defaultGlobalVariable = generateGlobalVariableStatement(ts, transition);
+                    defaultAction = generateActionStatement(ts, transition);
                 }
-                transitionSetting = transitionSetting + System.lineSeparator() + defaultAction;
+                transitionSetting = transitionSetting + System.lineSeparator() + defaultGlobalVariable + System.lineSeparator() + defaultAction;
             } else if (transitions.size() == 1) {
                 // One transition
                 Transition transition = transitions.iterator().next();
-                transitionSetting = generateActionStatement(ts, transition);
+                transitionSetting = generateGlobalVariableStatement(ts, transition) + System.lineSeparator() + generateActionStatement(ts, transition);
 
                 Proposition guard = ts.getProposition(transition.getGuard()).orElseThrow(() -> {
                     throw new GeneratorException(ts.getIdentifier(), "Unknown guard is found");
@@ -276,6 +286,22 @@ public class CoreGeneration {
             actionStatement = "return %s;".formatted(toJavaStateName(dstState));
         }
         return actionStatement;
+    }
+
+    /**
+     * Generate GlobalVariable Statement
+     *
+     * @param ts         transition system
+     * @param transition transition
+     * @return GlobalVariable Statement
+     */
+    private String generateGlobalVariableStatement(TransitionSystem ts, Transition transition) {
+        StateDeclarator stateDeclarator = ts.getGlobalStateDeclarator(transition.getGlobalStateDeclarator()).orElseThrow(() ->
+                new GeneratorException(ts.getIdentifier(), "Unknown global state is found."));
+
+        return stateDeclarator.getVariables().stream()
+                .map(v -> "gVarSet.put(%s, %s);".formatted(toJavaVariableName(v.getName()), toJavaEvaluation(ts, v.getEvaluation())))
+                .collect(Collectors.joining(System.lineSeparator()));
     }
 
 }

@@ -16,6 +16,8 @@ import java.nio.file.Path;
 public abstract class BaseGenerator {
 
     protected final GlobalEnvironment env;
+
+    // Main system identifier
     protected final String systemIdentifier;
 
     /**

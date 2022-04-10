@@ -23,7 +23,7 @@ public class TransitionRule {
 
     private int action;
 
-    private int globalState;
+    private int globalStateDeclarator;
 
     private int dstStateDeclarator;
 
