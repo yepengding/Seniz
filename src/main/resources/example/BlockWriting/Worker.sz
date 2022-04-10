@@ -3,9 +3,8 @@ import Lock
 system Worker() over Vars with Lock {
 
     init processing -> readyToWrite
-    readyToWrite -> readyToWrite [s > 0] -> @decreaseS acquiredLock
-    acquiredLock -> writeBlock() @increaseS releasedLock
-    releasedLock -> processing
+    readyToWrite -> readyToWrite [s > 0] -> @decreaseS writeBlock() written
+    written -> @increaseS processing
 
     processing = {
         loc: 1
@@ -15,12 +14,8 @@ system Worker() over Vars with Lock {
         loc: 2
     }
 
-    acquiredLock = {
+    written = {
         loc: 3
-    }
-
-    releasedLock = {
-        loc: 4
     }
 
     @increaseS = {

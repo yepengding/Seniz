@@ -1,10 +1,13 @@
-// Generated from /Users/michaeltei/Projects/ResearchProjects/FDD/Seniz/project/Seniz/src/main/resources/SenizParser.g4 by ANTLR 4.9.2
+// Generated from /Users/michaeltei/Projects/ResearchProjects/FDD/Seniz/project/Seniz/Grammar/SenizParser.g4 by ANTLR 4.9.2
 package org.veritasopher.seniz.core.base;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class SenizParser extends Parser {
@@ -136,7 +139,7 @@ public class SenizParser extends Parser {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "Grammar/SenizParser.g4"; }
+	public String getGrammarFileName() { return "SenizParser.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -2484,11 +2487,11 @@ public class SenizParser extends Parser {
 		public GuardIdentifierContext guardIdentifier() {
 			return getRuleContext(GuardIdentifierContext.class,0);
 		}
-		public ActionDeclarationContext actionDeclaration() {
-			return getRuleContext(ActionDeclarationContext.class,0);
-		}
 		public GlobalStateIdentifierContext globalStateIdentifier() {
 			return getRuleContext(GlobalStateIdentifierContext.class,0);
+		}
+		public ActionDeclarationContext actionDeclaration() {
+			return getRuleContext(ActionDeclarationContext.class,0);
 		}
 		public TransitionDeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2530,24 +2533,24 @@ public class SenizParser extends Parser {
 			match(TO);
 			setState(365);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,32,_ctx) ) {
-			case 1:
-				{
-				setState(364);
-				actionDeclaration();
-				}
-				break;
-			}
-			setState(368);
-			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==GLOBAL) {
 				{
-				setState(367);
+				setState(364);
 				globalStateIdentifier();
 				}
 			}
 
+			setState(368);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,33,_ctx) ) {
+			case 1:
+				{
+				setState(367);
+				actionDeclaration();
+				}
+				break;
+			}
 			setState(370);
 			stateIdentifier();
 			}
@@ -5458,8 +5461,8 @@ public class SenizParser extends Parser {
 		"\u0167\3\2\2\2\u0165\u0163\3\2\2\2\u0165\u0166\3\2\2\2\u0166?\3\2\2\2"+
 		"\u0167\u0165\3\2\2\2\u0168\u0169\7\13\2\2\u0169A\3\2\2\2\u016a\u016c\5"+
 		"D#\2\u016b\u016a\3\2\2\2\u016b\u016c\3\2\2\2\u016c\u016d\3\2\2\2\u016d"+
-		"\u016f\7\32\2\2\u016e\u0170\5F$\2\u016f\u016e\3\2\2\2\u016f\u0170\3\2"+
-		"\2\2\u0170\u0172\3\2\2\2\u0171\u0173\5<\37\2\u0172\u0171\3\2\2\2\u0172"+
+		"\u016f\7\32\2\2\u016e\u0170\5<\37\2\u016f\u016e\3\2\2\2\u016f\u0170\3"+
+		"\2\2\2\u0170\u0172\3\2\2\2\u0171\u0173\5F$\2\u0172\u0171\3\2\2\2\u0172"+
 		"\u0173\3\2\2\2\u0173\u0174\3\2\2\2\u0174\u0175\5\60\31\2\u0175C\3\2\2"+
 		"\2\u0176\u0177\7@\2\2\u0177\u0178\5T+\2\u0178\u0179\7A\2\2\u0179E\3\2"+
 		"\2\2\u017a\u017b\7E\2\2\u017b\u017d\7<\2\2\u017c\u017e\5z>\2\u017d\u017c"+

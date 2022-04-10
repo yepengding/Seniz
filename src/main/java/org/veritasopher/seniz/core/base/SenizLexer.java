@@ -1,10 +1,13 @@
-// Generated from /Users/michaeltei/Projects/ResearchProjects/FDD/Seniz/project/Seniz/src/main/resources/SenizLexer.g4 by ANTLR 4.9.2
+// Generated from /Users/michaeltei/Projects/ResearchProjects/FDD/Seniz/project/Seniz/Grammar/SenizLexer.g4 by ANTLR 4.9.2
 package org.veritasopher.seniz.core.base;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class SenizLexer extends Lexer {
@@ -117,7 +120,7 @@ public class SenizLexer extends Lexer {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "Grammar/SenizLexer.g4"; }
+	public String getGrammarFileName() { return "SenizLexer.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }

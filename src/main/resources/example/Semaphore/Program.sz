@@ -3,8 +3,8 @@ import SharedVars
 system Program() over Vars with SharedVars {
 
     init plain -> wait
-    wait -> wait [s > 0] -> @decreaseS critical
-    critical -> @increaseS plain
+    wait -> wait [s > 0] -> @decreaseS enterCritical() critical
+    critical -> @increaseS exitCritical() plain
 
     plain = {
         loc: 1

@@ -155,7 +155,7 @@ initIdentifier
     ;
 
 transitionDeclaration
-    : guardIdentifier? TO actionDeclaration? globalStateIdentifier? stateIdentifier
+    : guardIdentifier? TO globalStateIdentifier? actionDeclaration? stateIdentifier
     ;
 
 // Guard
