@@ -71,17 +71,11 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSystemBodyDeclaration(SenizParser.SystemBodyDeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SenizParser#controlSystemBodyDeclaration}.
+	 * Visit a parse tree produced by {@link SenizParser#initControlState}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitControlSystemBodyDeclaration(SenizParser.ControlSystemBodyDeclarationContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SenizParser#globalStateBody}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGlobalStateBody(SenizParser.GlobalStateBodyContext ctx);
+	T visitInitControlState(SenizParser.InitControlStateContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#logicStatement}.
 	 * @param ctx the parse tree
@@ -222,6 +216,12 @@ public interface SenizParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPrimary(SenizParser.PrimaryContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SenizParser#globalStateBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGlobalStateBody(SenizParser.GlobalStateBodyContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SenizParser#globalStateNaming}.
 	 * @param ctx the parse tree

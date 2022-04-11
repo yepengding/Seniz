@@ -23,16 +23,8 @@ import static org.veritasopher.seniz.util.FileUtil.writeToFile;
  * @author Yepeng Ding
  * @date 4/10/2022
  */
-@AllArgsConstructor
-public class CoreGeneration {
-
-    private TransitionSystem ts;
-
-    private String globalNamespace;
-
-    private String rootNamespace;
-
-    private Path root;
+public record CoreGeneration(TransitionSystem ts, String globalNamespace,
+                             String rootNamespace, Path root) {
 
     public void generate() {
         generateArgument();
@@ -49,12 +41,11 @@ public class CoreGeneration {
      * Generate system argument file
      */
     public void generateArgument() {
-        String arguments = ts.getSystemArgumentSet().stream()
-                .map(arg -> "%s(\"%s\", %s, %s)"
+        String arguments = ts.getSystemArguments().stream()
+                .map(arg -> "%s(\"%s\", %s)"
                         .formatted(toJavaArgumentName(arg.getName()),
                                 arg.getName(),
-                                toJavaTypeClass(arg.getPrimaryType()),
-                                toJavaEvaluation(ts, arg.getEvaluation())))
+                                toJavaTypeClass(arg.getPrimaryType())))
                 .collect(Collectors.joining("," + System.lineSeparator()));
 
         String argumentProgram = generateArgumentFromTemplate(ARGUMENT.getNamespace(rootNamespace), arguments);

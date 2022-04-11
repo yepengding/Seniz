@@ -2,6 +2,7 @@ package org.veritasopher.seniz.core.visitor;
 
 import org.veritasopher.seniz.core.base.SenizParser;
 import org.veritasopher.seniz.core.base.SenizParserBaseVisitor;
+import org.veritasopher.seniz.core.model.BaseSystem;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.StateDeclarator;
@@ -37,14 +38,14 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<StateDeclarat
         return new StateDeclarator(ctx.hashCode(), stateVariables);
     }
 
-    private static class StateExpressionVisitor extends SenizParserBaseVisitor<StateVariable> {
+    static class StateExpressionVisitor extends SenizParserBaseVisitor<StateVariable> {
 
-        private final TransitionSystem transitionSystem;
+        private final BaseSystem baseSystem;
 
         private final boolean isGlobal;
 
-        StateExpressionVisitor(TransitionSystem transitionSystem, boolean isGlobal) {
-            this.transitionSystem = transitionSystem;
+        StateExpressionVisitor(BaseSystem baseSystem, boolean isGlobal) {
+            this.baseSystem = baseSystem;
             this.isGlobal = isGlobal;
         }
 
@@ -55,22 +56,22 @@ public class StateDeclaratorVisitor extends SenizParserBaseVisitor<StateDeclarat
             StateVariable var;
             if (!isGlobal) {
                 // State variable
-                var = transitionSystem.getStateVariable(name).orElseThrow(() -> {
-                    throw new StateVariableException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined variable (" + name + ").");
+                var = baseSystem.getStateVariable(name).orElseThrow(() -> {
+                    throw new StateVariableException(baseSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined variable (" + name + ").");
                 });
             } else {
                 // Global (Shared) state variable
-                // Check coinciding
-                Assert.isTrue(transitionSystem.getStateVariable(name).isEmpty(),
-                        new GlobalStateException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Global variable (%s) has the same name with a defined variable.".formatted(name)));
-                var = transitionSystem.getGlobalStateVariable(name).orElseThrow(() -> {
-                    throw new GlobalStateException(transitionSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined global variable (" + name + ").");
+                // Check coinciding with local state variable
+                Assert.isTrue(baseSystem.getStateVariable(name).isEmpty(),
+                        new GlobalStateException(baseSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Global variable (%s) has the same name with a defined variable.".formatted(name)));
+                var = baseSystem.getGlobalStateVariable(name).orElseThrow(() -> {
+                    throw new GlobalStateException(baseSystem.getIdentifier(), ctx.start.getLine(), ctx.start.getCharPositionInLine(), "Undefined global variable (" + name + ").");
                 });
             }
 
             // Get evaluation of the variable
             Evaluation evaluation = new Evaluation();
-            ExpressionVisitor expressionVisitor = new ExpressionVisitor(evaluation, transitionSystem);
+            ExpressionVisitor expressionVisitor = new ExpressionVisitor(evaluation, baseSystem);
             ctx.expression().accept(expressionVisitor);
 
             return var.withEvaluation(evaluation);

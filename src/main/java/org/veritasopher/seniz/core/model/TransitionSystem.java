@@ -17,29 +17,7 @@ import static org.veritasopher.seniz.core.tool.Naming.getGlobalStateName;
  * @date 12/5/2020
  */
 @Getter
-public class TransitionSystem {
-
-    // System identifier
-    private final String identifier;
-
-    // Dependent variable set name
-    @Setter
-    private String dependentVariableSetName;
-
-    // Global (Shared) variable set name
-    @Setter
-    private String globalVariableSetName;
-
-    // State variable set
-    @Setter
-    private VariableSet stateVariables;
-
-    // State variable set
-    @Setter
-    private VariableSet globalStateVariables;
-
-    // System argument map <Name, System argument>
-    private final Map<String, SystemArgument> arguments;
+public class TransitionSystem extends BaseSystem {
 
     // State map <HashCode, State>
     private final Map<Integer, State> states;
@@ -79,10 +57,8 @@ public class TransitionSystem {
     private final Proposition tautology;
 
     public TransitionSystem(String identifier) {
-        this.identifier = identifier;
-        this.stateVariables = new VariableSet();
-        this.globalStateVariables = new VariableSet();
-        this.arguments = new HashMap<>();
+        super(identifier);
+
         this.states = new HashMap<>();
         this.actions = new HashMap<>();
         this.transitions = new HashMap<>();
@@ -105,72 +81,6 @@ public class TransitionSystem {
         alwaysTrue.addTerm(new Term(new Value(PrimaryType.BOOLEAN, true)));
         this.tautology = new Proposition(true, "", alwaysTrue);
         this.propositions.put(tautology.hashCode(), tautology);
-    }
-
-    /**
-     * Get a state variable by name
-     *
-     * @param name state variable name
-     * @return either a state variable or null
-     */
-    public Optional<StateVariable> getStateVariable(String name) {
-        return Optional.ofNullable(this.stateVariables.getVariable(name));
-    }
-
-    /**
-     * Get the set of state variables
-     *
-     * @return set of state variables
-     */
-    public Set<StateVariable> getStateVariableSet() {
-        return this.stateVariables.getVariableSet();
-    }
-
-    /**
-     * Add a system argument
-     *
-     * @param systemArgument system argument
-     */
-    public void addSystemArgument(SystemArgument systemArgument) {
-        this.arguments.put(systemArgument.getName(), systemArgument);
-    }
-
-    /**
-     * Get a system argument by name
-     *
-     * @param name system argument name
-     * @return either a system argument or null
-     */
-    public Optional<SystemArgument> getSystemArgument(String name) {
-        return Optional.ofNullable(this.arguments.get(name));
-    }
-
-    /**
-     * Get system argument set
-     *
-     * @return system argument set
-     */
-    public Set<SystemArgument> getSystemArgumentSet() {
-        return new HashSet<>(this.arguments.values());
-    }
-
-    /**
-     * Get system argument name set
-     *
-     * @return system argument name set
-     */
-    public Set<String> getSystemArgumentNameSet() {
-        return this.arguments.keySet();
-    }
-
-    /**
-     * Look up if system argument exists.
-     *
-     * @param name a system argument name
-     * @return true if system argument exists. Otherwise, false.
-     */
-    public boolean hasSystemArgument(String name) {
-        return this.arguments.containsKey(name);
     }
 
     /**
@@ -346,16 +256,6 @@ public class TransitionSystem {
      */
     public Optional<StateDeclarator> getGlobalStateDeclarator(String name) {
         return Optional.ofNullable(this.globalStateDeclarators.get(getGlobalStateName(identifier, name)));
-    }
-
-    /**
-     * Get a global state variable
-     *
-     * @param name global state variable name
-     * @return either a global state variable or null
-     */
-    public Optional<StateVariable> getGlobalStateVariable(String name) {
-        return Optional.ofNullable(this.globalStateVariables.getVariable(name));
     }
 
     /**

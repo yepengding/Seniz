@@ -35,7 +35,7 @@ systemParameter
     ;
 
 systemBody
-    : LBRACE controlStatement controlSystemBodyDeclaration RBRACE
+    : LBRACE initControlState? controlStatement logicStatement* RBRACE
     | LBRACE systemBodyDeclaration* RBRACE
     ;
 
@@ -46,15 +46,9 @@ systemBodyDeclaration
     | logicStatement
     ;
 
-controlSystemBodyDeclaration
-    : (GLOBAL globalStateBody)?
-    | logicStatement*
+initControlState
+    : INIT stateBody
     ;
-
-globalStateBody
-    : LBRACE stateDeclarator RBRACE
-    ;
-
 
 logicStatement
     : propositionStatement
@@ -131,6 +125,10 @@ primary
     ;
 
 // Global State Naming
+globalStateBody
+    : LBRACE stateDeclarator RBRACE
+    ;
+
 globalStateNaming
     : globalStateNameIdentifier bop=EQ globalStateBody
     ;

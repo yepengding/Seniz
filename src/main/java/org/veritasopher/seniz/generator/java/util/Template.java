@@ -186,6 +186,7 @@ public class Template {
      * @param namespace
      * @param importState
      * @param importArgument
+     * @param importVariable
      * @param importGlobalVariable
      * @param importSync
      * @param importSystemExecutorThread
@@ -196,6 +197,7 @@ public class Template {
             String namespace,
             String importState,
             String importArgument,
+            String importVariable,
             String importGlobalVariable,
             String importSync,
             String importSystemExecutorThread,
@@ -205,6 +207,7 @@ public class Template {
                 namespace,
                 importState,
                 importArgument,
+                importVariable,
                 importGlobalVariable,
                 importSync,
                 importSystemExecutorThread,
@@ -230,22 +233,51 @@ public class Template {
      * Generate SystemExecutorThread
      *
      * @param namespace
-     * @param importActionEffect
-     * @param importArgument
-     * @param importVariable
      * @return SystemExecutorThread program
      */
     public static String generateSystemExecutorThreadFromTemplate(
-            String namespace,
-            String importActionEffect,
-            String importArgument,
-            String importVariable
+            String namespace
     ) {
         return readFromFileInResource("template/sdk/SystemExecutorThread").formatted(
+                namespace
+        );
+    }
+
+    /**
+     * Generate ControlSystemExecutor
+     *
+     * @param namespace
+     * @param importArgument
+     * @param importArgumentStatic
+     * @param importGlobalVariable
+     * @param importGlobalVariableStatic
+     * @param importSystemExecutorThread
+     * @param initControlVariable
+     * @param initSystemExecutor
+     * @param initCallables
+     * @return ControlSystemExecutor program
+     */
+    public static String generateControlSystemExecutorFromTemplate(
+            String namespace,
+            String importArgument,
+            String importArgumentStatic,
+            String importGlobalVariable,
+            String importGlobalVariableStatic,
+            String importSystemExecutorThread,
+            String initControlVariable,
+            String initSystemExecutor,
+            String initCallables
+    ) {
+        return readFromFileInResource("template/ControlSystemExecutor").formatted(
                 namespace,
-                importActionEffect,
                 importArgument,
-                importVariable
+                importArgumentStatic,
+                importGlobalVariable,
+                importGlobalVariableStatic,
+                importSystemExecutorThread,
+                initControlVariable,
+                initSystemExecutor,
+                initCallables
         );
     }
 }

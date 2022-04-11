@@ -119,6 +119,18 @@ public enum SourceFile {
         }
     },
 
+    CONTROL_SYSTEM_EXECUTOR("ControlSystemExecutor") {
+        @Override
+        public Path getFilePath(Path rootPath) {
+            return Path.of(rootPath.toAbsolutePath() + File.separator + getFilename());
+        }
+
+        @Override
+        public String getNamespace(String rootNamespace) {
+            return "%s".formatted(rootNamespace);
+        }
+    },
+
     SYNC("Sync") {
         @Override
         public Path getFilePath(Path rootPath) {

@@ -1,5 +1,6 @@
 package org.veritasopher.seniz.generator.java.util;
 
+import org.veritasopher.seniz.core.model.BaseSystem;
 import org.veritasopher.seniz.core.model.TransitionSystem;
 import org.veritasopher.seniz.core.model.common.Evaluation;
 import org.veritasopher.seniz.core.model.common.State;
@@ -57,29 +58,29 @@ public class Transform {
      * Get corresponding Java evaluation
      * Because Seniz uses the same symbol for operands, no need to create a transformation table.
      *
-     * @param ts         transition system
+     * @param bs         base system
      * @param evaluation Seniz evaluation
      * @return evaluated Java string
      */
-    public static String toJavaEvaluation(TransitionSystem ts, Evaluation evaluation) {
+    public static String toJavaEvaluation(BaseSystem bs, Evaluation evaluation) {
         return evaluation.getInfixList().stream()
                 .map(t -> switch (t.getType()) {
                     case OPERATOR -> t.getOperator().getValue();
                     case OPERAND -> switch (t.getOperand().primaryType()) {
                         case VARIABLE -> "(%s) varSet.get(%s)".formatted(
                                 toJavaType(
-                                        ts.getStateVariable(t.getOperand().value().toString()).orElseThrow(() -> {
-                                            throw new GeneratorException(ts.getIdentifier(), "Unknown state variable is found");
+                                        bs.getStateVariable(t.getOperand().value().toString()).orElseThrow(() -> {
+                                            throw new GeneratorException(bs.getIdentifier(), "Unknown state variable is found");
                                         }).getPrimaryType()),
                                 toJavaVariableName(t.getOperand().value().toString()));
                         case GLOBAL_VARIABLE -> "(%s) gVarSet.get(%s)".formatted(
                                 toJavaType(
-                                        ts.getGlobalStateVariable(t.getOperand().value().toString()).orElseThrow(() -> {
-                                            throw new GeneratorException(ts.getIdentifier(), "Unknown global state variable is found");
+                                        bs.getGlobalStateVariable(t.getOperand().value().toString()).orElseThrow(() -> {
+                                            throw new GeneratorException(bs.getIdentifier(), "Unknown global state variable is found");
                                         }).getPrimaryType()),
                                 toJavaVariableName(t.getOperand().value().toString()));
-                        case ARGUMENT -> toJavaEvaluation(ts, ts.getSystemArgument(t.getOperand().value().toString()).orElseThrow(() -> {
-                            throw new GeneratorException(ts.getIdentifier(), "Unknown system argument is found");
+                        case ARGUMENT -> toJavaEvaluation(bs, bs.getSystemArgument(t.getOperand().value().toString()).orElseThrow(() -> {
+                            throw new GeneratorException(bs.getIdentifier(), "Unknown system argument is found");
                         }).getEvaluation());
                         case STRING -> "".equals(t.getOperand().value()) ?
                                 "\"\"" : t.getOperand().value().toString();

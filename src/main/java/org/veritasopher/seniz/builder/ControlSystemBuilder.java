@@ -5,6 +5,7 @@ import org.veritasopher.seniz.core.model.ControlSystem;
 import org.veritasopher.seniz.core.model.GlobalEnvironment;
 import org.veritasopher.seniz.core.model.VariableSet;
 import org.veritasopher.seniz.core.model.common.ControlStatement;
+import org.veritasopher.seniz.core.visitor.ControlInitStateVisitor;
 import org.veritasopher.seniz.core.visitor.ControlStatementVisitor;
 import org.veritasopher.seniz.exception.Assert;
 import org.veritasopher.seniz.exception.type.BuilderException;
@@ -27,12 +28,16 @@ public class ControlSystemBuilder {
         controlSystem.setStateVariables(variableSet);
         controlSystem.setGlobalStateVariables(globalVariableSet);
 
+        // Compile initialized global variables of subsystems
+        ControlInitStateVisitor controlInitStateVisitor = new ControlInitStateVisitor(controlSystem, false);
+        controlInitStateVisitor.visit(tree);
+
         // Compile control statement
         ControlStatement controlStatement = new ControlStatement();
-        ControlStatementVisitor controlStatementVisitor = new ControlStatementVisitor(controlStatement);
+        ControlStatementVisitor controlStatementVisitor = new ControlStatementVisitor(controlSystem, controlStatement);
         controlStatementVisitor.visit(tree);
 
-        List<String> systemIdentifiers = controlStatement.getSubsystemIdentifier();
+        List<String> systemIdentifiers = controlStatement.getSubsystemIdentifierList();
 
         // Empty check
         Assert.isTrue(systemIdentifiers.size() > 0,
@@ -47,12 +52,24 @@ public class ControlSystemBuilder {
                         String.join(", ", lackingDependencies)
                 )));
 
+        // System argument set consistency check
+        // TODO Type check
+        Set<String> inconsistentSystems = controlStatement.getSubsystems().stream()
+                .filter(sys -> env.getTransitionSystem(sys.identifier()).orElseThrow().getSystemArguments().size() != sys.argEvaluations().size())
+                .map(ControlStatement.SubSystem::alias)
+                .collect(Collectors.toSet());
+
+        Assert.isTrue(inconsistentSystems.size() == 0,
+                new BuilderException(controlSystem.getIdentifier(), "Inconsistent system arguments in subsystems: %s.".formatted(
+                        String.join(", ", inconsistentSystems)
+                )));
+
         // Global variable set consistency check (all subsystems must declare the same global variable set to enable sharing)
-        Set<String> inconsistentSystems = systemIdentifiers.stream()
+        inconsistentSystems = systemIdentifiers.stream()
                 .filter(id -> !Objects.equals(env.getTransitionSystem(id).orElseThrow().getGlobalVariableSetName(), variableSet.getIdentifier()))
                 .collect(Collectors.toSet());
         Assert.isTrue(inconsistentSystems.size() == 0,
-                new BuilderException(controlSystem.getIdentifier(), "Inconsistent global variable sets in dependency: %s.".formatted(
+                new BuilderException(controlSystem.getIdentifier(), "Inconsistent global variable sets in subsystems: %s.".formatted(
                         String.join(", ", inconsistentSystems)
                 )));
 

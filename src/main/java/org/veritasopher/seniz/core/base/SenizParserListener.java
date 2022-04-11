@@ -108,25 +108,15 @@ public interface SenizParserListener extends ParseTreeListener {
 	 */
 	void exitSystemBodyDeclaration(SenizParser.SystemBodyDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SenizParser#controlSystemBodyDeclaration}.
+	 * Enter a parse tree produced by {@link SenizParser#initControlState}.
 	 * @param ctx the parse tree
 	 */
-	void enterControlSystemBodyDeclaration(SenizParser.ControlSystemBodyDeclarationContext ctx);
+	void enterInitControlState(SenizParser.InitControlStateContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SenizParser#controlSystemBodyDeclaration}.
+	 * Exit a parse tree produced by {@link SenizParser#initControlState}.
 	 * @param ctx the parse tree
 	 */
-	void exitControlSystemBodyDeclaration(SenizParser.ControlSystemBodyDeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SenizParser#globalStateBody}.
-	 * @param ctx the parse tree
-	 */
-	void enterGlobalStateBody(SenizParser.GlobalStateBodyContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SenizParser#globalStateBody}.
-	 * @param ctx the parse tree
-	 */
-	void exitGlobalStateBody(SenizParser.GlobalStateBodyContext ctx);
+	void exitInitControlState(SenizParser.InitControlStateContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SenizParser#logicStatement}.
 	 * @param ctx the parse tree
@@ -363,6 +353,16 @@ public interface SenizParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPrimary(SenizParser.PrimaryContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SenizParser#globalStateBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterGlobalStateBody(SenizParser.GlobalStateBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SenizParser#globalStateBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitGlobalStateBody(SenizParser.GlobalStateBodyContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SenizParser#globalStateNaming}.
 	 * @param ctx the parse tree

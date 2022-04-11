@@ -1,10 +1,6 @@
 package org.veritasopher.seniz.generator.java.ts;
 
-import lombok.AllArgsConstructor;
-import org.veritasopher.seniz.core.model.TransitionSystem;
-
 import java.nio.file.Path;
-import java.util.stream.Collectors;
 
 import static org.veritasopher.seniz.generator.java.dict.SourceFile.*;
 import static org.veritasopher.seniz.generator.java.util.Template.*;
@@ -17,14 +13,8 @@ import static org.veritasopher.seniz.util.FileUtil.writeToFile;
  * @author Yepeng Ding
  * @date 4/10/2022
  */
-@AllArgsConstructor
-public class BaseGeneration {
-
-    private String globalNamespace;
-
-    private String rootNamespace;
-
-    private Path root;
+public record BaseGeneration(String globalNamespace, String rootNamespace,
+                             Path root) {
 
     public void generate() {
         generateActionExecutor();

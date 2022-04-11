@@ -36,6 +36,15 @@ public class VariableSet {
     }
 
     /**
+     * Update the evaluation of a state variable
+     *
+     * @param stateVariable new state variable
+     */
+    public void updateVariable(StateVariable stateVariable) {
+        this.variables.get(stateVariable.getName()).setEvaluation(stateVariable.getEvaluation());
+    }
+
+    /**
      * Get a state variable by name
      *
      * @param name variable name

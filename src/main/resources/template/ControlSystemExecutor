@@ -1,0 +1,44 @@
+package %s;
+%s
+%s
+%s
+%s
+%s
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ControlSystemExecutor {
+
+    private final ConcurrentMap<GlobalVariable, Object> gVarSet;
+
+    public ControlSystemExecutor() {
+        this.gVarSet = new ConcurrentHashMap<>();
+        initGlobalVariable();
+    }
+
+    private void initGlobalVariable() {
+        %s
+    }
+
+    public void run() {
+        %s
+
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+
+        List<SystemExecutorThread<GlobalVariable>> callables = new ArrayList<>();
+        %s
+
+        try {
+            executorService.invokeAll(callables);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+}

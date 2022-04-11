@@ -79,10 +79,10 @@ public class JavaGenerator extends BaseGenerator {
         Path root = Path.of(outDir + File.separator + cs.getIdentifier().toLowerCase());
         String rootNamespace = "%s.%s".formatted(namespace, cs.getIdentifier().toLowerCase());
 
-        ControlGeneration controlGeneration = new ControlGeneration(cs, rootNamespace, root);
+        ControlGeneration controlGeneration = new ControlGeneration(env, cs, rootNamespace, root);
         controlGeneration.generate();
 
-        cs.getControlStatement().getSubsystemIdentifier().forEach(
+        cs.getControlStatement().getSubsystemIdentifierList().forEach(
                 id -> generateTSToDir(env.getTransitionSystem(id).orElseThrow(() ->
                                 new GeneratorException("Undefined transition system.")),
                         rootNamespace,

@@ -136,25 +136,13 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterControlSystemBodyDeclaration(SenizParser.ControlSystemBodyDeclarationContext ctx) { }
+	@Override public void enterInitControlState(SenizParser.InitControlStateContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitControlSystemBodyDeclaration(SenizParser.ControlSystemBodyDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterGlobalStateBody(SenizParser.GlobalStateBodyContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitGlobalStateBody(SenizParser.GlobalStateBodyContext ctx) { }
+	@Override public void exitInitControlState(SenizParser.InitControlStateContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -419,6 +407,18 @@ public class SenizParserBaseListener implements SenizParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrimary(SenizParser.PrimaryContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGlobalStateBody(SenizParser.GlobalStateBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGlobalStateBody(SenizParser.GlobalStateBodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

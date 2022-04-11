@@ -9,7 +9,7 @@ import org.veritasopher.seniz.core.model.domain.CompositionType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -56,7 +56,7 @@ public class ControlStatement {
      *
      * @return subsystem alias list
      */
-    public List<String> getSubsystemAlias() {
+    public List<String> getSubsystemAliasList() {
         return subsystems.stream().map(sys -> sys.alias).collect(Collectors.toList());
     }
 
@@ -65,11 +65,20 @@ public class ControlStatement {
      *
      * @return subsystem identifier list
      */
-    public List<String> getSubsystemIdentifier() {
+    public List<String> getSubsystemIdentifierList() {
         return subsystems.stream().map(sys -> sys.identifier).collect(Collectors.toList());
     }
 
+    /**
+     * Get subsystem by alias
+     *
+     * @param alias subsystem alias
+     * @return either subsystem or null
+     */
+    public Optional<SubSystem> getSubsystemByAlias(String alias) {
+        return subsystems.stream().filter(sys -> sys.alias.equals(alias)).findAny();
+    }
 
-    public record SubSystem(String alias, String identifier) {
+    public record SubSystem(String alias, String identifier, List<Evaluation> argEvaluations) {
     }
 }
