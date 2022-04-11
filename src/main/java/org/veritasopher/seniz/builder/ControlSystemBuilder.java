@@ -32,7 +32,7 @@ public class ControlSystemBuilder {
         ControlStatementVisitor controlStatementVisitor = new ControlStatementVisitor(controlStatement);
         controlStatementVisitor.visit(tree);
 
-        List<String> systemIdentifiers = controlStatement.getSystemIdentifiers();
+        List<String> systemIdentifiers = controlStatement.getSubsystemIdentifier();
 
         // Empty check
         Assert.isTrue(systemIdentifiers.size() > 0,

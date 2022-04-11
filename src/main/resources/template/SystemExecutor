@@ -3,6 +3,7 @@ package %s;
 %s
 %s
 %s
+%s
 import java.util.concurrent.ConcurrentMap;
 public class SystemExecutor extends SystemExecutorThread<GlobalVariable> {
 
@@ -18,8 +19,10 @@ public class SystemExecutor extends SystemExecutorThread<GlobalVariable> {
     public void run() {
         State state = State.%s;
         while (state != null) {
+            Sync.lock.lock();
             state.init(variableSet, argumentSet, globalVariableSet);
             state = state.next(actionEffect, variableSet, argumentSet, globalVariableSet);
+            Sync.lock.unlock();
         }
     }
 

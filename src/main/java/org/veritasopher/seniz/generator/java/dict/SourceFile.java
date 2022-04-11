@@ -119,6 +119,18 @@ public enum SourceFile {
         }
     },
 
+    SYNC("Sync") {
+        @Override
+        public Path getFilePath(Path rootPath) {
+            return Path.of(rootPath.toAbsolutePath() + File.separator + "sdk" + File.separator + getFilename());
+        }
+
+        @Override
+        public String getNamespace(String rootNamespace) {
+            return "%s.sdk".formatted(rootNamespace);
+        }
+    },
+
     SYSTEM_EXECUTOR_THREAD("SystemExecutorThread") {
         @Override
         public Path getFilePath(Path rootPath) {

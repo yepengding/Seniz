@@ -9,6 +9,7 @@ import org.veritasopher.seniz.generator.java.cs.ControlGeneration;
 import org.veritasopher.seniz.generator.java.ts.BaseGeneration;
 import org.veritasopher.seniz.generator.java.ts.CoreGeneration;
 import org.veritasopher.seniz.generator.java.ts.ExecutorGeneration;
+import org.veritasopher.seniz.generator.java.ts.SDKGeneration;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -69,6 +70,9 @@ public class JavaGenerator extends BaseGenerator {
         ExecutorGeneration executorGeneration = new ExecutorGeneration(ts, globalNamespace, rootNamespace, root);
         executorGeneration.generate();
 
+        SDKGeneration sdkGeneration = new SDKGeneration(globalNamespace, rootNamespace, root);
+        sdkGeneration.generate();
+
     }
 
     private void generateCSToDir(ControlSystem cs, String namespace, String outDir) {
@@ -76,9 +80,9 @@ public class JavaGenerator extends BaseGenerator {
         String rootNamespace = "%s.%s".formatted(namespace, cs.getIdentifier().toLowerCase());
 
         ControlGeneration controlGeneration = new ControlGeneration(cs, rootNamespace, root);
-        controlGeneration.generateGlobalVariable();
+        controlGeneration.generate();
 
-        cs.getControlStatement().getSystemIdentifiers().forEach(
+        cs.getControlStatement().getSubsystemIdentifier().forEach(
                 id -> generateTSToDir(env.getTransitionSystem(id).orElseThrow(() ->
                                 new GeneratorException("Undefined transition system.")),
                         rootNamespace,

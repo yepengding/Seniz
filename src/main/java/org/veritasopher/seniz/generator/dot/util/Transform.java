@@ -6,6 +6,8 @@ import org.veritasopher.seniz.core.model.common.State;
 import org.veritasopher.seniz.core.model.domain.CompositionType;
 import org.veritasopher.seniz.exception.type.GeneratorException;
 
+import java.util.stream.Collectors;
+
 /**
  * DOT Transform Tool
  *
@@ -50,9 +52,13 @@ public class Transform {
 
     public static String toDotControlStatement(ControlStatement controlStatement) {
         if (controlStatement.getCompositionType() == CompositionType.ASYNC) {
-            return String.join(" ||| ", controlStatement.getSystemIdentifiers());
+            return controlStatement.getSubsystems().stream()
+                    .map(sys -> "%s (%s)".formatted(sys.alias(), sys.identifier()))
+                    .collect(Collectors.joining(" ||| "));
         } else if (controlStatement.getCompositionType() == CompositionType.SYNC) {
-            return String.join(" || ", controlStatement.getSystemIdentifiers());
+            return controlStatement.getSubsystems().stream()
+                    .map(sys -> "%s (%s)".formatted(sys.alias(), sys.identifier()))
+                    .collect(Collectors.joining(" || "));
         } else {
             throw new GeneratorException("Unsupported control statement.");
         }

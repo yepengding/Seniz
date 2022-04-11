@@ -32,7 +32,6 @@ public class ExecutorGeneration {
     public void generate() {
         generateActionEffect();
         generateSystemExecutor();
-        generateSystemExecutorThread();
     }
 
     /**
@@ -67,22 +66,11 @@ public class ExecutorGeneration {
                 toJavaImport(rootNamespace, STATE, false),
                 toJavaImport(rootNamespace, ARGUMENT, false),
                 toJavaImport(globalNamespace, GLOBAL_VARIABLE, false),
+                toJavaImport(globalNamespace, SYNC, false),
                 toJavaImport(rootNamespace, SYSTEM_EXECUTOR_THREAD, false),
                 toJavaStateName(ts.getInitState())
         );
         writeToFile(program, SYSTEM_EXECUTOR.getFilePath(root));
     }
 
-    /**
-     * Generate SystemExecutorThread file
-     */
-    public void generateSystemExecutorThread() {
-        String program = generateSystemExecutorThreadFromTemplate(
-                SYSTEM_EXECUTOR_THREAD.getNamespace(rootNamespace),
-                toJavaImport(rootNamespace, ACTION_EFFECT, false),
-                toJavaImport(rootNamespace, ARGUMENT, false),
-                toJavaImport(rootNamespace, VARIABLE, false)
-        );
-        writeToFile(program, SYSTEM_EXECUTOR_THREAD.getFilePath(root));
-    }
 }

@@ -187,6 +187,7 @@ public class Template {
      * @param importState
      * @param importArgument
      * @param importGlobalVariable
+     * @param importSync
      * @param importSystemExecutorThread
      * @param initStateName
      * @return SystemExecutor program
@@ -196,6 +197,7 @@ public class Template {
             String importState,
             String importArgument,
             String importGlobalVariable,
+            String importSync,
             String importSystemExecutorThread,
             String initStateName
     ) {
@@ -204,8 +206,23 @@ public class Template {
                 importState,
                 importArgument,
                 importGlobalVariable,
+                importSync,
                 importSystemExecutorThread,
                 initStateName
+        );
+    }
+
+    /**
+     * Generate Sync
+     *
+     * @param namespace
+     * @return Sync program
+     */
+    public static String generateSyncFromTemplate(
+            String namespace
+    ) {
+        return readFromFileInResource("template/sdk/Sync").formatted(
+                namespace
         );
     }
 

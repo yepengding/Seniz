@@ -75,7 +75,7 @@ asyncControlStatement
     ;
 
 subSystemIdentifier
-    : systemIdentifier LPAREN parameterList? RPAREN (AS systemAlias)?
+    : systemIdentifier LPAREN parameterList? RPAREN AS systemAlias
     ;
 
 systemIdentifier
