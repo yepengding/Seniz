@@ -27,14 +27,14 @@ public class JavaGenerationTest {
 
     @Test
     public void testSimple0() {
-        String path = FileUtil.getFilePathInResource("example/Simple0.sz");
+        String path = getFilePathInResource("example/Simple0.sz");
         Set<String> sourceFilePaths = new HashSet<>();
         sourceFilePaths.add(path);
 
         MasterController masterController = new MasterController();
         GlobalEnvironment env = masterController.compile(sourceFilePaths);
-        JavaGenerator javaGenerator = new JavaGenerator(env);
 
+        JavaGenerator javaGenerator = new JavaGenerator(env);
         javaGenerator.generateToDir("org.veritasopher.seniz.generation", "src/test/java/org/veritasopher/seniz/generation");
     }
 

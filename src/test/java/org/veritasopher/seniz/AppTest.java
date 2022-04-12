@@ -28,4 +28,15 @@ public class AppTest {
         App.main(args);
     }
 
+    @Test
+    public void testGenerationFromSourceFile() {
+        String[] args = {"-n", "org.veritasopher.seniz.generation", "-o", "src/test/java/org/veritasopher/seniz/generation", "src/main/resources/example/Simple0.sz"};
+        App.main(args);
+    }
+
+    @Test
+    public void testGenerationFromSourceDir() {
+        String[] args = {"-n", "org.veritasopher.seniz.generation", "-o", "src/test/java/org/veritasopher/seniz/generation", "src/main/resources/example/Semaphore"};
+        App.main(args);
+    }
 }
